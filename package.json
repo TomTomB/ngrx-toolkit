@@ -15,9 +15,10 @@
   "scripts": {
     "commit": "npx git-cz",
     "release": "standard-version --no-verify",
+    "upload": "yarn --cwd dist/ngrx-toolkit publish",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production",
     "test": "ng test",
     "lint": "ng lint"
   },
