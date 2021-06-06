@@ -9,22 +9,8 @@ export interface Response<T> {
   response: T;
 }
 
-export interface Paginated<T> {
-  totalHits: number;
-  currentPage: number;
-  totalPageCount: number;
-  itemsPerPage: number;
-  items: T[];
-}
-
-export interface ErrorAction {
-  error: Error;
-}
-
-export interface Violation {
-  invalidValue: string | null;
-  message: string;
-  propertyPath: string | null;
+export interface ErrorAction<ErrorResponse> {
+  error: Error<ErrorResponse>;
 }
 
 export interface Args<T> {
@@ -44,10 +30,11 @@ export interface EntityStatus<Arguments = any, Response = any> {
   timestamp: number;
 }
 
-export interface TypedApiAction<Arguments, Response> extends TypedAction {
+export interface TypedApiAction<Arguments, Response, ErrorResponse = any>
+  extends TypedAction {
   args?: Arguments;
   response?: Response;
-  error?: Error;
+  error?: Error<ErrorResponse>;
 }
 
 export interface TypedAction extends Action {
@@ -69,8 +56,8 @@ export interface TypedActionObject {
   failure: ActionCreator<
     string,
     (
-      props: ErrorAction & Args<any>
-    ) => ErrorAction & Args<any> & TypedActionNative<string>
+      props: ErrorAction<any> & Args<any>
+    ) => ErrorAction<any> & Args<any> & TypedActionNative<string>
   >;
 }
 
@@ -79,7 +66,7 @@ export interface MappedEntityState<X extends TypedActionObject> {
   truthyResponse$: Observable<ReturnType<X['success']>['response']>;
   falsyResponse$: Observable<null>;
 
-  error$: Observable<Error | null>;
+  error$: Observable<Error<ReturnType<X['failure']>['error']> | null>;
   args$: Observable<ReturnType<X['call']>['args'] | null>;
 
   isInit$: Observable<boolean | null>;
@@ -116,8 +103,13 @@ export interface HttpPatchOptions extends HttpCallOptions {
 
 export interface HttpDeleteOptions extends HttpCallOptions {}
 
-export interface Error {
-  status: number;
+export interface Error<T> {
+  status: number | string;
   message: string;
-  violations: Violation[];
+  data: T | null;
+}
+
+export interface FirebaseError {
+  code: string;
+  message: string;
 }

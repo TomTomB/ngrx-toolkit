@@ -26,12 +26,14 @@ export const joinLoading = (observables: Observable<boolean | null>[]) => {
   );
 };
 
-export const joinErrors = (observables: Observable<Error | null>[]) => {
+export const joinErrors = (
+  observables: Observable<Error<unknown> | null>[]
+) => {
   const copy = observables.filter((o) => !!o);
 
   return combineLatest(copy).pipe(
     map((values) => {
-      const errors: Error[] = [];
+      const errors: Error<unknown>[] = [];
 
       values.forEach((v) => {
         if (v) {

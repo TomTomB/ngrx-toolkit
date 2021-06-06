@@ -100,7 +100,7 @@ export class FacadeBase<T extends TypedActionObject> {
       truthyResponse$: this.selectTruthyResponse<J>(selector, actionId),
       falsyResponse$: this.selectFalsyResponse(selector, actionId),
 
-      error$: this.selectError(selector, actionId),
+      error$: this.selectError<J>(selector, actionId),
       args$: this.selectArgs<J>(selector, actionId),
 
       isInit$: this.selectIsInit(selector, actionId),
@@ -154,7 +154,7 @@ export class FacadeBase<T extends TypedActionObject> {
   selectResponse<J extends TypedActionObject>(
     selector: T,
     actionId: number
-  ): Observable<ReturnType<J['success']>['response']> {
+  ): Observable<ReturnType<J['success']>['response'] | null> {
     return this.__store.select(
       this._entitySelectors.getResponse(
         uniformActionType(selector.call.type),
@@ -188,7 +188,10 @@ export class FacadeBase<T extends TypedActionObject> {
       .pipe(filter((v): v is null => !v));
   }
 
-  selectError(selector: T, actionId: number) {
+  selectError<J extends TypedActionObject>(
+    selector: T,
+    actionId: number
+  ): Observable<ReturnType<J['failure']>['error'] | null> {
     return this.__store.select(
       this._entitySelectors.getError(
         uniformActionType(selector.call.type),

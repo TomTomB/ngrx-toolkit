@@ -1,7 +1,11 @@
 import { Args, Response, ErrorAction } from '../types';
 import { createAction, props } from '@ngrx/store';
 
-export const createActionGroup = <Arguments, ResponseData>({
+export const createActionGroup = <
+  Arguments,
+  ResponseData,
+  ErrorResponse = any
+>({
   method,
   scope,
   name,
@@ -21,7 +25,7 @@ export const createActionGroup = <Arguments, ResponseData>({
     ),
     failure: createAction(
       `[${scope}] [${method}] ${name} Failure`,
-      props<ErrorAction & Args<Arguments>>()
+      props<ErrorAction<ErrorResponse> & Args<Arguments>>()
     ),
   };
 };
