@@ -2,6 +2,16 @@
   "name": "@tomtomb/ngrx-toolkit",
   "version": "1.0.1",
   "license": "MIT",
+  "description": "A bundle containing NgRx Helper classes and functions to simplify the coding experience",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TomTomB/ngrx-toolkit.git"
+  },
+  "author": "Tom-Rune Bornholdt",
+  "bugs": {
+    "url": "https://github.com/TomTomB/ngrx-toolkit/issues"
+  },
+  "homepage": "https://github.com/TomTomB/ngrx-toolkit#readme",
   "scripts": {
     "commit": "npx git-cz",
     "release": "standard-version --no-verify",
