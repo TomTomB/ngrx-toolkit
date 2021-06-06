@@ -66,7 +66,7 @@ export interface MappedEntityState<X extends TypedActionObject> {
   truthyResponse$: Observable<ReturnType<X['success']>['response']>;
   falsyResponse$: Observable<null>;
 
-  error$: Observable<Error<ReturnType<X['failure']>['error']> | null>;
+  error$: Observable<ReturnType<X['failure']>['error'] | null>;
   args$: Observable<ReturnType<X['call']>['args'] | null>;
 
   isInit$: Observable<boolean | null>;
