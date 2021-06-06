@@ -1,0 +1,31 @@
+<pre class="store-debug">
+  <h1>Store Debug: {{  !store ? 'NO STORE PRESENT' : '' }}</h1>
+
+  entityId: {{ store?.entityId$ | async }}
+  isError: {{ store?.isError$ | async }}
+  isInit: {{ store?.isInit$ | async }}
+  isLoading: {{ store?.isLoading$ | async }}
+  isSuccess: {{ store?.isSuccess$ | async }}
+  timestamp: {{ store?.timestamp$ | async }} ({{ store?.timestamp$ | async | date:'full' }})
+  type: {{ store?.type$ | async }}
+  callState: {{ store?.callState$ | async }}
+
+  error (length): {{ (store?.error$ | async| json)?.length === 4 ? 'null (4)' : (store?.error$ | async| json)?.length }}
+  response (length): {{ (store?.response$ | async | json)?.length }}
+  args (length): {{ (store?.args$ | async | json)?.length }}
+
+  <h1>Args</h1>
+{{ (store?.args$ | async | json) }}
+
+  <h1>Error</h1>
+{{ (store?.error$ | async | json) }}
+
+  <h1>Response</h1>
+{{ (store?.response$ | async | json) }}
+
+  <h1>Truthy Response</h1>
+{{ (store?.truthyResponse$ | async | json) }}
+
+  <h1>Falsy Response</h1>
+{{ (store?.falsyResponse$ | async | json) }}
+</pre>
