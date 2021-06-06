@@ -1,6 +1,6 @@
 {
   "name": "@tomtomb/ngrx-toolkit",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "license": "MIT",
   "description": "A bundle containing NgRx Helper classes and functions to simplify the coding experience",
   "repository": {
