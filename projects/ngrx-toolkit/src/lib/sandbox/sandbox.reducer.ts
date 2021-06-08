@@ -10,7 +10,7 @@ export interface SandboxPartialState {
   readonly [SANDBOX_FEATURE_KEY]: State;
 }
 
-export const storeSlice = createStoreSlice([Actions.postSandbox]);
+export const storeSlice = createStoreSlice(Actions.SANDBOX_ACTIONS);
 
 const sandboxReducer = createReducer(
   storeSlice.initialState,
