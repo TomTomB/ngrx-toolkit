@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.5.0...v1.6.0) (2021-06-08)
+
+
+### Features
+
+* 🎸 add sandbox app ([4686c02](https://github.com/TomTomB/ngrx-toolkit/commit/4686c0212f56b0d746bf34a9f1defec58d713af6))
+
+
+### Bug Fixes
+
+* 🐛 unique actions ([f997978](https://github.com/TomTomB/ngrx-toolkit/commit/f9979783d067aca9988a856c19df198c8395c4eb))
+
 ## [1.5.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.4.0...v1.5.0) (2021-06-08)
 
 
