@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.4.0...v1.5.0) (2021-06-08)
+
+
+### Features
+
+* 🎸 add isUnique flag to action creator ([98af007](https://github.com/TomTomB/ngrx-toolkit/commit/98af0078c60884b7c58b85fb63c814fb3fd98268))
+
 ## [1.4.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.3.0...v1.4.0) (2021-06-08)
 
 
