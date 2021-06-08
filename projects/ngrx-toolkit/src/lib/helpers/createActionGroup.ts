@@ -2,9 +2,13 @@ import { Args, Response, ErrorAction } from '../types';
 import { createAction, props } from '@ngrx/store';
 
 export const createActionGroup = <
-  Arguments,
+  Arguments extends {
+    queryParams?: Record<string | number, unknown>;
+    params?: Record<string | number, unknown>;
+    body?: unknown;
+  },
   ResponseData,
-  ErrorResponse = any
+  ErrorResponse = unknown
 >({
   method,
   scope,
