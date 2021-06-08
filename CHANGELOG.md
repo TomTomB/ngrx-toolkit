@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.3.0...v1.4.0) (2021-06-08)
+
+
+### Features
+
+* 🎸 add action option to determine a fixed action store id ([035e54b](https://github.com/TomTomB/ngrx-toolkit/commit/035e54b3fa1e2a828ef9ca3484f4a652094765e8))
+
 ## [1.3.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.2.0...v1.3.0) (2021-06-08)
 
 
