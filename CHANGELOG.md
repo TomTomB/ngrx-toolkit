@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.2.0...v1.3.0) (2021-06-08)
+
+
+### Features
+
+* 🎸 add effect helpers for different flattening operators ([0f3dc09](https://github.com/TomTomB/ngrx-toolkit/commit/0f3dc09823350688b4aa02fd6c68e88f29a2ed52))
+* 🎸 simplify dispatching ([e129394](https://github.com/TomTomB/ngrx-toolkit/commit/e129394208d63a1284e93cc36476a9ebc0ddbd2f))
+
 ## [1.2.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.1.1...v1.2.0) (2021-06-08)
 
 
