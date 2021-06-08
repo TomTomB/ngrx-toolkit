@@ -32,11 +32,21 @@ export const generateEntityId = (opts: any) => {
 
 export const UNIQUE_ID = generateEntityId(UNIQUE);
 
+const UNIQUE_LIST: string[] = [];
+
 export const createActionId = (
   action: TypedApiAction<any, any>,
   isUnique?: boolean
 ) => {
   if (isUnique) {
+    if (!UNIQUE_LIST.some((u) => u === uniformActionType(action.type))) {
+      UNIQUE_LIST.push(uniformActionType(action.type));
+    }
+
+    return UNIQUE_ID;
+  }
+
+  if (UNIQUE_LIST.some((u) => u === action.type)) {
     return UNIQUE_ID;
   }
 

@@ -295,7 +295,8 @@ export class FacadeBase {
    * @deprecated Will be private in the near future. Use `call()` instead
    */
   _dispatch(action: Action, isUnique?: boolean) {
+    const id = createActionId(action, isUnique);
     this.__store.dispatch(action);
-    return createActionId(action, isUnique);
+    return id;
   }
 }
