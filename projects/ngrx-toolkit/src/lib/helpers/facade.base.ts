@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 
 import {
+  createActionId,
   EntitySelectors,
   generateEntityId,
   removeCallState,
@@ -292,21 +293,6 @@ export class FacadeBase {
    */
   _dispatch(action: Action) {
     this.__store.dispatch(action);
-
-    const args = (action as any).args;
-    if (args) {
-      const copiedArgs = JSON.parse(JSON.stringify(args));
-      if (copiedArgs?.body?.password) {
-        copiedArgs.body.password = '[HIDDEN]';
-      }
-
-      if (copiedArgs?.body?.plainPassword) {
-        copiedArgs.body.plainPassword = '[HIDDEN]';
-      }
-
-      return generateEntityId(copiedArgs);
-    }
-
-    return generateEntityId(null);
+    return createActionId(action);
   }
 }

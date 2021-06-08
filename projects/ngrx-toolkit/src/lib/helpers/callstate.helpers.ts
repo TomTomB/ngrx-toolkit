@@ -32,9 +32,13 @@ export const generateEntityId = (opts: any) => {
   return hashCode('NO_ARG');
 };
 
-const createActionId = (action: TypedApiAction<any, any>) => {
+export const createActionId = (action: TypedApiAction<any, any>) => {
   const args = (action as any).args;
   if (args) {
+    if (args.id) {
+      return generateEntityId(args.id);
+    }
+
     const copiedArgs = JSON.parse(JSON.stringify(args));
     if (copiedArgs?.body?.password) {
       copiedArgs.body.password = '[HIDDEN]';
@@ -162,10 +166,6 @@ export const onClearFeature = <T>(
       : state
   );
 };
-
-export interface EntityActionState {
-  [key: string]: EntityState<EntityStatus<any, any>>;
-}
 
 export const createEntitySelectors = ({
   getState,

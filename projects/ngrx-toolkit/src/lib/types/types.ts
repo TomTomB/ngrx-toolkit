@@ -1,4 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
+import { EntityState } from '@ngrx/entity';
 import { Action, ActionCreator } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
@@ -112,4 +113,8 @@ export interface Error<T> {
 export interface FirebaseError {
   code: string;
   message: string;
+}
+
+export interface EntityActionState {
+  [key: string]: EntityState<EntityStatus<any, any>>;
 }
