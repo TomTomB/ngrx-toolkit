@@ -17,9 +17,6 @@ export class AuthFacade extends FacadeBase {
   }
 
   postSandbox(args: fromModels.PostSandboxArgs) {
-    return this.select(
-      Actions.postSandbox,
-      this._dispatch(Actions.postSandbox.call({ args }))
-    );
+    return this.call(Actions.postSandbox, args);
   }
 }

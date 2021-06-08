@@ -273,8 +273,22 @@ export class FacadeBase {
   }
 
   /**
+   * Dispatch a call action to the store
+   * @param actionGroup The group to dispatch the call action of
+   * @param args The call action args
+   * @returns A mapped entity state
+   */
+  call<J extends TypedActionObject>(
+    actionGroup: J,
+    args: ReturnType<J['call']>['args']
+  ) {
+    return this.select(actionGroup, this._dispatch(actionGroup.call({ args })));
+  }
+
+  /**
    * @private DO NOT USE OUTSIDE OF FACADES
    * @param action The action to dispatch
+   * @deprecated Will be private in the near future. Use `call()` instead
    */
   _dispatch(action: Action) {
     this.__store.dispatch(action);
