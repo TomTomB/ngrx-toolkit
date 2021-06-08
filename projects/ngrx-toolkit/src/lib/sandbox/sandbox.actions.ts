@@ -11,6 +11,7 @@ export const postSandbox = createActionGroup<
   method: 'POST',
   name: 'The Sandbox',
   scope: SANDBOX_PREFIX,
+  isUnique: true,
 });
 
 export const SANDBOX_ACTIONS = [postSandbox];

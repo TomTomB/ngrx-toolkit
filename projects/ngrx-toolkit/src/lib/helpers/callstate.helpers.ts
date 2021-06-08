@@ -1,6 +1,7 @@
 import {
   CallState,
   EntityStatus,
+  StoreSlice,
   TypedAction,
   TypedActionObject,
   TypedApiAction,
@@ -18,11 +19,8 @@ import {
 import { hashCode } from './util';
 import { uniformActionType } from './status.helpers';
 
-export interface StoreSlice {
-  ons: ReducerTypes<any, any>[];
-  adapters: { [typeId: string]: EntityAdapter<EntityStatus<any, any>> };
-  initialState: { [typeId: string]: EntityState<EntityStatus<any, any>> };
-}
+export const UNIQUE = '[UNIQUE]';
+export const HIDDEN = '[HIDDEN]';
 
 export const generateEntityId = (opts: any) => {
   if (opts) {
@@ -32,13 +30,18 @@ export const generateEntityId = (opts: any) => {
   return hashCode('NO_ARG');
 };
 
-export const createActionId = (action: TypedApiAction<any, any>) => {
+export const UNIQUE_ID = generateEntityId(UNIQUE);
+
+export const createActionId = (
+  action: TypedApiAction<any, any>,
+  isUnique?: boolean
+) => {
+  if (isUnique) {
+    return UNIQUE_ID;
+  }
+
   const args = (action as any).args;
   if (args) {
-    if (args.id) {
-      return generateEntityId(args.id);
-    }
-
     const copiedArgs = JSON.parse(JSON.stringify(args));
     if (copiedArgs?.body?.password) {
       copiedArgs.body.password = '[HIDDEN]';

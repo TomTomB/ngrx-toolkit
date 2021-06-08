@@ -6,7 +6,6 @@ export const createActionGroup = <
     queryParams?: Record<string | number, unknown>;
     params?: Record<string | number, unknown>;
     body?: unknown;
-    id?: string;
   },
   ResponseData,
   ErrorResponse = unknown
@@ -14,12 +13,15 @@ export const createActionGroup = <
   method,
   scope,
   name,
+  isUnique,
 }: {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   scope: string;
   name: string;
+  isUnique?: boolean;
 }) => {
   return {
+    isUnique: !!isUnique,
     call: createAction(
       `[${scope}] [${method}] ${name}`,
       props<Args<Arguments>>()

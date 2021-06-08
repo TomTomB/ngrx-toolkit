@@ -1,6 +1,6 @@
 import { HttpHeaders } from '@angular/common/http';
-import { EntityState } from '@ngrx/entity';
-import { Action, ActionCreator } from '@ngrx/store';
+import { EntityAdapter, EntityState } from '@ngrx/entity';
+import { Action, ActionCreator, ReducerTypes } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 export declare interface TypedActionNative<T extends string> extends Action {
@@ -44,6 +44,8 @@ export interface TypedAction extends Action {
 }
 
 export interface TypedActionObject {
+  isUnique: boolean;
+
   call: ActionCreator<
     string,
     (props: Args<any>) => Args<any> & TypedActionNative<string>
@@ -117,4 +119,10 @@ export interface FirebaseError {
 
 export interface EntityActionState {
   [key: string]: EntityState<EntityStatus<any, any>>;
+}
+
+export interface StoreSlice {
+  ons: ReducerTypes<any, any>[];
+  adapters: { [typeId: string]: EntityAdapter<EntityStatus<any, any>> };
+  initialState: { [typeId: string]: EntityState<EntityStatus<any, any>> };
 }

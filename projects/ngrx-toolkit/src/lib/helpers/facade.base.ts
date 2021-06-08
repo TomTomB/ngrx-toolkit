@@ -283,7 +283,10 @@ export class FacadeBase {
     actionGroup: J,
     args: ReturnType<J['call']>['args']
   ) {
-    return this.select(actionGroup, this._dispatch(actionGroup.call({ args })));
+    return this.select(
+      actionGroup,
+      this._dispatch(actionGroup.call({ args }), actionGroup.isUnique)
+    );
   }
 
   /**
@@ -291,8 +294,8 @@ export class FacadeBase {
    * @param action The action to dispatch
    * @deprecated Will be private in the near future. Use `call()` instead
    */
-  _dispatch(action: Action) {
+  _dispatch(action: Action, isUnique?: boolean) {
     this.__store.dispatch(action);
-    return createActionId(action);
+    return createActionId(action, isUnique);
   }
 }
