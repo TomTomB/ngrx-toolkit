@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.7.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.6.0...v1.7.0) (2021-06-09)
+
+
+### Features
+
+* 🎸 typing for on and once and isAction helper ([488679b](https://github.com/TomTomB/ngrx-toolkit/commit/488679b2974768bb1e2898b7f2de7b004ddd2f8a))
+
+
+### Bug Fixes
+
+* 🐛 enhance default generic types ([320a35f](https://github.com/TomTomB/ngrx-toolkit/commit/320a35facc0a74cbcd1e7e653c219e22b956bbd3))
+
 ## [1.6.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.5.0...v1.6.0) (2021-06-08)
 
 
