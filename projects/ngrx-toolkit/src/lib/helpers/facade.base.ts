@@ -3,11 +3,9 @@ import { Actions, ofType } from '@ngrx/effects';
 import { Action, ActionCreator, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-
 import {
   createActionId,
   EntitySelectors,
-  generateEntityId,
   removeCallState,
 } from './callstate.helpers';
 import { uniformActionType } from './status.helpers';
@@ -36,10 +34,8 @@ export class FacadeBase {
    * // OR
    * on(getAllKittens);
    */
-  on<J extends Action>(
-    actions: ActionCreator
-  ): Observable<ReturnType<typeof actions>>;
-  on<J extends Action>(actions: ActionCreator[]): Observable<J>;
+  on<J extends ActionCreator>(actions: J): Observable<ReturnType<J>>;
+  on<J extends ActionCreator[]>(actions: J): Observable<Action>;
   on(actions: any): Observable<any> | undefined {
     if (Array.isArray(actions)) {
       const _actions = actions as ActionCreator[];
@@ -69,24 +65,10 @@ export class FacadeBase {
    * // OR
    * once(getAllKittens);
    */
-  once<J extends Action>(
-    actions: ActionCreator
-  ): Observable<ReturnType<typeof actions>>;
-  once<J extends Action>(actions: ActionCreator[]): Observable<J>;
+  once<J extends ActionCreator>(actions: J): Observable<ReturnType<J>>;
+  once<J extends ActionCreator[]>(actions: J): Observable<Action>;
   once(actions: any): Observable<any> | undefined {
-    if (Array.isArray(actions)) {
-      const _actions = actions as ActionCreator[];
-      return this.__actions.pipe(
-        ofType(..._actions.map((a) => a.type)),
-        take(1)
-      );
-    }
-    if (typeof actions === 'function') {
-      const _action = actions as ActionCreator;
-
-      return this.__actions.pipe(ofType(_action.type), take(1));
-    }
-    return;
+    return this.on(actions).pipe(take(1));
   }
 
   /**
@@ -264,10 +246,9 @@ export class FacadeBase {
    * remove(getAllKittens);
    */
   remove<J extends TypedActionObject>(selector: J, actionId: number) {
-    const _selector = selector as TypedActionObject;
     this._dispatch(
       removeCallState({
-        adapterId: uniformActionType(_selector.call.type),
+        adapterId: uniformActionType(selector.call.type),
         actionId: actionId,
       })
     );
@@ -290,11 +271,9 @@ export class FacadeBase {
   }
 
   /**
-   * @private DO NOT USE OUTSIDE OF FACADES
    * @param action The action to dispatch
-   * @deprecated Will be private in the near future. Use `call()` instead
    */
-  _dispatch(action: Action, isUnique?: boolean) {
+  private _dispatch(action: Action, isUnique?: boolean) {
     const id = createActionId(action, isUnique);
     this.__store.dispatch(action);
     return id;

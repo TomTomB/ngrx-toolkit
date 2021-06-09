@@ -8,6 +8,8 @@ import {
 } from '../types';
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
 import {
+  Action,
+  ActionCreator,
   createAction,
   createSelector,
   MemoizedSelector,
@@ -21,6 +23,13 @@ import { uniformActionType } from './status.helpers';
 
 export const UNIQUE = '[UNIQUE]';
 export const HIDDEN = '[HIDDEN]';
+
+export const isAction = <T extends ActionCreator>(
+  actionToBe: T,
+  action: Action
+  // @ts-ignore
+): action is ReturnType<T> =>
+  uniformActionType(action.type) === uniformActionType(actionToBe.type);
 
 export const generateEntityId = (opts: any) => {
   if (opts) {

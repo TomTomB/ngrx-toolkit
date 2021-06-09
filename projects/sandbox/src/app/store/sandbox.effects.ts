@@ -6,7 +6,7 @@ import { SandboxService } from './sandbox.service';
 
 @Injectable()
 export class SandboxEffects extends EffectBase {
-  postSandbox$ = this.onAction({
+  postSandbox$ = this.onActionSwitchMap({
     action: SandboxActions.postSandbox,
     serviceCall: this.featureService.postSandbox,
   });

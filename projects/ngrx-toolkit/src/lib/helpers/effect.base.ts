@@ -14,25 +14,14 @@ import { buildErrorFromHttpError } from './error.helpers';
 export class EffectBase {
   constructor(private __actions$: Actions, private __featureService: any) {}
 
-  /**
-   * @deprecated use `onActionMergeMap` or `onActionSwitchMap`
-   */
-  onAction({
+  onActionSwitchMap<T extends TypedActionObject>({
     action,
     serviceCall,
   }: {
-    action: TypedActionObject;
-    serviceCall: (args: any) => Observable<any>;
-  }) {
-    return this.onActionMergeMap({ action, serviceCall });
-  }
-
-  onActionSwitchMap({
-    action,
-    serviceCall,
-  }: {
-    action: TypedActionObject;
-    serviceCall: (args: any) => Observable<any>;
+    action: T;
+    serviceCall: (
+      args: ReturnType<T['call']>['args']
+    ) => Observable<ReturnType<T['success']>['response']>;
   }) {
     return createEffect(() =>
       this.__actions$.pipe(
@@ -42,12 +31,14 @@ export class EffectBase {
     );
   }
 
-  onActionMergeMap({
+  onActionMergeMap<T extends TypedActionObject>({
     action,
     serviceCall,
   }: {
-    action: TypedActionObject;
-    serviceCall: (args: any) => Observable<any>;
+    action: T;
+    serviceCall: (
+      args: ReturnType<T['call']>['args']
+    ) => Observable<ReturnType<T['success']>['response']>;
   }) {
     return createEffect(() =>
       this.__actions$.pipe(
@@ -57,12 +48,14 @@ export class EffectBase {
     );
   }
 
-  onActionExhaustMap({
+  onActionExhaustMap<T extends TypedActionObject>({
     action,
     serviceCall,
   }: {
-    action: TypedActionObject;
-    serviceCall: (args: any) => Observable<any>;
+    action: T;
+    serviceCall: (
+      args: ReturnType<T['call']>['args']
+    ) => Observable<ReturnType<T['success']>['response']>;
   }) {
     return createEffect(() =>
       this.__actions$.pipe(
@@ -72,12 +65,14 @@ export class EffectBase {
     );
   }
 
-  onActionConcatMap({
+  onActionConcatMap<T extends TypedActionObject>({
     action,
     serviceCall,
   }: {
-    action: TypedActionObject;
-    serviceCall: (args: any) => Observable<any>;
+    action: T;
+    serviceCall: (
+      args: ReturnType<T['call']>['args']
+    ) => Observable<ReturnType<T['success']>['response']>;
   }) {
     return createEffect(() =>
       this.__actions$.pipe(
@@ -87,10 +82,12 @@ export class EffectBase {
     );
   }
 
-  private _serviceCall(
-    action: TypedActionObject,
-    args: any,
-    serviceCall: (args: any) => Observable<any>
+  private _serviceCall<T extends TypedActionObject>(
+    action: T,
+    args: ReturnType<T['call']>['args'],
+    serviceCall: (
+      args: ReturnType<T['call']>['args']
+    ) => Observable<ReturnType<T['success']>['response']>
   ) {
     return serviceCall
       .bind(this.__featureService)(args)

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { MappedEntityState } from 'projects/ngrx-toolkit/src/public-api';
+import {
+  MappedEntityState,
+  isAction,
+} from 'projects/ngrx-toolkit/src/public-api';
+import { tap } from 'rxjs/operators';
 import { postSandbox } from './store/sandbox.actions';
 import { SandboxFacade } from './store/sandbox.facade';
 
@@ -23,15 +27,34 @@ export class AppComponent implements OnInit {
     });
 
     this._sandboxFacade.postSandbox({
-      body: { foo: 'afasf' },
-      params: { foo: '' },
-      queryParams: { foo: 'fsa' },
+      body: { foo: 'bar' },
+      params: { foo: 'bar' },
+      queryParams: { foo: 'bar' },
     });
 
     this._sandboxFacade.postSandbox({
-      body: { foo: 'dsfdsf' },
-      params: { foo: 'dsfsdf' },
-      queryParams: { foo: '' },
+      body: { foo: 'baz' },
+      params: { foo: 'baz' },
+      queryParams: { foo: 'baz' },
     });
+
+    const onExample = this._sandboxFacade.on(postSandbox.success);
+
+    const onExampleMulti = this._sandboxFacade
+      .on([postSandbox.success, postSandbox.failure])
+      .pipe(
+        tap((a) => {
+          if (isAction(postSandbox.success, a)) {
+            console.log(a.response.contents);
+          }
+        })
+      );
+
+    const onceExample = this._sandboxFacade.on(postSandbox.success);
+
+    const onceExampleMulti = this._sandboxFacade.on([
+      postSandbox.success,
+      postSandbox.failure,
+    ]);
   }
 }
