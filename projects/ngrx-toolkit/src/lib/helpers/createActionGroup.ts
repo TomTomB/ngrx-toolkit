@@ -6,7 +6,7 @@ export const createActionGroup = <
     queryParams?: Record<string | number, unknown>;
     params?: Record<string | number, unknown>;
     body?: unknown;
-  },
+  } | null,
   ResponseData,
   ErrorResponse = unknown
 >({

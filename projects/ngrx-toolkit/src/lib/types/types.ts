@@ -106,7 +106,7 @@ export interface HttpPatchOptions extends HttpCallOptions {
 
 export interface HttpDeleteOptions extends HttpCallOptions {}
 
-export interface Error<T> {
+export interface Error<T = unknown> {
   status: number | string;
   message: string;
   data: T | null;
