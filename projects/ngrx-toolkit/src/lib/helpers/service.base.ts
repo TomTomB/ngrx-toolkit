@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { buildApiURL } from './url-builder.helpers';
@@ -51,7 +51,7 @@ export class ServiceBase {
 
     if (cacheItem) {
       if (new Date().getTime() < cacheItem.validUntil && !extras?.skipCache) {
-        return of(cacheItem.data);
+        return of(cacheItem.data) as Observable<T>;
       } else {
         delete this._cache[cacheId];
       }
@@ -103,7 +103,7 @@ export class ServiceBase {
         }),
         map((r) => {
           if (responseType === 'arraybuffer') {
-            return { file: r.body };
+            return { file: r.body } as any as T;
           }
           return r.body;
         })
@@ -133,7 +133,7 @@ export class ServiceBase {
       .pipe(
         map((r) => {
           if (responseType === 'arraybuffer') {
-            return { file: r };
+            return { file: r } as any as T;
           }
           return r;
         })
@@ -163,7 +163,7 @@ export class ServiceBase {
       .pipe(
         map((r) => {
           if (responseType === 'arraybuffer') {
-            return { file: r };
+            return { file: r } as any as T;
           }
           return r;
         })
@@ -193,7 +193,7 @@ export class ServiceBase {
       .pipe(
         map((r) => {
           if (responseType === 'arraybuffer') {
-            return { file: r };
+            return { file: r } as any as T;
           }
           return r;
         })
@@ -223,7 +223,7 @@ export class ServiceBase {
       .pipe(
         map((r) => {
           if (responseType === 'arraybuffer') {
-            return { file: r };
+            return { file: r } as any as T;
           }
           return r;
         })
