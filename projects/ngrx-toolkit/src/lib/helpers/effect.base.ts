@@ -92,10 +92,40 @@ export class EffectBase {
     return serviceCall
       .bind(this.__featureService)(args)
       .pipe(
-        map((response) => action.success({ response, args })),
-        catchError((error) =>
-          of(action.failure(buildErrorFromHttpError({ error, args })))
-        )
+        map((response) => {
+          const actionDefault = [action.success({ response, args })];
+
+          if (action.sideUpdates?.success) {
+            actionDefault.push(
+              ...action.sideUpdates.success.map((a, i) =>
+                a.action({ args: args.sideUpdateArgs.success[i], response })
+              )
+            );
+          }
+
+          return actionDefault;
+        }),
+        switchMap((a) => a),
+        catchError((error) => {
+          const actionDefault = [
+            action.failure(buildErrorFromHttpError({ error, args })),
+          ];
+
+          if (action.sideUpdates?.failure) {
+            actionDefault.push(
+              ...action.sideUpdates.failure.map((a, i) =>
+                a.action(
+                  buildErrorFromHttpError({
+                    error,
+                    args: args.sideUpdateArgs.failure[i],
+                  })
+                )
+              )
+            );
+          }
+
+          return of(actionDefault).pipe(switchMap((a) => a));
+        })
       );
   }
 }

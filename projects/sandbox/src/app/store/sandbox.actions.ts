@@ -21,6 +21,10 @@ export const postSandbox = createActionGroup<
   name: 'The Sandbox',
   scope: SANDBOX_PREFIX,
   isUnique: true,
+  sideUpdates: {
+    success: [{ action: getFoo.success }],
+    failure: [{ action: getFoo.failure }],
+  },
 });
 
 export const SANDBOX_ACTIONS = [postSandbox, getFoo];

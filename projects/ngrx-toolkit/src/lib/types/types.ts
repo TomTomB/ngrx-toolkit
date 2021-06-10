@@ -22,6 +22,10 @@ export interface ArgumentsBase {
   queryParams?: Record<string | number, unknown>;
   params?: Record<string | number, unknown>;
   body?: unknown;
+  sideUpdateArgs?: {
+    success?: ArgumentsBase[];
+    failure?: ArgumentsBase[];
+  };
 }
 
 export const enum CallState {
@@ -74,6 +78,14 @@ export interface TypedActionObject<
   Error = any
 > {
   isUnique: boolean;
+  sideUpdates?: {
+    success?: {
+      action: SuccessCreator;
+    }[];
+    failure?: {
+      action: FailureCreator;
+    }[];
+  };
 
   call: CallCreator<Args>;
   success: SuccessCreator<Args, Response>;

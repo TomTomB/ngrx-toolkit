@@ -21,22 +21,29 @@ export class AppComponent implements OnInit {
   constructor(private _sandboxFacade: SandboxFacade) {}
 
   ngOnInit(): void {
+    this.store2 = this._sandboxFacade.getFoo({
+      queryParams: { sandboxSlug: 'foobar' },
+    });
+
     this.store = this._sandboxFacade.postSandbox({
-      body: { foo: '' },
-      params: { foo: '' },
-      queryParams: { foo: '' },
-    });
-
-    this._sandboxFacade.postSandbox({
-      body: { foo: 'bar' },
-      params: { foo: 'bar' },
-      queryParams: { foo: 'bar' },
-    });
-
-    this._sandboxFacade.postSandbox({
-      body: { foo: 'baz' },
-      params: { foo: 'baz' },
-      queryParams: { foo: 'baz' },
+      queryParams: { sandboxId: 'asfs11412vad' },
+      sideUpdateArgs: {
+        success: [
+          {
+            queryParams: { sandboxSlug: 'foobar' },
+          },
+          {
+            queryParams: {
+              testThing: 'fsdf',
+            },
+          },
+        ],
+        failure: [
+          {
+            queryParams: { sandboxSlug: 'foobar' },
+          },
+        ],
+      },
     });
 
     const onExample = this._sandboxFacade.on(postSandbox.success);

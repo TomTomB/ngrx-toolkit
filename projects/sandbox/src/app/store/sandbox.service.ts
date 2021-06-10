@@ -17,4 +17,11 @@ export class SandboxService extends ServiceBase {
       httpOpts: args,
     });
   }
+
+  getFoo(args: fromModels.GetFooArgs) {
+    return this.get<fromModels.Sandbox>({
+      apiRoute: '/todos/1',
+      httpOpts: args,
+    });
+  }
 }

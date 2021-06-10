@@ -10,6 +10,10 @@ export class SandboxEffects extends EffectBase {
     action: SandboxActions.postSandbox,
     serviceCall: this.featureService.postSandbox,
   });
+  getFoo$ = this.onActionSwitchMap({
+    action: SandboxActions.getFoo,
+    serviceCall: this.featureService.getFoo,
+  });
 
   constructor(
     private actions$: Actions,

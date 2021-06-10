@@ -4,6 +4,8 @@ import {
   ErrorAction,
   TypedActionObject,
   ArgumentsBase,
+  SuccessCreator,
+  FailureCreator,
 } from '../types';
 import { createAction, props } from '@ngrx/store';
 
@@ -16,11 +18,16 @@ export const createActionGroup = <
   scope,
   name,
   isUnique,
+  sideUpdates,
 }: {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   scope: string;
   name: string;
   isUnique?: boolean;
+  sideUpdates?: {
+    success?: { action: SuccessCreator }[];
+    failure?: { action: FailureCreator }[];
+  };
 }): TypedActionObject<Arguments, ResponseData, ErrorResponse> => {
   return {
     isUnique: !!isUnique,
@@ -36,6 +43,7 @@ export const createActionGroup = <
       `[${scope}] [${method}] ${name} Failure`,
       props<ErrorAction<ErrorResponse> & Args<Arguments>>()
     ),
+    sideUpdates,
   };
 };
 

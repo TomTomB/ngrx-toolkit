@@ -1,21 +1,22 @@
 export interface PostSandboxArgs {
   queryParams: {
-    foo: string;
+    sandboxId: string;
   };
-  params: {
-    foo: string;
-  };
-  body: {
-    foo: string;
+  sideUpdateArgs: {
+    success: [GetFooArgs, TestArgs];
+    failure: [GetFooArgs];
   };
 }
 
 export interface GetFooArgs {
   queryParams: {
-    bar: string;
+    sandboxSlug: string;
   };
-  params: {
-    baz: string;
+}
+
+export interface TestArgs {
+  queryParams: {
+    testThing: string;
   };
 }
 
