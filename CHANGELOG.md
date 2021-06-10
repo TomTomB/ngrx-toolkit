@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.1](https://github.com/TomTomB/ngrx-toolkit/compare/v1.7.0...v1.7.1) (2021-06-10)
+
+
+### Bug Fixes
+
+* 🐛 dont return null as type in get ([ded90a7](https://github.com/TomTomB/ngrx-toolkit/commit/ded90a751c65abc4626000202078b31e2abf145f))
+* 🐛 isAction should not uniform the action types ([442ad1a](https://github.com/TomTomB/ngrx-toolkit/commit/442ad1a554381ea2e2a9587861030c06b0cc770e))
+* 🐛 sandbox errors ([a9021cb](https://github.com/TomTomB/ngrx-toolkit/commit/a9021cb92e2f7e6b1d56a2034cb03ceb5ee9784a))
+* 🐛 service base typings ([43a5ad3](https://github.com/TomTomB/ngrx-toolkit/commit/43a5ad3bfe077b7281b197a235872d46c4cd7b5f))
+
 ## [1.7.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.6.0...v1.7.0) (2021-06-09)
 
 
