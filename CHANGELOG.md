@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.7.1...v1.8.0) (2021-06-10)
+
+
+### Features
+
+* 🎸 enhance mapped entity state typings ([a518cc5](https://github.com/TomTomB/ngrx-toolkit/commit/a518cc55719cc3059b63f9cc6a1088e68b0a630b))
+* 🎸 side updates for success and failure actions ([33dd212](https://github.com/TomTomB/ngrx-toolkit/commit/33dd212f8033f87b5a2d21077f36a83ea9970fcd))
+
 ### [1.7.1](https://github.com/TomTomB/ngrx-toolkit/compare/v1.7.0...v1.7.1) (2021-06-10)
 
 
