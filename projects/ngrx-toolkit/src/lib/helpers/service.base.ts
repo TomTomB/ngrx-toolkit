@@ -105,7 +105,7 @@ export class ServiceBase {
           if (responseType === 'arraybuffer') {
             return { file: r.body } as any as T;
           }
-          return r.body;
+          return r.body as T;
         })
       );
   }
