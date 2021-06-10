@@ -4,7 +4,7 @@ import {
   isAction,
 } from 'projects/ngrx-toolkit/src/public-api';
 import { tap } from 'rxjs/operators';
-import { postSandbox } from './store/sandbox.actions';
+import { getFoo, postSandbox } from './store/sandbox.actions';
 import { SandboxFacade } from './store/sandbox.facade';
 
 @Component({
@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   title = 'sandbox';
 
   store!: MappedEntityState<typeof postSandbox>;
+  store2?: MappedEntityState<typeof getFoo>;
 
   constructor(private _sandboxFacade: SandboxFacade) {}
 

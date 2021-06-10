@@ -10,6 +10,15 @@ export interface PostSandboxArgs {
   };
 }
 
+export interface GetFooArgs {
+  queryParams: {
+    bar: string;
+  };
+  params: {
+    baz: string;
+  };
+}
+
 export interface Sandbox {
   name: string;
   contents: string;

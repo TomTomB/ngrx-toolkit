@@ -3,6 +3,15 @@ import * as fromModels from './sandbox.models';
 
 export const SANDBOX_PREFIX = 'Sandbox';
 
+export const getFoo = createActionGroup<
+  fromModels.GetFooArgs,
+  fromModels.Sandbox
+>({
+  method: 'GET',
+  name: 'Foo',
+  scope: SANDBOX_PREFIX,
+});
+
 export const postSandbox = createActionGroup<
   fromModels.PostSandboxArgs,
   fromModels.Sandbox,
@@ -14,4 +23,4 @@ export const postSandbox = createActionGroup<
   isUnique: true,
 });
 
-export const SANDBOX_ACTIONS = [postSandbox];
+export const SANDBOX_ACTIONS = [postSandbox, getFoo];

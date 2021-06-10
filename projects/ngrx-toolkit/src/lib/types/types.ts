@@ -18,6 +18,12 @@ export interface Args<T> {
   args: T;
 }
 
+export interface ArgumentsBase {
+  queryParams?: Record<string | number, unknown>;
+  params?: Record<string | number, unknown>;
+  body?: unknown;
+}
+
 export const enum CallState {
   INIT = 'INIT',
   LOADING = 'LOADING',
@@ -43,25 +49,35 @@ export interface TypedAction extends Action {
   [key: string]: any;
 }
 
-export interface TypedActionObject {
+export type CallCreator<T = any> = ActionCreator<
+  string,
+  (props: Args<T>) => Args<T> & TypedActionNative<string>
+>;
+
+export type SuccessCreator<T = any, J = any> = ActionCreator<
+  string,
+  (
+    props: Response<J> & Args<T>
+  ) => Response<J> & Args<T> & TypedActionNative<string>
+>;
+
+export type FailureCreator<T = any, J = any> = ActionCreator<
+  string,
+  (
+    props: ErrorAction<J> & Args<T>
+  ) => ErrorAction<J> & Args<T> & TypedActionNative<string>
+>;
+
+export interface TypedActionObject<
+  Args extends ArgumentsBase | null = any,
+  Response = any,
+  Error = any
+> {
   isUnique: boolean;
 
-  call: ActionCreator<
-    string,
-    (props: Args<any>) => Args<any> & TypedActionNative<string>
-  >;
-  success: ActionCreator<
-    string,
-    (
-      props: Response<any> & Args<any>
-    ) => Response<any> & Args<any> & TypedActionNative<string>
-  >;
-  failure: ActionCreator<
-    string,
-    (
-      props: ErrorAction<any> & Args<any>
-    ) => ErrorAction<any> & Args<any> & TypedActionNative<string>
-  >;
+  call: CallCreator<Args>;
+  success: SuccessCreator<Args, Response>;
+  failure: FailureCreator<Args, Error>;
 }
 
 export interface MappedEntityState<X extends TypedActionObject> {

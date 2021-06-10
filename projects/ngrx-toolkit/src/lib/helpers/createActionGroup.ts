@@ -1,12 +1,14 @@
-import { Args, Response, ErrorAction } from '../types';
+import {
+  Args,
+  Response,
+  ErrorAction,
+  TypedActionObject,
+  ArgumentsBase,
+} from '../types';
 import { createAction, props } from '@ngrx/store';
 
 export const createActionGroup = <
-  Arguments extends {
-    queryParams?: Record<string | number, unknown>;
-    params?: Record<string | number, unknown>;
-    body?: unknown;
-  } | null,
+  Arguments extends ArgumentsBase | null,
   ResponseData,
   ErrorResponse = unknown
 >({
@@ -19,7 +21,7 @@ export const createActionGroup = <
   scope: string;
   name: string;
   isUnique?: boolean;
-}) => {
+}): TypedActionObject<Arguments, ResponseData, ErrorResponse> => {
   return {
     isUnique: !!isUnique,
     call: createAction(
