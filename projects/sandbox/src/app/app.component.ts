@@ -45,10 +45,11 @@ export class AppComponent implements OnInit {
       .pipe(
         tap((a) => {
           if (isAction(postSandbox.success, a)) {
-            console.log(a.response.contents);
+            console.log('yes', a);
           }
         })
-      );
+      )
+      .subscribe();
 
     const onceExample = this._sandboxFacade.on(postSandbox.success);
 

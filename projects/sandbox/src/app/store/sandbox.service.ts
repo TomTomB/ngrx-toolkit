@@ -12,6 +12,9 @@ export class SandboxService extends ServiceBase {
   }
 
   postSandbox(args: fromModels.PostSandboxArgs) {
-    return this.get({ apiRoute: '/todos/1', httpOpts: args });
+    return this.get<fromModels.Sandbox>({
+      apiRoute: '/todos/1',
+      httpOpts: args,
+    });
   }
 }
