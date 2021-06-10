@@ -28,8 +28,7 @@ export const isAction = <T extends ActionCreator>(
   actionToBe: T,
   action: Action
   // @ts-ignore
-): action is ReturnType<T> =>
-  uniformActionType(action.type) === uniformActionType(actionToBe.type);
+): action is ReturnType<T> => action.type === actionToBe.type;
 
 export const generateEntityId = (opts: any) => {
   if (opts) {
