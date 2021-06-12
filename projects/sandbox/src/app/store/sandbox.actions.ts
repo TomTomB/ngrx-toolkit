@@ -13,7 +13,7 @@ export const getFoo = createActionGroup<
 });
 
 export const getBar = createActionGroup<
-  fromModels.GetBarArgs & { x: boolean },
+  fromModels.GetBarArgs,
   fromModels.Sandbox
 >({
   method: 'GET',
@@ -25,7 +25,8 @@ export const postSandbox = createActionGroup<
   fromModels.PostSandboxArgs,
   fromModels.Sandbox,
   fromModels.PostSandboxError,
-  [typeof getFoo, typeof getBar]
+  [typeof getFoo, typeof getBar],
+  [typeof getFoo]
 >({
   method: 'POST',
   name: 'The Sandbox',

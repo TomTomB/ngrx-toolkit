@@ -7,6 +7,11 @@ import { tap } from 'rxjs/operators';
 import { getFoo, postSandbox } from './store/sandbox.actions';
 import { SandboxFacade } from './store/sandbox.facade';
 
+const dumbSideUpdates = {
+  failure: [] as any,
+  success: [] as any,
+};
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -21,26 +26,33 @@ export class AppComponent implements OnInit {
   constructor(private _sandboxFacade: SandboxFacade) {}
 
   ngOnInit(): void {
-    this.store2 = this._sandboxFacade.getFoo({
+    this.store2 = this._sandboxFacade.call(getFoo, {
       queryParams: { sandboxSlug: 'foobar' },
+      sideUpdates: dumbSideUpdates,
     });
 
-    this.store = this._sandboxFacade.postSandbox({
+    this.store = this._sandboxFacade.call(postSandbox, {
       queryParams: { sandboxId: 'asfs11412vad' },
-      sideUpdateArgs: {
+      sideUpdates: {
         success: [
           {
             queryParams: { sandboxSlug: 'foobar' },
+            sideUpdates: dumbSideUpdates,
           },
           {
             queryParams: {
-              testThing: 'fsdf',
+              barSlug: 'dsfdf',
             },
+            params: {
+              page: 1,
+            },
+            sideUpdates: dumbSideUpdates,
           },
         ],
         failure: [
           {
             queryParams: { sandboxSlug: 'foobar' },
+            sideUpdates: dumbSideUpdates,
           },
         ],
       },

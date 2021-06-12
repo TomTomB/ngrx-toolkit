@@ -2,10 +2,6 @@ export interface PostSandboxArgs {
   queryParams: {
     sandboxId: string;
   };
-  sideUpdateArgs: {
-    success: [GetFooArgs, TestArgs];
-    failure: [GetFooArgs];
-  };
 }
 
 export interface GetFooArgs {

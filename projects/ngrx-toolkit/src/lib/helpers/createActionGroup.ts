@@ -6,6 +6,7 @@ import {
   ArgumentsBase,
 } from '../types';
 import { createAction, props } from '@ngrx/store';
+import { SideUpdates } from '../types/internal';
 
 export const createActionGroup = <
   Arguments extends ArgumentsBase | null,
@@ -29,7 +30,7 @@ export const createActionGroup = <
     failure?: readonly { action: FailureSideUpdates[number]['failure'] }[];
   };
 }): TypedActionObject<
-  Arguments,
+  Arguments & SideUpdates<SuccessSideUpdates, FailureSideUpdates>,
   ResponseData,
   ErrorResponse,
   SuccessSideUpdates,
@@ -39,15 +40,23 @@ export const createActionGroup = <
     isUnique: !!isUnique,
     call: createAction(
       `[${scope}] [${method}] ${name}`,
-      props<Args<Arguments>>()
+      props<
+        Args<Arguments & SideUpdates<SuccessSideUpdates, FailureSideUpdates>>
+      >()
     ),
     success: createAction(
       `[${scope}] [${method}] ${name} Success`,
-      props<Response<ResponseData> & Args<Arguments>>()
+      props<
+        Response<ResponseData> &
+          Args<Arguments & SideUpdates<SuccessSideUpdates, FailureSideUpdates>>
+      >()
     ),
     failure: createAction(
       `[${scope}] [${method}] ${name} Failure`,
-      props<ErrorAction<ErrorResponse> & Args<Arguments>>()
+      props<
+        ErrorAction<ErrorResponse> &
+          Args<Arguments & SideUpdates<SuccessSideUpdates, FailureSideUpdates>>
+      >()
     ),
     sideUpdates,
   };
