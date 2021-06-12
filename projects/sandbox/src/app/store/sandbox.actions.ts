@@ -12,19 +12,29 @@ export const getFoo = createActionGroup<
   scope: SANDBOX_PREFIX,
 });
 
+export const getBar = createActionGroup<
+  fromModels.GetBarArgs & { x: boolean },
+  fromModels.Sandbox
+>({
+  method: 'GET',
+  name: 'Bar',
+  scope: SANDBOX_PREFIX,
+});
+
 export const postSandbox = createActionGroup<
   fromModels.PostSandboxArgs,
   fromModels.Sandbox,
-  fromModels.PostSandboxError
+  fromModels.PostSandboxError,
+  [typeof getFoo, typeof getBar]
 >({
   method: 'POST',
   name: 'The Sandbox',
   scope: SANDBOX_PREFIX,
   isUnique: true,
   sideUpdates: {
-    success: [{ action: getFoo.success }],
+    success: [{ action: getFoo.success }, { action: getBar.success }],
     failure: [{ action: getFoo.failure }],
   },
 });
 
-export const SANDBOX_ACTIONS = [postSandbox, getFoo];
+export const SANDBOX_ACTIONS = [postSandbox, getFoo, getBar];

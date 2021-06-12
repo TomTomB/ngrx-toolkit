@@ -4,15 +4,15 @@ import {
   ErrorAction,
   TypedActionObject,
   ArgumentsBase,
-  SuccessCreator,
-  FailureCreator,
 } from '../types';
 import { createAction, props } from '@ngrx/store';
 
 export const createActionGroup = <
   Arguments extends ArgumentsBase | null,
   ResponseData,
-  ErrorResponse = unknown
+  ErrorResponse = unknown,
+  SuccessSideUpdates extends TypedActionObject[] = TypedActionObject[],
+  FailureSideUpdates extends TypedActionObject[] = TypedActionObject[]
 >({
   method,
   scope,
@@ -25,10 +25,10 @@ export const createActionGroup = <
   name: string;
   isUnique?: boolean;
   sideUpdates?: {
-    success?: { action: SuccessCreator }[];
-    failure?: { action: FailureCreator }[];
+    success?: { action: SuccessSideUpdates[number]['success'] }[];
+    failure?: { action: FailureSideUpdates[number]['failure'] }[];
   };
-}): TypedActionObject<Arguments, ResponseData, ErrorResponse> => {
+}) => {
   return {
     isUnique: !!isUnique,
     call: createAction(

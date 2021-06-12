@@ -14,6 +14,15 @@ export interface GetFooArgs {
   };
 }
 
+export interface GetBarArgs {
+  queryParams: {
+    barSlug: string;
+  };
+  params: {
+    page: number;
+  };
+}
+
 export interface TestArgs {
   queryParams: {
     testThing: string;
