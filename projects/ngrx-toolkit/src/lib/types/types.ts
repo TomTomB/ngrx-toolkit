@@ -83,6 +83,7 @@ export interface TypedActionObject<
   sideUpdates?: {
     success?: readonly {
       action: SuccessCreator;
+      mapFn?: (x: Response) => any;
     }[];
     failure?: readonly {
       action: FailureCreator;

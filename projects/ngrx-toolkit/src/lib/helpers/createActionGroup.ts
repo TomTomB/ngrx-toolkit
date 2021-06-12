@@ -26,7 +26,12 @@ export const createActionGroup = <
   name: string;
   isUnique?: boolean;
   sideUpdates?: {
-    success?: readonly { action: SuccessSideUpdates[number]['success'] }[];
+    success?: readonly {
+      action: SuccessSideUpdates[number]['success'];
+      mapFn?: (
+        resp: ResponseData
+      ) => ReturnType<SuccessSideUpdates[number]['success']>['response'];
+    }[];
     failure?: readonly { action: FailureSideUpdates[number]['failure'] }[];
   };
 }): TypedActionObject<

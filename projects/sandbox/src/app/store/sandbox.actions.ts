@@ -14,7 +14,7 @@ export const getFoo = createActionGroup<
 
 export const getBar = createActionGroup<
   fromModels.GetBarArgs,
-  fromModels.Sandbox
+  { value: boolean }
 >({
   method: 'GET',
   name: 'Bar',
@@ -33,8 +33,11 @@ export const postSandbox = createActionGroup<
   scope: SANDBOX_PREFIX,
   isUnique: true,
   sideUpdates: {
-    success: [{ action: getFoo.success }, { action: getBar.success }] as const,
-    failure: [{ action: getFoo.failure }] as const,
+    success: [
+      { action: getFoo.success },
+      { action: getBar.success, mapFn: (x) => ({ value: !!x }) },
+    ],
+    failure: [{ action: getFoo.failure }],
   },
 });
 

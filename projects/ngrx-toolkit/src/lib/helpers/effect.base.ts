@@ -98,7 +98,10 @@ export class EffectBase {
           if (action.sideUpdates?.success) {
             actionDefault.push(
               ...action.sideUpdates.success.map((a, i) =>
-                a.action({ args: args.sideUpdates.success[i], response })
+                a.action({
+                  args: args.sideUpdates.success[i],
+                  response: a.mapFn ? a.mapFn(response) : response,
+                })
               )
             );
           }
