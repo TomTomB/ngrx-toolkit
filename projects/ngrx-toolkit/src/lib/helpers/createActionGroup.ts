@@ -11,8 +11,8 @@ export const createActionGroup = <
   Arguments extends ArgumentsBase | null,
   ResponseData,
   ErrorResponse = unknown,
-  SuccessSideUpdates extends TypedActionObject[] = TypedActionObject[],
-  FailureSideUpdates extends TypedActionObject[] = TypedActionObject[]
+  SuccessSideUpdates extends readonly TypedActionObject[] = readonly TypedActionObject[],
+  FailureSideUpdates extends readonly TypedActionObject[] = readonly TypedActionObject[]
 >({
   method,
   scope,
@@ -25,10 +25,16 @@ export const createActionGroup = <
   name: string;
   isUnique?: boolean;
   sideUpdates?: {
-    success?: { action: SuccessSideUpdates[number]['success'] }[];
-    failure?: { action: FailureSideUpdates[number]['failure'] }[];
+    success?: readonly { action: SuccessSideUpdates[number]['success'] }[];
+    failure?: readonly { action: FailureSideUpdates[number]['failure'] }[];
   };
-}) => {
+}): TypedActionObject<
+  Arguments,
+  ResponseData,
+  ErrorResponse,
+  SuccessSideUpdates,
+  FailureSideUpdates
+> => {
   return {
     isUnique: !!isUnique,
     call: createAction(

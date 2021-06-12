@@ -32,9 +32,9 @@ export const postSandbox = createActionGroup<
   scope: SANDBOX_PREFIX,
   isUnique: true,
   sideUpdates: {
-    success: [{ action: getFoo.success }, { action: getBar.success }],
-    failure: [{ action: getFoo.failure }],
+    success: [{ action: getFoo.success }, { action: getBar.success }] as const,
+    failure: [{ action: getFoo.failure }] as const,
   },
 });
 
-export const SANDBOX_ACTIONS = [postSandbox, getFoo, getBar];
+export const SANDBOX_ACTIONS = [postSandbox, getFoo, getBar] as const;

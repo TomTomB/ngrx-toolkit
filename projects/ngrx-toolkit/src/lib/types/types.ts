@@ -75,14 +75,16 @@ export type FailureCreator<T = any, J = any> = ActionCreator<
 export interface TypedActionObject<
   Args extends ArgumentsBase | null = any,
   Response = any,
-  Error = any
+  Error = any,
+  SuccessSideUpdates = readonly any[],
+  FailureSideUpdates = readonly any[]
 > {
   isUnique: boolean;
   sideUpdates?: {
-    success?: {
+    success?: readonly {
       action: SuccessCreator;
     }[];
-    failure?: {
+    failure?: readonly {
       action: FailureCreator;
     }[];
   };

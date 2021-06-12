@@ -75,7 +75,9 @@ export const createActionId = (
   return generateEntityId(null);
 };
 
-export const createStoreSlice = (actionObjects: TypedActionObject[]) => {
+export const createStoreSlice = (
+  actionObjects: readonly TypedActionObject[]
+) => {
   const storeSlice: StoreSlice = { ons: [], adapters: {}, initialState: {} };
 
   for (const obj of actionObjects) {
