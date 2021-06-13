@@ -22,25 +22,35 @@ type ActionCallSideUpdates<T extends TypedActionObject> = ReturnType<
   T['call']
 >['args']['sideUpdates'];
 
-interface SideUpdateObject<SuccessResponse = any, J = any> {
-  action: SuccessCreator;
-  mapFn?: (x: SuccessResponse) => J;
-}
+type SideUpdateObject<
+  SuccessArgs = any,
+  SuccessResponse = any,
+  OriginSuccessResponse = any
+> = {
+  action: SuccessCreator<SuccessArgs, SuccessResponse>;
+  mapFn?: (x: OriginSuccessResponse) => SuccessResponse;
+};
 
 type SideUpdates<
   SideUpdateArgs,
   MapFnArg,
   UpdateConfig extends SideUpdates<SideUpdateArgs, MapFnArg, UpdateConfig>
 > = {
-  [Property in keyof SideUpdateArgs]: {
-    action: SuccessCreator<
-      SideUpdateArgs[Property],
-      ReturnType<UpdateConfig[Property]['action']>['response']
-    >;
-    mapFn?: (
-      x: MapFnArg
-    ) => ReturnType<UpdateConfig[Property]['action']>['response'];
-  };
+  [Property in keyof SideUpdateArgs]: MapFnArg extends ReturnType<
+    UpdateConfig[Property]['action']
+  >['response']
+    ? SideUpdateObject<
+        SideUpdateArgs[Property],
+        ReturnType<UpdateConfig[Property]['action']>['response'],
+        MapFnArg
+      >
+    : Required<
+        SideUpdateObject<
+          SideUpdateArgs[Property],
+          ReturnType<UpdateConfig[Property]['action']>['response'],
+          MapFnArg
+        >
+      >;
 };
 
 type OnActionArgs<
