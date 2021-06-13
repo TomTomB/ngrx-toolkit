@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.9.0...v1.10.0) (2021-06-13)
+
+
+### Features
+
+* 🎸 require map fn if side update types dont match ([4595b5e](https://github.com/TomTomB/ngrx-toolkit/commit/4595b5e060e5b360aaae1b7ab81fe11bf35e638f))
+* 🎸 simplify side updates ([fcc0ac1](https://github.com/TomTomB/ngrx-toolkit/commit/fcc0ac1b8db1b12a2dd108016761c403d6e1945c))
+
+
+### Bug Fixes
+
+* 🐛 map fn typings in side updates ([0733bf8](https://github.com/TomTomB/ngrx-toolkit/commit/0733bf811f8645afdc10ba13e08df6ba011675d5))
+
 ## [1.9.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.8.0...v1.9.0) (2021-06-12)
 
 
