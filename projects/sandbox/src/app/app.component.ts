@@ -21,14 +21,15 @@ export class AppComponent implements OnInit {
   constructor(private _sandboxFacade: SandboxFacade) {}
 
   ngOnInit(): void {
-    this.store2 = this._sandboxFacade.call(getFoo, {
+    this.store2 = this._sandboxFacade.getFoo({
       queryParams: { sandboxSlug: 'foobar' },
     });
 
-    this.store = this._sandboxFacade.call(postSandbox, {
+    this.store = this._sandboxFacade.postSandbox({
       queryParams: { sandboxId: 'asfs11412vad' },
       sideUpdates: {
-        getFoo: { queryParams: { sandboxSlug: 'asfasf' } },
+        getFoo: { queryParams: { sandboxSlug: 'foobar' } },
+        getBar: { params: { page: 1 }, queryParams: { barSlug: 'baro' } },
       },
     });
 

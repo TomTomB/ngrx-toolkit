@@ -10,7 +10,11 @@ export class SandboxEffects extends EffectBase {
     action: SandboxActions.postSandbox,
     serviceCall: this.featureService.postSandbox,
     sideUpdates: {
-      getFoo: { action: SandboxActions.getFoo.success, mapFn: (x) => true },
+      getFoo: { action: SandboxActions.getFoo.success, mapFn: (x) => x },
+      getBar: {
+        action: SandboxActions.getBar.success,
+        mapFn: (x) => ({ value: !!x }),
+      },
     },
   });
   getFoo$ = this.onActionSwitchMap({

@@ -1,5 +1,5 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { FailureCreator, SuccessCreator } from '../types';
+import { SuccessCreator } from '../types';
 import { Observable, of } from 'rxjs';
 import {
   catchError,
@@ -12,23 +12,6 @@ import {
 import { TypedActionObject } from '../types/types';
 import { buildErrorFromHttpError } from './error.helpers';
 
-interface SideUpdateSuccess {
-  action: SuccessCreator;
-  mapFn?: (x: any) => any;
-}
-
-interface SideUpdateFailure {
-  action: SuccessCreator;
-  mapFn?: (x: any) => any;
-}
-
-type SideUpdates<SideUpdateArgs, MapFnArg> = {
-  [Property in keyof SideUpdateArgs]: {
-    action: SuccessCreator<SideUpdateArgs[Property], any>;
-    mapFn?: (x: MapFnArg) => any;
-  };
-};
-
 type ActionCallArgs<T extends TypedActionObject> = ReturnType<
   T['call']
 >['args'];
@@ -39,10 +22,34 @@ type ActionCallSideUpdates<T extends TypedActionObject> = ReturnType<
   T['call']
 >['args']['sideUpdates'];
 
+interface SideUpdateObject<SuccessResponse = any, J = any> {
+  action: SuccessCreator;
+  mapFn?: (x: SuccessResponse) => J;
+}
+
+type SideUpdates<
+  SideUpdateArgs,
+  MapFnArg,
+  UpdateConfig extends SideUpdates<SideUpdateArgs, MapFnArg, UpdateConfig>
+> = {
+  [Property in keyof SideUpdateArgs]: {
+    action: SuccessCreator<
+      SideUpdateArgs[Property],
+      ReturnType<UpdateConfig[Property]['action']>['response']
+    >;
+    mapFn?: (
+      x: MapFnArg
+    ) => ReturnType<UpdateConfig[Property]['action']>['response'];
+  };
+};
+
 export class EffectBase {
   constructor(private __actions$: Actions, private __featureService: any) {}
 
-  onActionSwitchMap<T extends TypedActionObject>({
+  onActionSwitchMap<
+    T extends TypedActionObject,
+    J extends SideUpdates<ActionCallSideUpdates<T>, ActionSuccessResponse<T>, J>
+  >({
     action,
     serviceCall,
     sideUpdates,
@@ -51,10 +58,7 @@ export class EffectBase {
     serviceCall: (
       args: ActionCallArgs<T>
     ) => Observable<ActionSuccessResponse<T>>;
-    sideUpdates?: SideUpdates<
-      ActionCallSideUpdates<T>,
-      ActionSuccessResponse<T>
-    >;
+    sideUpdates?: J;
   }) {
     return createEffect(() =>
       this.__actions$.pipe(
@@ -117,16 +121,16 @@ export class EffectBase {
     );
   }
 
-  private _serviceCall<T extends TypedActionObject>(
+  private _serviceCall<
+    T extends TypedActionObject,
+    J extends SideUpdates<ActionCallSideUpdates<T>, ActionSuccessResponse<T>, J>
+  >(
     action: T,
     args: ActionCallArgs<T>,
     serviceCall: (
       args: ActionCallArgs<T>
     ) => Observable<ActionSuccessResponse<T>>,
-    sideUpdates?: SideUpdates<
-      ActionCallSideUpdates<T>,
-      ActionSuccessResponse<T>
-    >
+    sideUpdates?: J
   ) {
     return serviceCall
       .bind(this.__featureService)(args)
@@ -136,44 +140,23 @@ export class EffectBase {
 
           if (sideUpdates) {
             for (const updateKey of Object.keys(sideUpdates)) {
-              const update = sideUpdates[updateKey] as
-                | SideUpdateSuccess
-                | SideUpdateFailure;
+              const update = sideUpdates[updateKey] as SideUpdateObject;
 
-              if (update.action.type.toLocaleLowerCase().includes('success')) {
-                actionDefault.push(
-                  update.action({
-                    args: args['sideUpdates'][updateKey],
-                    response: update.mapFn ? update.mapFn(response) : response,
-                  })
-                );
-              }
+              actionDefault.push(
+                update.action({
+                  args: args['sideUpdates'][updateKey],
+                  response: update.mapFn ? update.mapFn(response) : response,
+                })
+              );
             }
           }
 
           return actionDefault;
         }),
         switchMap((a) => a),
-        catchError((error) => {
-          const actionDefault = [
-            action.failure(buildErrorFromHttpError({ error, args })),
-          ];
-
-          // if (action.sideUpdates?.failure) {
-          //   actionDefault.push(
-          //     ...action.sideUpdates.failure.map((a, i) =>
-          //       a.action(
-          //         buildErrorFromHttpError({
-          //           error,
-          //           args: args.sideUpdates.failure[i],
-          //         })
-          //       )
-          //     )
-          //   );
-          // }
-
-          return of(actionDefault).pipe(switchMap((a) => a));
-        })
+        catchError((error) =>
+          of(action.failure(buildErrorFromHttpError({ error, args })))
+        )
       );
   }
 }

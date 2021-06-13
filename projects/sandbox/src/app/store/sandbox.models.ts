@@ -4,6 +4,7 @@ export interface PostSandboxArgs {
   };
   sideUpdates: {
     getFoo: GetFooArgs;
+    getBar: GetBarArgs;
   };
 }
 
