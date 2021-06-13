@@ -22,10 +22,7 @@ export interface ArgumentsBase {
   queryParams?: Record<string | number, unknown>;
   params?: Record<string | number, unknown>;
   body?: unknown;
-  sideUpdateArgs?: {
-    success?: ArgumentsBase[];
-    failure?: ArgumentsBase[];
-  };
+  sideUpdates?: Record<string, ArgumentsBase>;
 }
 
 export const enum CallState {
