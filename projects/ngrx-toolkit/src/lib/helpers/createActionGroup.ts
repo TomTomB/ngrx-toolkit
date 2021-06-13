@@ -6,64 +6,36 @@ import {
   ArgumentsBase,
 } from '../types';
 import { createAction, props } from '@ngrx/store';
-import { SideUpdates } from '../types/internal';
 
 export const createActionGroup = <
   Arguments extends ArgumentsBase | null,
   ResponseData,
-  ErrorResponse = unknown,
-  SuccessSideUpdates extends readonly TypedActionObject[] = readonly TypedActionObject[],
-  FailureSideUpdates extends readonly TypedActionObject[] = readonly TypedActionObject[]
+  ErrorResponse = unknown
 >({
   method,
   scope,
   name,
   isUnique,
-  sideUpdates,
 }: {
   method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   scope: string;
   name: string;
   isUnique?: boolean;
-  sideUpdates?: {
-    success?: readonly {
-      action: SuccessSideUpdates[number]['success'];
-      mapFn?: (
-        resp: ResponseData
-      ) => ReturnType<SuccessSideUpdates[number]['success']>['response'];
-    }[];
-    failure?: readonly { action: FailureSideUpdates[number]['failure'] }[];
-  };
-}): TypedActionObject<
-  Arguments & SideUpdates<SuccessSideUpdates, FailureSideUpdates>,
-  ResponseData,
-  ErrorResponse,
-  SuccessSideUpdates,
-  FailureSideUpdates
-> => {
+}): TypedActionObject<Arguments, ResponseData, ErrorResponse> => {
   return {
     isUnique: !!isUnique,
     call: createAction(
       `[${scope}] [${method}] ${name}`,
-      props<
-        Args<Arguments & SideUpdates<SuccessSideUpdates, FailureSideUpdates>>
-      >()
+      props<Args<Arguments>>()
     ),
     success: createAction(
       `[${scope}] [${method}] ${name} Success`,
-      props<
-        Response<ResponseData> &
-          Args<Arguments & SideUpdates<SuccessSideUpdates, FailureSideUpdates>>
-      >()
+      props<Response<ResponseData> & Args<Arguments>>()
     ),
     failure: createAction(
       `[${scope}] [${method}] ${name} Failure`,
-      props<
-        ErrorAction<ErrorResponse> &
-          Args<Arguments & SideUpdates<SuccessSideUpdates, FailureSideUpdates>>
-      >()
+      props<ErrorAction<ErrorResponse> & Args<Arguments>>()
     ),
-    sideUpdates,
   };
 };
 

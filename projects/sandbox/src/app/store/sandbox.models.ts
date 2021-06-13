@@ -2,6 +2,9 @@ export interface PostSandboxArgs {
   queryParams: {
     sandboxId: string;
   };
+  sideUpdates: {
+    getFoo: GetFooArgs;
+  };
 }
 
 export interface GetFooArgs {

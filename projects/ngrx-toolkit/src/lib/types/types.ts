@@ -75,20 +75,9 @@ export type FailureCreator<T = any, J = any> = ActionCreator<
 export interface TypedActionObject<
   Args extends ArgumentsBase | null = any,
   Response = any,
-  Error = any,
-  SuccessSideUpdates = readonly any[],
-  FailureSideUpdates = readonly any[]
+  Error = any
 > {
   isUnique: boolean;
-  sideUpdates?: {
-    success?: readonly {
-      action: SuccessCreator;
-      mapFn?: (x: Response) => any;
-    }[];
-    failure?: readonly {
-      action: FailureCreator;
-    }[];
-  };
 
   call: CallCreator<Args>;
   success: SuccessCreator<Args, Response>;

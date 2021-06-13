@@ -1,4 +1,5 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { FailureCreator, SuccessCreator } from '../types';
 import { Observable, of } from 'rxjs';
 import {
   catchError,
@@ -11,22 +12,56 @@ import {
 import { TypedActionObject } from '../types/types';
 import { buildErrorFromHttpError } from './error.helpers';
 
+interface SideUpdateSuccess {
+  action: SuccessCreator;
+  mapFn?: (x: any) => any;
+}
+
+interface SideUpdateFailure {
+  action: SuccessCreator;
+  mapFn?: (x: any) => any;
+}
+
+type SideUpdates<SideUpdateArgs, MapFnArg> = {
+  [Property in keyof SideUpdateArgs]: {
+    action: SuccessCreator<SideUpdateArgs[Property], any>;
+    mapFn?: (x: MapFnArg) => any;
+  };
+};
+
+type ActionCallArgs<T extends TypedActionObject> = ReturnType<
+  T['call']
+>['args'];
+type ActionSuccessResponse<T extends TypedActionObject> = ReturnType<
+  T['success']
+>['response'];
+type ActionCallSideUpdates<T extends TypedActionObject> = ReturnType<
+  T['call']
+>['args']['sideUpdates'];
+
 export class EffectBase {
   constructor(private __actions$: Actions, private __featureService: any) {}
 
   onActionSwitchMap<T extends TypedActionObject>({
     action,
     serviceCall,
+    sideUpdates,
   }: {
     action: T;
     serviceCall: (
-      args: ReturnType<T['call']>['args']
-    ) => Observable<ReturnType<T['success']>['response']>;
+      args: ActionCallArgs<T>
+    ) => Observable<ActionSuccessResponse<T>>;
+    sideUpdates?: SideUpdates<
+      ActionCallSideUpdates<T>,
+      ActionSuccessResponse<T>
+    >;
   }) {
     return createEffect(() =>
       this.__actions$.pipe(
         ofType(action.call),
-        switchMap(({ args }) => this._serviceCall(action, args, serviceCall))
+        switchMap(({ args }) =>
+          this._serviceCall(action, args, serviceCall, sideUpdates)
+        )
       )
     );
   }
@@ -37,8 +72,8 @@ export class EffectBase {
   }: {
     action: T;
     serviceCall: (
-      args: ReturnType<T['call']>['args']
-    ) => Observable<ReturnType<T['success']>['response']>;
+      args: ActionCallArgs<T>
+    ) => Observable<ActionSuccessResponse<T>>;
   }) {
     return createEffect(() =>
       this.__actions$.pipe(
@@ -54,8 +89,8 @@ export class EffectBase {
   }: {
     action: T;
     serviceCall: (
-      args: ReturnType<T['call']>['args']
-    ) => Observable<ReturnType<T['success']>['response']>;
+      args: ActionCallArgs<T>
+    ) => Observable<ActionSuccessResponse<T>>;
   }) {
     return createEffect(() =>
       this.__actions$.pipe(
@@ -71,8 +106,8 @@ export class EffectBase {
   }: {
     action: T;
     serviceCall: (
-      args: ReturnType<T['call']>['args']
-    ) => Observable<ReturnType<T['success']>['response']>;
+      args: ActionCallArgs<T>
+    ) => Observable<ActionSuccessResponse<T>>;
   }) {
     return createEffect(() =>
       this.__actions$.pipe(
@@ -84,10 +119,14 @@ export class EffectBase {
 
   private _serviceCall<T extends TypedActionObject>(
     action: T,
-    args: ReturnType<T['call']>['args'],
+    args: ActionCallArgs<T>,
     serviceCall: (
-      args: ReturnType<T['call']>['args']
-    ) => Observable<ReturnType<T['success']>['response']>
+      args: ActionCallArgs<T>
+    ) => Observable<ActionSuccessResponse<T>>,
+    sideUpdates?: SideUpdates<
+      ActionCallSideUpdates<T>,
+      ActionSuccessResponse<T>
+    >
   ) {
     return serviceCall
       .bind(this.__featureService)(args)
@@ -95,15 +134,21 @@ export class EffectBase {
         map((response) => {
           const actionDefault = [action.success({ response, args })];
 
-          if (action.sideUpdates?.success) {
-            actionDefault.push(
-              ...action.sideUpdates.success.map((a, i) =>
-                a.action({
-                  args: args.sideUpdates.success[i],
-                  response: a.mapFn ? a.mapFn(response) : response,
-                })
-              )
-            );
+          if (sideUpdates) {
+            for (const updateKey of Object.keys(sideUpdates)) {
+              const update = sideUpdates[updateKey] as
+                | SideUpdateSuccess
+                | SideUpdateFailure;
+
+              if (update.action.type.toLocaleLowerCase().includes('success')) {
+                actionDefault.push(
+                  update.action({
+                    args: args['sideUpdates'][updateKey],
+                    response: update.mapFn ? update.mapFn(response) : response,
+                  })
+                );
+              }
+            }
           }
 
           return actionDefault;
@@ -114,18 +159,18 @@ export class EffectBase {
             action.failure(buildErrorFromHttpError({ error, args })),
           ];
 
-          if (action.sideUpdates?.failure) {
-            actionDefault.push(
-              ...action.sideUpdates.failure.map((a, i) =>
-                a.action(
-                  buildErrorFromHttpError({
-                    error,
-                    args: args.sideUpdates.failure[i],
-                  })
-                )
-              )
-            );
-          }
+          // if (action.sideUpdates?.failure) {
+          //   actionDefault.push(
+          //     ...action.sideUpdates.failure.map((a, i) =>
+          //       a.action(
+          //         buildErrorFromHttpError({
+          //           error,
+          //           args: args.sideUpdates.failure[i],
+          //         })
+          //       )
+          //     )
+          //   );
+          // }
 
           return of(actionDefault).pipe(switchMap((a) => a));
         })

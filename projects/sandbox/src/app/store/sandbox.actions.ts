@@ -24,21 +24,12 @@ export const getBar = createActionGroup<
 export const postSandbox = createActionGroup<
   fromModels.PostSandboxArgs,
   fromModels.Sandbox,
-  fromModels.PostSandboxError,
-  [typeof getFoo, typeof getBar],
-  [typeof getFoo]
+  fromModels.PostSandboxError
 >({
   method: 'POST',
   name: 'The Sandbox',
   scope: SANDBOX_PREFIX,
   isUnique: true,
-  sideUpdates: {
-    success: [
-      { action: getFoo.success },
-      { action: getBar.success, mapFn: (x) => ({ value: !!x }) },
-    ],
-    failure: [{ action: getFoo.failure }],
-  },
 });
 
 export const SANDBOX_ACTIONS = [postSandbox, getFoo, getBar] as const;
