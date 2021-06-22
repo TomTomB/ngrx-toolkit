@@ -19,8 +19,8 @@ export interface Args<T> {
 }
 
 export interface ArgumentsBase {
-  queryParams?: Record<string | number, unknown>;
-  params?: Record<string | number, unknown>;
+  queryParams?: Record<string | number | symbol, any>;
+  params?: Record<string | number | symbol, any>;
   body?: unknown;
   sideUpdates?: Record<string, ArgumentsBase>;
 }
