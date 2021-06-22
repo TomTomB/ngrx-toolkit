@@ -4,7 +4,7 @@ import {
   SandboxPartialState,
   SANDBOX_FEATURE_KEY,
   State,
-  storeSlice,
+  reducerAdapters,
 } from './sandbox.reducer';
 
 export const getState =
@@ -12,5 +12,5 @@ export const getState =
 
 export const entitySelectors = createEntitySelectors({
   getState,
-  storeSlice,
+  reducerAdapters,
 });

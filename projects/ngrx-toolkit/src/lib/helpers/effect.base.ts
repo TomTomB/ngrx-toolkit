@@ -9,18 +9,13 @@ import {
   mergeMap,
   switchMap,
 } from 'rxjs/operators';
-import { TypedActionObject } from '../types/types';
+import {
+  ActionCallArgs,
+  ActionCallSideUpdates,
+  ActionSuccessResponse,
+  TypedActionObject,
+} from '../types/types';
 import { buildErrorFromHttpError } from './error.helpers';
-
-type ActionCallArgs<T extends TypedActionObject> = ReturnType<
-  T['call']
->['args'];
-type ActionSuccessResponse<T extends TypedActionObject> = ReturnType<
-  T['success']
->['response'];
-type ActionCallSideUpdates<T extends TypedActionObject> = ReturnType<
-  T['call']
->['args']['sideUpdates'];
 
 type SideUpdateObject<
   SuccessArgs = any,

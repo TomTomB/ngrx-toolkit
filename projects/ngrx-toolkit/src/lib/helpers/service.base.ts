@@ -1,9 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-
 import { buildApiURL } from './url-builder.helpers';
-import { generateEntityId } from './callstate.helpers';
 import {
   HttpCallOptions,
   HttpDeleteOptions,
@@ -12,6 +10,7 @@ import {
   HttpPostOptions,
   HttpPutOptions,
 } from '../types';
+import { generateEntityId } from './util';
 
 interface CacheItem {
   validUntil: number;

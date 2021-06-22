@@ -138,8 +138,17 @@ export interface EntityActionState {
   [key: string]: EntityState<EntityStatus<any, any>>;
 }
 
-export interface StoreSlice {
-  ons: ReducerTypes<any, any>[];
-  adapters: { [typeId: string]: EntityAdapter<EntityStatus<any, any>> };
-  initialState: { [typeId: string]: EntityState<EntityStatus<any, any>> };
-}
+export type ActionCallArgs<T extends TypedActionObject> = ReturnType<
+  T['call']
+>['args'];
+export type ActionSuccessResponse<T extends TypedActionObject> = ReturnType<
+  T['success']
+>['response'];
+export type ActionCallSideUpdates<T extends TypedActionObject> = ReturnType<
+  T['call']
+>['args']['sideUpdates'];
+
+export type EntityReducerMap = Record<
+  string,
+  EntityAdapter<EntityStatus<any, any>>
+>;

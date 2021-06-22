@@ -40,3 +40,13 @@ export const createActionGroup = <
 };
 
 export type ActionGroup = ReturnType<typeof createActionGroup>;
+
+export const resetFeatureStore = createAction(
+  '[NgRx Toolkit] Reset Feature Store',
+  props<{ featureName?: string }>()
+);
+
+export const removeCallState = createAction(
+  '[NgRx Toolkit] Remove Call State',
+  props<{ adapterId: string; actionId: number }>()
+);
