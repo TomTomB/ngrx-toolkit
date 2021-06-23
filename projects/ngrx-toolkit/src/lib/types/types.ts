@@ -1,6 +1,6 @@
 import { HttpHeaders } from '@angular/common/http';
 import { EntityAdapter, EntityState } from '@ngrx/entity';
-import { Action, ActionCreator, ReducerTypes } from '@ngrx/store';
+import { Action, ActionCreator } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 export declare interface TypedActionNative<T extends string> extends Action {
@@ -50,35 +50,45 @@ export interface TypedAction extends Action {
   [key: string]: any;
 }
 
-export type CallCreator<T = any> = ActionCreator<
-  string,
-  (props: Args<T>) => Args<T> & TypedActionNative<string>
+export type CallCreator<ArgType = any, ActionName extends string = string> =
+  ActionCreator<
+    ActionName,
+    (props: Args<ArgType>) => Args<ArgType> & TypedActionNative<ActionName>
+  >;
+
+export type SuccessCreator<
+  ArgType = any,
+  ResponseData = any,
+  ActionName extends string = string
+> = ActionCreator<
+  ActionName,
+  (
+    props: Response<ResponseData> & Args<ArgType>
+  ) => Response<ResponseData> & Args<ArgType> & TypedActionNative<ActionName>
 >;
 
-export type SuccessCreator<T = any, J = any> = ActionCreator<
-  string,
+export type FailureCreator<
+  ArgType = any,
+  ResponseData = any,
+  ActionName extends string = string
+> = ActionCreator<
+  ActionName,
   (
-    props: Response<J> & Args<T>
-  ) => Response<J> & Args<T> & TypedActionNative<string>
->;
-
-export type FailureCreator<T = any, J = any> = ActionCreator<
-  string,
-  (
-    props: ErrorAction<J> & Args<T>
-  ) => ErrorAction<J> & Args<T> & TypedActionNative<string>
+    props: ErrorAction<ResponseData> & Args<ArgType>
+  ) => ErrorAction<ResponseData> & Args<ArgType> & TypedActionNative<ActionName>
 >;
 
 export interface TypedActionObject<
   Args extends ArgumentsBase | null = any,
   Response = any,
-  Error = any
+  Error = any,
+  ActionName extends string = string
 > {
   isUnique: boolean;
 
-  call: CallCreator<Args>;
-  success: SuccessCreator<Args, Response>;
-  failure: FailureCreator<Args, Error>;
+  call: CallCreator<Args, ActionName>;
+  success: SuccessCreator<Args, Response, `${ActionName} Success`>;
+  failure: FailureCreator<Args, Error, `${ActionName} Failure`>;
 }
 
 export interface MappedEntityState<X extends TypedActionObject> {

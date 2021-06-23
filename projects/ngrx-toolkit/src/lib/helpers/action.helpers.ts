@@ -7,21 +7,41 @@ import {
 } from '../types';
 import { createAction, props } from '@ngrx/store';
 
+export const defineArgTypes = <
+  T extends {
+    args?: ArgumentsBase | null;
+    response?: any;
+    errorResponse?: any;
+  } = { args?: ArgumentsBase | null; response?: any; errorResponse?: any }
+>() => null as any as T;
+
 export const createActionGroup = <
-  Arguments extends ArgumentsBase | null,
-  ResponseData,
-  ErrorResponse = unknown
+  Method extends 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+  Scope extends string,
+  Name extends string,
+  ArgTypes extends ReturnType<typeof defineArgTypes> = ReturnType<
+    typeof defineArgTypes
+  >,
+  Arguments = ArgTypes['args'] | null,
+  ResponseData = ArgTypes['response'] | null,
+  ErrorResponse = ArgTypes['errorResponse'] | null
 >({
   method,
   scope,
   name,
   isUnique,
 }: {
-  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
-  scope: string;
-  name: string;
+  method: Method;
+  scope: Scope;
+  name: Name;
   isUnique?: boolean;
-}): TypedActionObject<Arguments, ResponseData, ErrorResponse> => {
+  argsTypes: ArgTypes;
+}): TypedActionObject<
+  Arguments,
+  ResponseData,
+  ErrorResponse,
+  `[${Scope}] [${Method}] ${Name}`
+> => {
   return {
     isUnique: !!isUnique,
     call: createAction(
