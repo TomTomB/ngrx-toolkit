@@ -12,7 +12,7 @@ export const defineArgTypes = <
     args?: ArgumentsBase | null;
     response?: any;
     errorResponse?: any;
-  } = { args?: ArgumentsBase | null; response?: any; errorResponse?: any }
+  }
 >() => null as any as T;
 
 export const createActionGroup = <
@@ -22,9 +22,9 @@ export const createActionGroup = <
   ArgTypes extends ReturnType<typeof defineArgTypes> = ReturnType<
     typeof defineArgTypes
   >,
-  Arguments = ArgTypes['args'] | null,
-  ResponseData = ArgTypes['response'] | null,
-  ErrorResponse = ArgTypes['errorResponse'] | null
+  Arguments = ArgTypes['args'],
+  ResponseData = ArgTypes['response'],
+  ErrorResponse = ArgTypes['errorResponse']
 >({
   method,
   scope,
@@ -40,10 +40,12 @@ export const createActionGroup = <
   Arguments,
   ResponseData,
   ErrorResponse,
-  `[${Scope}] [${Method}] ${Name}`
+  `[${Scope}] [${Method}] ${Name}`,
+  `${Scope}::${Method}::${Name}`
 > => {
   return {
     isUnique: !!isUnique,
+    actionId: `${scope}::${method}::${name}`,
     call: createAction(
       `[${scope}] [${method}] ${name}`,
       props<Args<Arguments>>()

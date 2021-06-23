@@ -82,9 +82,11 @@ export interface TypedActionObject<
   Args extends ArgumentsBase | null = any,
   Response = any,
   Error = any,
-  ActionName extends string = string
+  ActionName extends string = string,
+  ActionId extends string = string
 > {
   isUnique: boolean;
+  actionId: ActionId;
 
   call: CallCreator<Args, ActionName>;
   success: SuccessCreator<Args, Response, `${ActionName} Success`>;

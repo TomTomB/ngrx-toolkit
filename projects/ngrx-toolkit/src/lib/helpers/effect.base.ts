@@ -16,6 +16,7 @@ import {
   TypedActionObject,
 } from '../types/types';
 import { buildErrorFromHttpError } from './error.helpers';
+import { Action } from '@ngrx/store';
 
 type SideUpdateObject<
   SuccessArgs = any,
@@ -141,7 +142,7 @@ export class EffectBase {
       .bind(this.__featureService)(args)
       .pipe(
         map((response) => {
-          const actionDefault = [action.success({ response, args })];
+          const actionDefault: Action[] = [action.success({ response, args })];
 
           if (sideUpdates) {
             for (const updateKey of Object.keys(sideUpdates)) {

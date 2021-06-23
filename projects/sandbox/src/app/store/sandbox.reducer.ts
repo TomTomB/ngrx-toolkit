@@ -4,16 +4,20 @@ import * as Actions from './sandbox.actions';
 
 export const SANDBOX_FEATURE_KEY = 'sandbox';
 
-export interface State {}
-
 export interface SandboxPartialState {
   readonly [SANDBOX_FEATURE_KEY]: State;
 }
 
-export const { reducerSlice, reducerAdapters } = createReducerSlide({
-  actions: Actions.SANDBOX_ACTIONS,
-  key: SANDBOX_FEATURE_KEY,
-});
+export const { reducerSlice, reducerAdapters, innerInitialState } =
+  createReducerSlide({
+    actions: Actions.SANDBOX_ACTIONS,
+    key: SANDBOX_FEATURE_KEY,
+    initialState: {
+      booo: 'asdas',
+    },
+  });
+
+export type State = typeof innerInitialState;
 
 export function reducer(state: State | undefined, action: Action) {
   return reducerSlice(state, action);

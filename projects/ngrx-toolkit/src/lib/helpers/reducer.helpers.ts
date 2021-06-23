@@ -13,7 +13,6 @@ import {
   TypedActionObject,
 } from '../types';
 import { removeCallState, resetFeatureStore } from './action.helpers';
-import { uniformActionType as sanitizeActionType } from './status.helpers';
 import { createActionId } from './util';
 
 const createCallState = (
@@ -23,7 +22,7 @@ const createCallState = (
   const newObj = {
     action: {
       ...JSON.parse(JSON.stringify(action)),
-      type: sanitizeActionType(action.type),
+      type: action.type,
     },
     callState: type,
     timestamp: new Date().getTime(),
@@ -65,7 +64,7 @@ const createOn = <
 
 export const createReducerSlide = <
   Actions extends readonly TypedActionObject[],
-  InitialState extends { [key: string]: any },
+  InitialState extends Record<string, any>,
   Key extends string
 >({
   actions,
@@ -76,9 +75,12 @@ export const createReducerSlide = <
   key: Key;
   initialState?: InitialState;
 }) => {
-  const innerInitialState: Record<string, any> = initialState
-    ? JSON.parse(JSON.stringify(initialState))
-    : {};
+  const innerInitialState: Record<
+    Actions[number]['actionId'],
+    EntityState<EntityStatus<any, any>>
+  > &
+    InitialState = initialState ? JSON.parse(JSON.stringify(initialState)) : {};
+
   const ons: ReducerTypes<
     any,
     CallCreator[] | SuccessCreator[] | FailureCreator[]
@@ -86,7 +88,7 @@ export const createReducerSlide = <
   const adapters: EntityReducerMap = {};
 
   for (const action of actions) {
-    const entityId = sanitizeActionType(action.call.type);
+    const entityId = action.actionId;
 
     const entityAdapter = createEntityAdapter<
       EntityStatus<
@@ -103,9 +105,9 @@ export const createReducerSlide = <
     });
 
     const adapterInitialState = entityAdapter.getInitialState();
-    innerInitialState[entityId] = adapterInitialState;
+    (innerInitialState as any)[action.actionId] = adapterInitialState;
 
-    adapters[entityId] = entityAdapter;
+    adapters[action.actionId] = entityAdapter;
 
     ons.push(createOn(entityAdapter, action.call, entityId, CallState.LOADING));
     ons.push(
@@ -143,5 +145,6 @@ export const createReducerSlide = <
   return {
     reducerSlice,
     reducerAdapters: adapters,
+    innerInitialState,
   };
 };

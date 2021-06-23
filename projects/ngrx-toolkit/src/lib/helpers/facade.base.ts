@@ -3,7 +3,6 @@ import { Actions, ofType } from '@ngrx/effects';
 import { Action, ActionCreator, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { uniformActionType } from './status.helpers';
 import { EntitySelectors } from './selector.helpers';
 import { removeCallState } from './action.helpers';
 import { createActionId } from './util';
@@ -98,37 +97,25 @@ export class FacadeBase {
 
   selectIsInit<J extends TypedActionObject>(selector: J, actionId: number) {
     return this.__store.select(
-      this._entitySelectors.getIsInit(
-        uniformActionType(selector.call.type),
-        actionId
-      )
+      this._entitySelectors.getIsInit(selector.actionId, actionId)
     );
   }
 
   selectIsLoading<J extends TypedActionObject>(selector: J, actionId: number) {
     return this.__store.select(
-      this._entitySelectors.getIsLoading(
-        uniformActionType(selector.call.type),
-        actionId
-      )
+      this._entitySelectors.getIsLoading(selector.actionId, actionId)
     );
   }
 
   selectIsSuccess<J extends TypedActionObject>(selector: J, actionId: number) {
     return this.__store.select(
-      this._entitySelectors.getIsSuccess(
-        uniformActionType(selector.call.type),
-        actionId
-      )
+      this._entitySelectors.getIsSuccess(selector.actionId, actionId)
     );
   }
 
   selectIsError<J extends TypedActionObject>(selector: J, actionId: number) {
     return this.__store.select(
-      this._entitySelectors.getIsError(
-        uniformActionType(selector.call.type),
-        actionId
-      )
+      this._entitySelectors.getIsError(selector.actionId, actionId)
     );
   }
 
@@ -137,10 +124,7 @@ export class FacadeBase {
     actionId: number
   ): Observable<ReturnType<J['success']>['response'] | null> {
     return this.__store.select(
-      this._entitySelectors.getResponse(
-        uniformActionType(selector.call.type),
-        actionId
-      )
+      this._entitySelectors.getResponse(selector.actionId, actionId)
     );
   }
 
@@ -149,12 +133,7 @@ export class FacadeBase {
     actionId: number
   ): Observable<ReturnType<J['success']>['response']> {
     return this.__store
-      .select(
-        this._entitySelectors.getResponse(
-          uniformActionType(selector.call.type),
-          actionId
-        )
-      )
+      .select(this._entitySelectors.getResponse(selector.actionId, actionId))
       .pipe(filter((v): v is ReturnType<J['success']>['response'] => !!v));
   }
 
@@ -163,12 +142,7 @@ export class FacadeBase {
     actionId: number
   ): Observable<null> {
     return this.__store
-      .select(
-        this._entitySelectors.getResponse(
-          uniformActionType(selector.call.type),
-          actionId
-        )
-      )
+      .select(this._entitySelectors.getResponse(selector.actionId, actionId))
       .pipe(filter((v): v is null => !v));
   }
 
@@ -177,10 +151,7 @@ export class FacadeBase {
     actionId: number
   ): Observable<ReturnType<J['failure']>['error'] | null> {
     return this.__store.select(
-      this._entitySelectors.getError(
-        uniformActionType(selector.call.type),
-        actionId
-      )
+      this._entitySelectors.getError(selector.actionId, actionId)
     );
   }
 
@@ -189,46 +160,31 @@ export class FacadeBase {
     actionId: number
   ): Observable<ReturnType<J['call']>['args']> {
     return this.__store.select(
-      this._entitySelectors.getArgs(
-        uniformActionType(selector.call.type),
-        actionId
-      )
+      this._entitySelectors.getArgs(selector.actionId, actionId)
     );
   }
 
   selectEntityId<J extends TypedActionObject>(selector: J, actionId: number) {
     return this.__store.select(
-      this._entitySelectors.getEntityId(
-        uniformActionType(selector.call.type),
-        actionId
-      )
+      this._entitySelectors.getEntityId(selector.actionId, actionId)
     );
   }
 
   selectTimestamp<J extends TypedActionObject>(selector: J, actionId: number) {
     return this.__store.select(
-      this._entitySelectors.getTimestamp(
-        uniformActionType(selector.call.type),
-        actionId
-      )
+      this._entitySelectors.getTimestamp(selector.actionId, actionId)
     );
   }
 
   selectType<J extends TypedActionObject>(selector: J, actionId: number) {
     return this.__store.select(
-      this._entitySelectors.getType(
-        uniformActionType(selector.call.type),
-        actionId
-      )
+      this._entitySelectors.getType(selector.actionId, actionId)
     );
   }
 
   selectCallState<J extends TypedActionObject>(selector: J, actionId: number) {
     return this.__store.select(
-      this._entitySelectors.getCallState(
-        uniformActionType(selector.call.type),
-        actionId
-      )
+      this._entitySelectors.getCallState(selector.actionId, actionId)
     );
   }
 
@@ -246,7 +202,7 @@ export class FacadeBase {
   remove<J extends TypedActionObject>(selector: J, actionId: number) {
     this._dispatch(
       removeCallState({
-        adapterId: uniformActionType(selector.call.type),
+        adapterId: selector.actionId,
         actionId: actionId,
       })
     );
