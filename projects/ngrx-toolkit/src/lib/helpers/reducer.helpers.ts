@@ -16,7 +16,7 @@ import { removeCallState, resetFeatureStore } from './action.helpers';
 import { uniformActionType } from './status.helpers';
 import { createActionId } from './util';
 
-const createCallState = (
+export const createCallState = (
   action: TypedAction,
   type: CallState
 ): EntityStatus => {
@@ -40,7 +40,7 @@ const createCallState = (
   return newObj;
 };
 
-const createOn = <
+export const createOn = <
   Adapter extends EntityAdapter<EntityStatus>,
   Action extends CallCreator | SuccessCreator | FailureCreator,
   AdapterId extends string,

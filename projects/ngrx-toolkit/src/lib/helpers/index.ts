@@ -9,3 +9,4 @@ export * from './status.helpers';
 export * from './url-builder.helpers';
 export * from './util';
 export * from './constants';
+export * from './testing';
