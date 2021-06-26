@@ -13,6 +13,7 @@ import {
   TypedActionObject,
 } from '../types';
 import { removeCallState, resetFeatureStore } from './action.helpers';
+import { uniformActionType } from './status.helpers';
 import { createActionId } from './util';
 
 const createCallState = (
@@ -22,7 +23,7 @@ const createCallState = (
   const newObj = {
     action: {
       ...JSON.parse(JSON.stringify(action)),
-      type: action.type,
+      type: uniformActionType(action.type),
     },
     callState: type,
     timestamp: new Date().getTime(),
@@ -76,7 +77,7 @@ export const createReducerSlide = <
   initialState?: InitialState;
 }) => {
   const innerInitialState: Record<
-    Actions[number]['actionId'],
+    Actions[number]['entityId'],
     EntityState<EntityStatus<any, any>>
   > &
     InitialState = initialState ? JSON.parse(JSON.stringify(initialState)) : {};
@@ -88,7 +89,7 @@ export const createReducerSlide = <
   const adapters: EntityReducerMap = {};
 
   for (const action of actions) {
-    const entityId = action.actionId;
+    const entityId = action.entityId;
 
     const entityAdapter = createEntityAdapter<
       EntityStatus<
@@ -105,9 +106,9 @@ export const createReducerSlide = <
     });
 
     const adapterInitialState = entityAdapter.getInitialState();
-    (innerInitialState as any)[action.actionId] = adapterInitialState;
+    (innerInitialState as any)[action.entityId] = adapterInitialState;
 
-    adapters[action.actionId] = entityAdapter;
+    adapters[action.entityId] = entityAdapter;
 
     ons.push(createOn(entityAdapter, action.call, entityId, CallState.LOADING));
     ons.push(

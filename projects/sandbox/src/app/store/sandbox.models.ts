@@ -17,6 +17,7 @@ export interface GetFooArgs {
 export interface GetBarArgs {
   queryParams: {
     barSlug: string;
+    barId: string;
   };
   params: {
     page: number;

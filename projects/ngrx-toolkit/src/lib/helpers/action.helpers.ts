@@ -16,7 +16,58 @@ export const defineArgTypes = <
 >() => null as any as T;
 
 export const createActionGroup = <
-  Method extends 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE',
+  Scope extends string,
+  Name extends string,
+  ArgTypes extends ReturnType<typeof defineArgTypes> = ReturnType<
+    typeof defineArgTypes
+  >,
+  Arguments = ArgTypes['args'],
+  ResponseData = ArgTypes['response'],
+  ErrorResponse = ArgTypes['errorResponse']
+>({
+  scope,
+  name,
+  isUnique,
+}: {
+  scope: Scope;
+  name: Name;
+  isUnique?: boolean;
+  argsTypes: ArgTypes;
+}): TypedActionObject<
+  Arguments,
+  ResponseData,
+  ErrorResponse,
+  `[${Scope}] ${Name}`,
+  `${Scope}::${Name}`
+> => {
+  const baseName: `[${Scope}] ${Name}` = `[${scope}] ${name}`;
+
+  return {
+    isUnique: !!isUnique,
+    entityId: `${scope}::${name}`,
+    call: createAction(baseName, props<Args<Arguments>>()),
+    success: createAction(
+      `${baseName} Success`,
+      props<Response<ResponseData> & Args<Arguments>>()
+    ),
+    failure: createAction(
+      `${baseName} Failure`,
+      props<ErrorAction<ErrorResponse> & Args<Arguments>>()
+    ),
+  };
+};
+
+export const createHttpActionGroup = <
+  Method extends
+    | 'GET'
+    | 'POST'
+    | 'PUT'
+    | 'PATCH'
+    | 'DELETE'
+    | 'HEAD'
+    | 'OPTIONS'
+    | 'CONNECT'
+    | 'TRACE',
   Scope extends string,
   Name extends string,
   ArgTypes extends ReturnType<typeof defineArgTypes> = ReturnType<
@@ -43,25 +94,22 @@ export const createActionGroup = <
   `[${Scope}] [${Method}] ${Name}`,
   `${Scope}::${Method}::${Name}`
 > => {
+  const baseName: `[${Scope}] [${Method}] ${Name}` = `[${scope}] [${method}] ${name}`;
+
   return {
     isUnique: !!isUnique,
-    actionId: `${scope}::${method}::${name}`,
-    call: createAction(
-      `[${scope}] [${method}] ${name}`,
-      props<Args<Arguments>>()
-    ),
+    entityId: `${scope}::${method}::${name}`,
+    call: createAction(baseName, props<Args<Arguments>>()),
     success: createAction(
-      `[${scope}] [${method}] ${name} Success`,
+      `${baseName} Success`,
       props<Response<ResponseData> & Args<Arguments>>()
     ),
     failure: createAction(
-      `[${scope}] [${method}] ${name} Failure`,
+      `${baseName} Failure`,
       props<ErrorAction<ErrorResponse> & Args<Arguments>>()
     ),
   };
 };
-
-export type ActionGroup = ReturnType<typeof createActionGroup>;
 
 export const resetFeatureStore = createAction(
   '[NgRx Toolkit] Reset Feature Store',

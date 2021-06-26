@@ -4,7 +4,7 @@ import {
   isAction,
 } from 'projects/ngrx-toolkit/src/public-api';
 import { tap } from 'rxjs/operators';
-import { getFoo, postSandbox } from './store/sandbox.actions';
+import { getBar, getFoo, postSandbox } from './store/sandbox.actions';
 import { SandboxFacade } from './store/sandbox.facade';
 
 @Component({
@@ -17,10 +17,21 @@ export class AppComponent implements OnInit {
 
   store!: MappedEntityState<typeof postSandbox>;
   store2?: MappedEntityState<typeof getFoo>;
+  store3?: MappedEntityState<typeof getBar>;
 
   constructor(private _sandboxFacade: SandboxFacade) {}
 
   ngOnInit(): void {
+    this.store3 = this._sandboxFacade.getBar({
+      queryParams: { barSlug: 'baro', barId: 'abc123' },
+      params: { page: 1 },
+    });
+
+    this._sandboxFacade.getBar({
+      queryParams: { barSlug: 'test', barId: 'test' },
+      params: { page: 5 },
+    });
+
     this.store2 = this._sandboxFacade.getFoo({
       queryParams: { sandboxSlug: 'foobar' },
     });
@@ -29,7 +40,10 @@ export class AppComponent implements OnInit {
       queryParams: { sandboxId: 'asfs11412vad' },
       sideUpdates: {
         getFoo: { queryParams: { sandboxSlug: 'foobar' } },
-        getBar: { params: { page: 1 }, queryParams: { barSlug: 'baro' } },
+        getBar: {
+          params: { page: 1 },
+          queryParams: { barId: 'abc123', barSlug: 'baro' },
+        },
       },
     });
 

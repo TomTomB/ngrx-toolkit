@@ -50,11 +50,13 @@ export interface TypedAction extends Action {
   [key: string]: any;
 }
 
-export type CallCreator<ArgType = any, ActionName extends string = string> =
-  ActionCreator<
-    ActionName,
-    (props: Args<ArgType>) => Args<ArgType> & TypedActionNative<ActionName>
-  >;
+export type CallCreator<
+  ArgType = any,
+  ActionName extends string = string
+> = ActionCreator<
+  ActionName,
+  (props: Args<ArgType>) => Args<ArgType> & TypedActionNative<ActionName>
+>;
 
 export type SuccessCreator<
   ArgType = any,
@@ -83,10 +85,10 @@ export interface TypedActionObject<
   Response = any,
   Error = any,
   ActionName extends string = string,
-  ActionId extends string = string
+  EntityId extends string = string
 > {
   isUnique: boolean;
-  actionId: ActionId;
+  entityId: EntityId;
 
   call: CallCreator<Args, ActionName>;
   success: SuccessCreator<Args, Response, `${ActionName} Success`>;

@@ -1,5 +1,5 @@
 import { Action, ActionCreator } from '@ngrx/store';
-import { TypedApiAction } from '../types';
+import { ArgumentsBase, TypedApiAction } from '../types';
 import { UNIQUE } from './constants';
 import { uniformActionType } from './status.helpers';
 
@@ -27,6 +27,21 @@ export const generateEntityId = (opts: any) => {
   return hashCode('NO_ARG');
 };
 
+export const sortObject = (sourceObj: Record<any, any>) => {
+  return Object.keys(sourceObj)
+    .sort()
+    .reduce((obj, key) => {
+      let val = sourceObj[key];
+
+      if (typeof val === 'object') {
+        val = sortObject(val);
+      }
+
+      obj[key] = val;
+      return obj;
+    }, {} as Record<string, any>);
+};
+
 export const UNIQUE_ID = generateEntityId(UNIQUE);
 
 const UNIQUE_LIST: string[] = [];
@@ -50,7 +65,7 @@ export const createActionId = (
   const args = action.args;
 
   if (args) {
-    const copiedArgs = JSON.parse(JSON.stringify(args));
+    const copiedArgs = JSON.parse(JSON.stringify(args)) as Record<string, any>;
     if (copiedArgs?.body?.password) {
       copiedArgs.body.password = '[HIDDEN]';
     }
@@ -59,7 +74,9 @@ export const createActionId = (
       copiedArgs.body.plainPassword = '[HIDDEN]';
     }
 
-    return generateEntityId(copiedArgs);
+    const orderedArgs = sortObject(copiedArgs);
+
+    return generateEntityId(orderedArgs);
   }
 
   return generateEntityId(null);
