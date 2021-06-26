@@ -69,9 +69,15 @@ export const createReducerSlice = <
   Key extends string,
   InitialStateExtra extends Record<any, any>
 >(
-  actions: Actions,
-  key: Key,
-  initialStateExtra: InitialStateExtra = {} as Record<any, any>,
+  {
+    actions,
+    key,
+    initialStateExtra,
+  }: {
+    actions: Actions;
+    key: Key;
+    initialStateExtra: InitialStateExtra;
+  },
   ...additionalOns: ReducerTypes<
     ActionInitialState<Actions> & InitialStateExtra,
     ActionCreator[]
