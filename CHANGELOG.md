@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.10.1...v2.0.0) (2021-06-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* 🧨 Action group types are now defined using the argTypes property and not
+by using the generic
+
+### Features
+
+* 🎸 enhance action group types ([38ea7ae](https://github.com/TomTomB/ngrx-toolkit/commit/38ea7aec4d501b59da729f77a6b799a02e248e6f))
+* 🎸 enhance reducer creation ([dbeee57](https://github.com/TomTomB/ngrx-toolkit/commit/dbeee5772921970a7b44430aec9d8579b41063c5))
+* 🎸 enhanced reducer typings ([4ec1cea](https://github.com/TomTomB/ngrx-toolkit/commit/4ec1cea2e459eb8ba0e4cf63037584920add87f6))
+
 ### [1.10.1](https://github.com/TomTomB/ngrx-toolkit/compare/v1.10.0...v1.10.1) (2021-06-18)
 
 
