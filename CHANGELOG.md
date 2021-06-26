@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.0.0...v2.1.0) (2021-06-26)
+
+
+### Features
+
+* 🎸 add helper for reducer testing ([fc66fee](https://github.com/TomTomB/ngrx-toolkit/commit/fc66feee95a8cddebe7f3a14263678bb13c98a61))
+
+
+### Bug Fixes
+
+* 🐛 entity mapping ([4843202](https://github.com/TomTomB/ngrx-toolkit/commit/4843202c0bf008ce20fcd17517b044ea96e94c1d))
+
 ## [2.0.0](https://github.com/TomTomB/ngrx-toolkit/compare/v1.10.1...v2.0.0) (2021-06-26)
 
 
