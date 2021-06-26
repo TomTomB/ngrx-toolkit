@@ -37,14 +37,13 @@ export const createActionGroup = <
   Arguments,
   ResponseData,
   ErrorResponse,
-  `[${Scope}] ${Name}`,
-  `${Scope}::${Name}`
+  `[${Scope}] ${Name}`
 > => {
   const baseName: `[${Scope}] ${Name}` = `[${scope}] ${name}`;
 
   return {
     isUnique: !!isUnique,
-    entityId: `${scope}::${name}`,
+    entityId: baseName,
     call: createAction(baseName, props<Args<Arguments>>()),
     success: createAction(
       `${baseName} Success`,
@@ -91,14 +90,13 @@ export const createHttpActionGroup = <
   Arguments,
   ResponseData,
   ErrorResponse,
-  `[${Scope}] [${Method}] ${Name}`,
-  `${Scope}::${Method}::${Name}`
+  `[${Scope}] [${Method}] ${Name}`
 > => {
   const baseName: `[${Scope}] [${Method}] ${Name}` = `[${scope}] [${method}] ${name}`;
 
   return {
     isUnique: !!isUnique,
-    entityId: `${scope}::${method}::${name}`,
+    entityId: baseName,
     call: createAction(baseName, props<Args<Arguments>>()),
     success: createAction(
       `${baseName} Success`,

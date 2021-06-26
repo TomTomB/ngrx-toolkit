@@ -8,8 +8,7 @@ export const uniformActionType = (type: string) =>
     .replace('Failure', '')
     .replace('success', '')
     .replace('failure', '')
-    .trim()
-    .replace(/ /g, '_');
+    .trim();
 
 export const joinLoading = (observables: Observable<boolean | null>[]) => {
   const copy = observables.filter((o) => !!o);

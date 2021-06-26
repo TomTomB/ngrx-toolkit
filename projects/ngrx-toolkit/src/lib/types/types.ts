@@ -84,11 +84,10 @@ export interface TypedActionObject<
   Args extends ArgumentsBase | null = any,
   Response = any,
   Error = any,
-  ActionName extends string = string,
-  EntityId extends string = string
+  ActionName extends string = string
 > {
   isUnique: boolean;
-  entityId: EntityId;
+  entityId: ActionName;
 
   call: CallCreator<Args, ActionName>;
   success: SuccessCreator<Args, Response, `${ActionName} Success`>;
