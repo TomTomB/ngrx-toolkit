@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.2.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.1.0...v2.2.0) (2021-06-26)
+
+
+### Features
+
+* 🎸 add expected state prop to create testing state ([578d80f](https://github.com/TomTomB/ngrx-toolkit/commit/578d80fc9f86a83a86af6540e57e93fbef4fb54b))
+
 ## [2.1.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.0.0...v2.1.0) (2021-06-26)
 
 
