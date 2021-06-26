@@ -18,13 +18,13 @@ export const createTestingState = ({
   const actionId = createActionId(action);
   const actionKey = uniformActionType(action.type);
   const state = reducer(initialState, action);
-  const cs = createCallState(action, callState);
+  const callStateEntity = createCallState(action, callState);
 
-  state[actionKey].entities[actionId].timestamp = cs.timestamp;
+  state[actionKey].entities[actionId].timestamp = callStateEntity.timestamp;
 
   const expectedState = {
     ...initialState,
-    [actionKey]: { ids: [actionId], entities: { [actionId]: callState } },
+    [actionKey]: { ids: [actionId], entities: { [actionId]: callStateEntity } },
   };
 
   return { state, expectedState };
