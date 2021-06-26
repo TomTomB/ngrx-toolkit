@@ -66,25 +66,19 @@ export const createOn = <
 
 export const createReducerSlice = <
   Actions extends Record<string, TypedActionObject>,
-  InitialState extends Record<string, any>,
-  Key extends string
+  Key extends string,
+  InitialStateExtra extends Record<any, any>
 >(
-  {
-    actions,
-    key,
-    initialState,
-  }: {
-    actions: Actions;
-    key: Key;
-    initialState?: InitialState;
-  },
+  actions: Actions,
+  key: Key,
+  initialStateExtra: InitialStateExtra = {} as Record<any, any>,
   ...additionalOns: ReducerTypes<
-    ActionInitialState<Actions> & InitialState,
+    ActionInitialState<Actions> & InitialStateExtra,
     ActionCreator[]
   >[]
 ) => {
-  const innerInitialState: ActionInitialState<Actions> & InitialState =
-    initialState ? JSON.parse(JSON.stringify(initialState)) : {};
+  const initialState: ActionInitialState<Actions> & InitialStateExtra =
+    JSON.parse(JSON.stringify(initialStateExtra));
 
   const ons: ReducerTypes<
     any,
@@ -110,7 +104,7 @@ export const createReducerSlice = <
     });
 
     const adapterInitialState = entityAdapter.getInitialState();
-    (innerInitialState as any)[action.entityId] = adapterInitialState;
+    (initialState as any)[action.entityId] = adapterInitialState;
 
     adapters[action.entityId] = entityAdapter;
 
@@ -124,13 +118,13 @@ export const createReducerSlice = <
   }
 
   const reducerSlice = createReducer(
-    innerInitialState,
+    initialState,
     ...ons,
     ...(additionalOns ? additionalOns : []),
     on(resetFeatureStore, (state, { featureName }) =>
       featureName === key || !featureName
         ? {
-            ...innerInitialState,
+            ...initialState,
           }
         : state
     ),
@@ -151,6 +145,6 @@ export const createReducerSlice = <
   return {
     reducerSlice,
     reducerAdapters: adapters,
-    innerInitialState,
+    initialState,
   };
 };

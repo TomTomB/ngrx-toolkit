@@ -1,27 +1,22 @@
 import { Action, on } from '@ngrx/store';
-import {
-  createReducerSlice,
-  uniformActionType,
-} from '../../../../ngrx-toolkit/src/public-api';
+import { createReducerSlice } from '../../../../ngrx-toolkit/src/public-api';
 import * as Actions from './sandbox.actions';
 
 export const SANDBOX_FEATURE_KEY = 'sandbox';
+
+const initialStateExtra = {};
 
 export interface SandboxPartialState {
   readonly [SANDBOX_FEATURE_KEY]: State;
 }
 
-export const { reducerSlice, reducerAdapters, innerInitialState } =
+export const { reducerSlice, reducerAdapters, initialState } =
   createReducerSlice(
-    {
-      actions: Actions.SANDBOX_ACTIONS,
-      key: SANDBOX_FEATURE_KEY,
-      initialState: {
-        booo: 'asdas',
-      },
-    },
+    Actions.SANDBOX_ACTIONS,
+    SANDBOX_FEATURE_KEY,
+    initialStateExtra,
     on(Actions.getBar.call, (state, action) => {
-      const entityId = uniformActionType(action.type);
+      const entityId = Actions.getBar.entityId;
 
       // you can now do custom stuff with the underlying entity adapter
       const entityAdapter = reducerAdapters[entityId];
@@ -31,7 +26,7 @@ export const { reducerSlice, reducerAdapters, innerInitialState } =
     })
   );
 
-export type State = typeof innerInitialState;
+export type State = typeof initialState;
 
 export function reducer(state: State | undefined, action: Action) {
   return reducerSlice(state, action);
