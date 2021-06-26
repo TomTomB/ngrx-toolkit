@@ -22,5 +22,10 @@ export const createTestingState = ({
 
   state[actionKey].entities[actionId].timestamp = cs.timestamp;
 
-  return state;
+  const expectedState = {
+    ...initialState,
+    [actionKey]: { ids: [actionId], entities: { [actionId]: callState } },
+  };
+
+  return { state, expectedState };
 };
