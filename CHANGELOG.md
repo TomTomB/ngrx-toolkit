@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.3.1](https://github.com/TomTomB/ngrx-toolkit/compare/v2.3.0...v2.3.1) (2021-06-26)
+
+
+### Bug Fixes
+
+* 🐛 reucer state type if no initial state is provided ([8630912](https://github.com/TomTomB/ngrx-toolkit/commit/8630912f6bef54caab15343f0b4452db100fb004))
+
 ## [2.3.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.2.1...v2.3.0) (2021-06-26)
 
 
