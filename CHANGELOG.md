@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.3.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.2.1...v2.3.0) (2021-06-26)
+
+
+### Features
+
+* 🎸 add option to supply additional on funcs in reducer ([7c06c8e](https://github.com/TomTomB/ngrx-toolkit/commit/7c06c8ee678f7da66a1648772101efa93d4fa1ab))
+
+
+### Bug Fixes
+
+* 🐛 create testing state sets wrong state ([9aac6e9](https://github.com/TomTomB/ngrx-toolkit/commit/9aac6e9119dcf28983e02a6c5bedfe6616dca400))
+
 ### [2.2.1](https://github.com/TomTomB/ngrx-toolkit/compare/v2.2.0...v2.2.1) (2021-06-26)
 
 ## [2.2.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.1.0...v2.2.0) (2021-06-26)
