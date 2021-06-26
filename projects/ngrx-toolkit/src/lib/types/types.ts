@@ -32,9 +32,13 @@ export const enum CallState {
   ERROR = 'ERROR',
 }
 
-export interface EntityStatus<Arguments = any, Response = any> {
+export interface EntityStatus<
+  Arguments = any,
+  Response = any,
+  ErrorResponse = any
+> {
   callState: CallState;
-  action: TypedApiAction<Arguments, Response>;
+  action: TypedApiAction<Arguments, Response, ErrorResponse>;
   timestamp: number;
 }
 
@@ -165,3 +169,13 @@ export type EntityReducerMap = Record<
   string,
   EntityAdapter<EntityStatus<any, any>>
 >;
+
+export type ActionInitialState<X extends Record<string, TypedActionObject>> = {
+  [Property in keyof X as X[Property]['call']['type']]: EntityState<
+    EntityStatus<
+      ReturnType<X[Property]['call']>['args'],
+      ReturnType<X[Property]['success']>['response'],
+      ReturnType<X[Property]['failure']>['error']
+    >
+  >;
+};

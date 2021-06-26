@@ -1,7 +1,8 @@
 import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
-import { createReducer, on, ReducerTypes } from '@ngrx/store';
+import { ActionCreator, createReducer, on, ReducerTypes } from '@ngrx/store';
 import {
   ActionCallArgs,
+  ActionInitialState,
   ActionSuccessResponse,
   CallCreator,
   CallState,
@@ -63,24 +64,27 @@ export const createOn = <
   );
 };
 
-export const createReducerSlide = <
-  Actions extends readonly TypedActionObject[],
+export const createReducerSlice = <
+  Actions extends Record<string, TypedActionObject>,
   InitialState extends Record<string, any>,
   Key extends string
->({
-  actions,
-  key,
-  initialState,
-}: {
-  actions: Actions;
-  key: Key;
-  initialState?: InitialState;
-}) => {
-  const innerInitialState: Record<
-    Actions[number]['entityId'],
-    EntityState<EntityStatus<any, any>>
-  > &
-    InitialState = initialState ? JSON.parse(JSON.stringify(initialState)) : {};
+>(
+  {
+    actions,
+    key,
+    initialState,
+  }: {
+    actions: Actions;
+    key: Key;
+    initialState?: InitialState;
+  },
+  ...additionalOns: ReducerTypes<
+    ActionInitialState<Actions> & InitialState,
+    ActionCreator[]
+  >[]
+) => {
+  const innerInitialState: ActionInitialState<Actions> & InitialState =
+    initialState ? JSON.parse(JSON.stringify(initialState)) : {};
 
   const ons: ReducerTypes<
     any,
@@ -88,7 +92,7 @@ export const createReducerSlide = <
   >[] = [];
   const adapters: EntityReducerMap = {};
 
-  for (const action of actions) {
+  for (const action of Object.values(actions)) {
     const entityId = action.entityId;
 
     const entityAdapter = createEntityAdapter<
@@ -122,6 +126,7 @@ export const createReducerSlide = <
   const reducerSlice = createReducer(
     innerInitialState,
     ...ons,
+    ...(additionalOns ? additionalOns : []),
     on(resetFeatureStore, (state, { featureName }) =>
       featureName === key || !featureName
         ? {

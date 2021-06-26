@@ -40,4 +40,4 @@ export const postSandbox = createHttpActionGroup({
   }>(),
 });
 
-export const SANDBOX_ACTIONS = [postSandbox, getFoo, getBar] as const;
+export const SANDBOX_ACTIONS = { postSandbox, getFoo, getBar };
