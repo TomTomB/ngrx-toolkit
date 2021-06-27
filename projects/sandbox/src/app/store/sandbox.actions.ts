@@ -2,7 +2,7 @@ import {
   defineArgTypes,
   createHttpActionGroup,
 } from '../../../../ngrx-toolkit/src/public-api';
-import * as fromModels from './sandbox.models';
+import * as Models from './sandbox.models';
 
 export const SANDBOX_PREFIX = 'Sandbox';
 
@@ -11,8 +11,8 @@ export const getFoo = createHttpActionGroup({
   name: 'Foo',
   scope: SANDBOX_PREFIX,
   argsTypes: defineArgTypes<{
-    args: fromModels.GetFooArgs;
-    response: fromModels.Sandbox;
+    args: Models.GetFooArgs;
+    response: Models.Sandbox;
     errorResponse: null;
   }>(),
 });
@@ -22,7 +22,7 @@ export const getBar = createHttpActionGroup({
   name: 'Bar',
   scope: SANDBOX_PREFIX,
   argsTypes: defineArgTypes<{
-    args: fromModels.GetBarArgs;
+    args: Models.GetBarArgs;
     response: { value: boolean };
     errorResponse: null;
   }>(),
@@ -34,9 +34,9 @@ export const postSandbox = createHttpActionGroup({
   scope: SANDBOX_PREFIX,
   isUnique: true,
   argsTypes: defineArgTypes<{
-    args: fromModels.PostSandboxArgs;
-    response: fromModels.Sandbox;
-    errorResponse: fromModels.PostSandboxError;
+    args: Models.PostSandboxArgs;
+    response: Models.Sandbox;
+    errorResponse: Models.PostSandboxError;
   }>(),
 });
 

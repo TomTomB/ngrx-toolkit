@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ServiceBase } from '../../../../ngrx-toolkit/src/public-api';
-import * as fromModels from './sandbox.models';
+import * as Models from './sandbox.models';
 
 @Injectable({
   providedIn: 'root',
@@ -11,15 +11,15 @@ export class SandboxService extends ServiceBase {
     super(_http, 'https://jsonplaceholder.typicode.com');
   }
 
-  postSandbox(args: fromModels.PostSandboxArgs) {
-    return this.get<fromModels.Sandbox>({
+  postSandbox(args: Models.PostSandboxArgs) {
+    return this.get<Models.Sandbox>({
       apiRoute: '/todos/1',
       httpOpts: args,
     });
   }
 
-  getFoo(args: fromModels.GetFooArgs) {
-    return this.get<fromModels.Sandbox>({
+  getFoo(args: Models.GetFooArgs) {
+    return this.get<Models.Sandbox>({
       apiRoute: '/todos/1',
       httpOpts: args,
     });

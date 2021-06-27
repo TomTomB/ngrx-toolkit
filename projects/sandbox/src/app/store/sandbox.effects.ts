@@ -1,24 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Actions } from '@ngrx/effects';
 import { EffectBase } from '../../../../ngrx-toolkit/src/public-api';
-import * as SandboxActions from './sandbox.actions';
+import * as FeatureActions from './sandbox.actions';
 import { SandboxService } from './sandbox.service';
 
 @Injectable()
 export class SandboxEffects extends EffectBase {
   postSandbox$ = this.onActionSwitchMap({
-    action: SandboxActions.postSandbox,
+    action: FeatureActions.postSandbox,
     serviceCall: this.featureService.postSandbox,
     sideUpdates: {
-      getFoo: { action: SandboxActions.getFoo.success, mapFn: (x) => x },
+      getFoo: { action: FeatureActions.getFoo.success, mapFn: (x) => x },
       getBar: {
-        action: SandboxActions.getBar.success,
+        action: FeatureActions.getBar.success,
         mapFn: (x) => ({ value: !!x }),
       },
     },
   });
   getFoo$ = this.onActionSwitchMap({
-    action: SandboxActions.getFoo,
+    action: FeatureActions.getFoo,
     serviceCall: this.featureService.getFoo,
   });
 
