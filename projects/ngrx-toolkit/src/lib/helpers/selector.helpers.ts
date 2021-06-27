@@ -1,12 +1,15 @@
 import { createSelector, MemoizedSelector } from '@ngrx/store';
 import { CallState, EntityReducerMap } from '../types';
 
-export const createEntitySelectors = ({
+export const createEntitySelectors = <
+  GetState extends MemoizedSelector<any, any>,
+  Reducers extends EntityReducerMap<any>
+>({
   getState,
   reducerAdapters,
 }: {
-  getState: MemoizedSelector<any, any>;
-  reducerAdapters: EntityReducerMap;
+  getState: GetState;
+  reducerAdapters: Reducers;
 }) => {
   const getAdapterEntities = (state: any, adapterId: string) => {
     const adapter = reducerAdapters[adapterId];
