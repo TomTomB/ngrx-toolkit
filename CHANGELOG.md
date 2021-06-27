@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.1](https://github.com/TomTomB/ngrx-toolkit/compare/v2.4.0...v2.4.1) (2021-06-27)
+
+
+### Bug Fixes
+
+* 🐛 naming inside schematic ([19bd734](https://github.com/TomTomB/ngrx-toolkit/commit/19bd734e1bbbc69b524ff1bcfc85a6ed55ca1986))
+
 ## [2.4.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.3.2...v2.4.0) (2021-06-27)
 
 
