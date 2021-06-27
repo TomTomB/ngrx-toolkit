@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.4.2](https://github.com/TomTomB/ngrx-toolkit/compare/v2.4.1...v2.4.2) (2021-06-27)
+
+
+### Bug Fixes
+
+* 🐛 store slice schematic and import order ([ac36745](https://github.com/TomTomB/ngrx-toolkit/commit/ac36745d6efcf37a57dd96e17a16272c897d4af9))
+
 ### [2.4.1](https://github.com/TomTomB/ngrx-toolkit/compare/v2.4.0...v2.4.1) (2021-06-27)
 
 
