@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.4.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.3.2...v2.4.0) (2021-06-27)
+
+
+### Features
+
+* 🎸 add store slice schematic ([a5a8c00](https://github.com/TomTomB/ngrx-toolkit/commit/a5a8c00138406f8da654fd65561ee9a13f842524))
+* 🎸 add support for ng schematics ([7c0c23a](https://github.com/TomTomB/ngrx-toolkit/commit/7c0c23a456d5db13f56a14a32f02927d253a1187))
+* 🎸 enhance entity reducer map typings ([2765034](https://github.com/TomTomB/ngrx-toolkit/commit/2765034f9278e00b9f51a5b06561b3370c0d179e))
+* 🎸 enhance on and once facade func types for arrays ([44f0744](https://github.com/TomTomB/ngrx-toolkit/commit/44f0744d194b0644df78ebd8015fc78d13fe7b19))
+* 🎸 enhance selector typings ([5c459f7](https://github.com/TomTomB/ngrx-toolkit/commit/5c459f704de8e9d12558b2100dbf6703dccb3e21))
+
+
+### Bug Fixes
+
+* 🐛 selector typings ([ad47237](https://github.com/TomTomB/ngrx-toolkit/commit/ad47237ab6dc4cdf52b69eaeffb7ef5decf986a8))
+
 ### [2.3.2](https://github.com/TomTomB/ngrx-toolkit/compare/v2.3.1...v2.3.2) (2021-06-26)
 
 
