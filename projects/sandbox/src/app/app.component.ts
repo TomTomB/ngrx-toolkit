@@ -54,7 +54,7 @@ export class AppComponent implements OnInit {
       .pipe(
         tap((a) => {
           if (isAction(postSandbox.success, a)) {
-            console.log('yes', a);
+            console.log('onExampleMulti', a);
           }
         })
       )
