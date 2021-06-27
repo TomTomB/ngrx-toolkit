@@ -21,5 +21,13 @@
   },
   "dependencies": {
     "tslib": "^2.0.0"
-  }
+  },
+  "scripts": {
+    "build": "../../node_modules/.bin/tsc -p tsconfig.schematics.json",
+    "copy:schemas": "cp --parents schematics/*/schema.json ../../dist/ngrx-toolkit/",
+    "copy:files": "cp --parents -p schematics/*/files/** ../../dist/ngrx-toolkit/",
+    "copy:collection": "cp schematics/collection.json ../../dist/ngrx-toolkit/schematics/collection.json",
+    "postbuild": "yarn copy:schemas && yarn copy:files && yarn copy:collection"
+  },
+  "schematics": "./schematics/collection.json"
 }

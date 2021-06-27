@@ -18,7 +18,7 @@
     "upload": "yarn --cwd dist/ngrx-toolkit publish",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --configuration production",
+    "build": "ng build --configuration production && yarn --cwd projects/ngrx-toolkit build",
     "test": "ng test",
     "lint": "ng lint"
   },
