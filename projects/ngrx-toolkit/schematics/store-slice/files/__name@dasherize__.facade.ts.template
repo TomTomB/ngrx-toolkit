@@ -1,0 +1,22 @@
+import { Injectable } from '@angular/core';
+import * as Actions from './<%= nameWithoutPath %>.actions';
+import * as fromReducer from './<%= nameWithoutPath %>.reducer';
+import * as Selectors from './<%= nameWithoutPath %>.selectors';
+import * as Models from './<%= nameWithoutPath %>.models';
+import { Store } from '@ngrx/store';
+import { FacadeBase } from '@tomtomb/ngrx-toolkit';
+import { Actions as ActionsNative } from '@ngrx/effects';
+
+@Injectable({ providedIn: 'root' })
+export class <%= classify(nameWithoutPath) %>Facade extends FacadeBase {
+  constructor(
+    private store: Store<fromReducer.<%= classify(nameWithoutPath) %>PartialState>,
+    private actions: ActionsNative
+  ) {
+    super(store, actions, Selectors.entitySelectors);
+  }
+
+  getFoo(args: Models.GetFooArgs) {
+    return this.call(Actions.getFoo, args);
+  }
+}

@@ -1,0 +1,17 @@
+import { defineArgTypes, createHttpActionGroup } from '@tomtomb/ngrx-toolkit';
+import * as Models from './<%= nameWithoutPath %>.models';
+
+export const <%= uppercase(underscore(nameWithoutPath)) %>_PREFIX = '<%= capitalize(nameWithoutPath) %>';
+
+export const getFoo = createHttpActionGroup({
+  method: 'GET',
+  name: 'Foo',
+  scope: <%= uppercase(underscore(nameWithoutPath)) %>_PREFIX,
+  argsTypes: defineArgTypes<{
+    args: Models.GetFooArgs;
+    response: null;
+    errorResponse: null;
+  }>(),
+});
+
+export const <%= uppercase(underscore(nameWithoutPath)) %>_ACTIONS = { getFoo };

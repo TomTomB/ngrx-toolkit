@@ -1,0 +1,20 @@
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { ServiceBase } from '@tomtomb/ngrx-toolkit';
+import * as Models from './<%= nameWithoutPath %>.models';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class <%= classify(nameWithoutPath) %>Service extends ServiceBase {
+  constructor(private _http: HttpClient) { 
+      super(_http, 'https://example.com');
+  }
+
+  getFoo(args: Models.GetFooArgs) {
+    return this.get<null>({
+      apiRoute: '/foo',
+      httpOpts: args,
+    });
+  }
+}

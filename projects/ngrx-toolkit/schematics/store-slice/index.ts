@@ -17,7 +17,7 @@ import {
   workspaces,
 } from '@angular-devkit/core';
 
-import { Schema as MyServiceSchema } from './schema';
+import { Schema as StoreSliceSchema } from './schema';
 
 function createHost(tree: Tree): workspaces.WorkspaceHost {
   return {
@@ -40,7 +40,7 @@ function createHost(tree: Tree): workspaces.WorkspaceHost {
   };
 }
 
-export function myService(options: MyServiceSchema): Rule {
+export function storeSlice(options: StoreSliceSchema): Rule {
   return async (tree: Tree) => {
     const host = createHost(tree);
     const { workspace } = await workspaces.readWorkspace('/', host);
@@ -67,7 +67,13 @@ export function myService(options: MyServiceSchema): Rule {
       applyTemplates({
         classify: strings.classify,
         dasherize: strings.dasherize,
+        underscore: strings.underscore,
+        capitalize: strings.capitalize,
+        uppercase: (str: string) => str.toUpperCase(),
         name: options.name,
+        nameWithoutPath: options.name.includes('/')
+          ? options.name.slice(options.name.lastIndexOf('/') + 1)
+          : options.name,
       }),
       move(normalize(options.path as string)),
     ]);

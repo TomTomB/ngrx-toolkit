@@ -1,10 +1,10 @@
 {
   "$schema": "../../../node_modules/@angular-devkit/schematics/collection-schema.json",
   "schematics": {
-    "my-service": {
-      "description": "Generate a service in the project.",
-      "factory": "./my-service/index#myService",
-      "schema": "./my-service/schema.json"
+    "store-slice": {
+      "description": "Generate a store slice in the project.",
+      "factory": "./store-slice/index#storeSlice",
+      "schema": "./store-slice/schema.json"
     }
   }
 }

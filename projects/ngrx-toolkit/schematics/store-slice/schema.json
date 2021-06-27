@@ -1,17 +1,17 @@
 {
   "$schema": "http://json-schema.org/schema",
-  "$id": "SchematicsMyService",
-  "title": "My Service Schema",
+  "$id": "SchematicsStoreSlice",
+  "title": "A complete store slice schema",
   "type": "object",
   "properties": {
     "name": {
-      "description": "The name of the service.",
+      "description": "The name of the store slice.",
       "type": "string"
     },
     "path": {
       "type": "string",
       "format": "path",
-      "description": "The path to create the service.",
+      "description": "The path to create the store slice.",
       "visible": false
     },
     "project": {

@@ -1,0 +1,11 @@
+export interface GetFooArgs {
+  queryParams: {
+    slug: string;
+  };
+  params: {
+    page: number
+  },
+  body: {
+    value: boolean
+  }
+}

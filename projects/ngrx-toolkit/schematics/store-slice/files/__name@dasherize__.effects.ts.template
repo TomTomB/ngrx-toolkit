@@ -1,0 +1,17 @@
+import { Injectable } from '@angular/core';
+import { Actions } from '@ngrx/effects';
+import { EffectBase } from '@tomtomb/ngrx-toolkit';
+import * as FeatureActions from './<%= nameWithoutPath %>.actions';
+import { <%= classify(nameWithoutPath) %>Service } from './<%= nameWithoutPath %>.service';
+
+@Injectable()
+export class <%= classify(nameWithoutPath) %>Effects extends EffectBase {
+  getFoo$ = this.onActionSwitchMap({
+    action: FeatureActions.getFoo,
+    serviceCall: this.featureService.getFoo,
+  });
+
+  constructor(private actions$: Actions, private featureService: <%= classify(nameWithoutPath) %>Service) {
+    super(actions$, featureService);
+  }
+}
