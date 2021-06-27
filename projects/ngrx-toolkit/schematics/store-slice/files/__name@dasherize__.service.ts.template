@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { ServiceBase } from '@tomtomb/ngrx-toolkit';
 import * as Models from './<%= nameWithoutPath %>.models';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { ServiceBase } from '@tomtomb/ngrx-toolkit';
 
 @Injectable({
   providedIn: 'root'

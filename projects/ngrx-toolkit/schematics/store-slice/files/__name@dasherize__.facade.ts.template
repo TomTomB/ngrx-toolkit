@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
 import * as Actions from './<%= nameWithoutPath %>.actions';
-import * as fromReducer from './<%= nameWithoutPath %>.reducer';
-import * as Selectors from './<%= nameWithoutPath %>.selectors';
 import * as Models from './<%= nameWithoutPath %>.models';
-import { Store } from '@ngrx/store';
-import { FacadeBase } from '@tomtomb/ngrx-toolkit';
+import * as Selectors from './<%= nameWithoutPath %>.selectors';
+import * as fromReducer from './<%= nameWithoutPath %>.reducer';
 import { Actions as ActionsNative } from '@ngrx/effects';
+import { FacadeBase } from '@tomtomb/ngrx-toolkit';
+import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 
 @Injectable({ providedIn: 'root' })
 export class <%= classify(nameWithoutPath) %>Facade extends FacadeBase {

@@ -1,6 +1,6 @@
+import * as Actions from './<%= nameWithoutPath %>.actions';
 import { Action } from '@ngrx/store';
 import { createReducerSlice } from '@tomtomb/ngrx-toolkit';
-import * as Actions from './<%= nameWithoutPath %>.actions';
 
 export const <%= uppercase(underscore(nameWithoutPath)) %>_FEATURE_KEY = '<%= nameWithoutPath %>';
 

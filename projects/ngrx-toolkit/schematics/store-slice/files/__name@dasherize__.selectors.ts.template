@@ -1,6 +1,6 @@
-import { createFeatureSelector } from '@ngrx/store';
-import { createEntitySelectors } from '@tomtomb/ngrx-toolkit';
 import * as fromReducer from './<%= nameWithoutPath %>.reducer';
+import { createEntitySelectors } from '@tomtomb/ngrx-toolkit';
+import { createFeatureSelector } from '@ngrx/store';
 
 export const getState = createFeatureSelector<
   fromReducer.<%= classify(nameWithoutPath) %>PartialState, 

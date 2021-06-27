@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import * as FeatureActions from './<%= nameWithoutPath %>.actions';
 import { Actions } from '@ngrx/effects';
 import { EffectBase } from '@tomtomb/ngrx-toolkit';
-import * as FeatureActions from './<%= nameWithoutPath %>.actions';
+import { Injectable } from '@angular/core';
 import { <%= classify(nameWithoutPath) %>Service } from './<%= nameWithoutPath %>.service';
 
 @Injectable()
