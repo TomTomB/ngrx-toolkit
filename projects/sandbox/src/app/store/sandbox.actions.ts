@@ -4,12 +4,12 @@ import {
 } from '../../../../ngrx-toolkit/src/public-api';
 import * as Models from './sandbox.models';
 
-export const SANDBOX_PREFIX = 'Sandbox';
+export const SANDBOX_ACTION_PREFIX = 'Sandbox';
 
 export const getFoo = createHttpActionGroup({
   method: 'GET',
   name: 'Foo',
-  scope: SANDBOX_PREFIX,
+  scope: SANDBOX_ACTION_PREFIX,
   argsTypes: defineArgTypes<{
     args: Models.GetFooArgs;
     response: Models.Sandbox;
@@ -20,7 +20,7 @@ export const getFoo = createHttpActionGroup({
 export const getBar = createHttpActionGroup({
   method: 'GET',
   name: 'Bar',
-  scope: SANDBOX_PREFIX,
+  scope: SANDBOX_ACTION_PREFIX,
   argsTypes: defineArgTypes<{
     args: Models.GetBarArgs;
     response: { value: boolean };
@@ -31,7 +31,7 @@ export const getBar = createHttpActionGroup({
 export const postSandbox = createHttpActionGroup({
   method: 'POST',
   name: 'The Sandbox',
-  scope: SANDBOX_PREFIX,
+  scope: SANDBOX_ACTION_PREFIX,
   isUnique: true,
   argsTypes: defineArgTypes<{
     args: Models.PostSandboxArgs;
