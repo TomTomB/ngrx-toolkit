@@ -11,7 +11,7 @@ export const createEntitySelectors = <
   getState: GetState;
   reducerAdapters: Reducers;
 }) => {
-  const getAdapterEntities = (state: any, adapterId: string) => {
+  const getAdapterEntities = (state: any, adapterId: keyof Reducers) => {
     const adapter = reducerAdapters[adapterId];
 
     const { selectEntities } = adapter.getSelectors();
@@ -19,75 +19,75 @@ export const createEntitySelectors = <
     return selectEntities(state[adapterId]);
   };
 
-  const getStoreSliceAdapterEntities = (adapterId: string) =>
+  const getStoreSliceAdapterEntities = (adapterId: keyof Reducers) =>
     createSelector(getState, (s) => getAdapterEntities(s, adapterId));
 
-  const getCallStateById = (adapterId: string, actionId: number) =>
+  const getCallStateById = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(
       getStoreSliceAdapterEntities(adapterId),
       (s) => s[actionId] || null
     );
 
-  const getIsInit = (adapterId: string, actionId: number) =>
+  const getIsInit = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(
       getCallStateById(adapterId, actionId),
       (s) => s?.callState === CallState.INIT ?? null
     );
 
-  const getIsLoading = (adapterId: string, actionId: number) =>
+  const getIsLoading = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(
       getCallStateById(adapterId, actionId),
       (s) => s?.callState === CallState.LOADING ?? null
     );
 
-  const getIsSuccess = (adapterId: string, actionId: number) =>
+  const getIsSuccess = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(
       getCallStateById(adapterId, actionId),
       (s) => s?.callState === CallState.SUCCESS ?? null
     );
 
-  const getIsError = (adapterId: string, actionId: number) =>
+  const getIsError = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(
       getCallStateById(adapterId, actionId),
       (s) => s?.callState === CallState.ERROR ?? null
     );
 
-  const getTimestamp = (adapterId: string, actionId: number) =>
+  const getTimestamp = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(
       getCallStateById(adapterId, actionId),
       (s) => s?.timestamp ?? null
     );
 
-  const getArgs = (adapterId: string, actionId: number) =>
+  const getArgs = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(
       getCallStateById(adapterId, actionId),
       (s) => s?.action.args ?? null
     );
 
-  const getResponse = (adapterId: string, actionId: number) =>
+  const getResponse = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(
       getCallStateById(adapterId, actionId),
       (s) => s?.action.response ?? null
     );
 
-  const getType = (adapterId: string, actionId: number) =>
+  const getType = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(
       getCallStateById(adapterId, actionId),
       (s) => s?.action.type ?? null
     );
 
-  const getError = (adapterId: string, actionId: number) =>
+  const getError = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(
       getCallStateById(adapterId, actionId),
       (s) => s?.action.error ?? null
     );
 
-  const getEntityId = (adapterId: string, actionId: number) =>
+  const getEntityId = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(getCallStateById(adapterId, actionId), (s) =>
       s ? actionId : null
     );
 
-  const getCallState = (adapterId: string, actionId: number) =>
+  const getCallState = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(getCallStateById(adapterId, actionId), (s) =>
       s ? s.callState : null
     );
