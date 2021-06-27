@@ -1,8 +1,5 @@
 import { Action, on } from '@ngrx/store';
-import {
-  createReducerSlice,
-  uniformActionType,
-} from '../../../../ngrx-toolkit/src/public-api';
+import { createReducerSlice } from '../../../../ngrx-toolkit/src/public-api';
 import * as Actions from './sandbox.actions';
 
 export const SANDBOX_FEATURE_KEY = 'sandbox';

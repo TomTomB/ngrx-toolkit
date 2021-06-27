@@ -90,7 +90,7 @@ export const createReducerSlice = <
     any,
     CallCreator[] | SuccessCreator[] | FailureCreator[]
   >[] = [];
-  const adapters: EntityReducerMap = {};
+  const adapters: EntityReducerMap<Actions> = {} as any;
 
   for (const action of Object.values(actions)) {
     const entityId = action.entityId;
@@ -112,7 +112,7 @@ export const createReducerSlice = <
     const adapterInitialState = entityAdapter.getInitialState();
     (initialState as any)[action.entityId] = adapterInitialState;
 
-    adapters[action.entityId] = entityAdapter;
+    (adapters as any)[action.entityId] = entityAdapter;
 
     ons.push(createOn(entityAdapter, action.call, entityId, CallState.LOADING));
     ons.push(
@@ -135,7 +135,7 @@ export const createReducerSlice = <
         : state
     ),
     on(removeCallState, (state, { actionId, adapterId }) => {
-      const adapter = adapters[adapterId];
+      const adapter = (adapters as any)[adapterId];
 
       if (!adapter) {
         return state;

@@ -151,10 +151,6 @@ export interface FirebaseError {
   message: string;
 }
 
-export interface EntityActionState {
-  [key: string]: EntityState<EntityStatus<any, any>>;
-}
-
 export type ActionCallArgs<T extends TypedActionObject> = ReturnType<
   T['call']
 >['args'];
@@ -165,13 +161,20 @@ export type ActionCallSideUpdates<T extends TypedActionObject> = ReturnType<
   T['call']
 >['args']['sideUpdates'];
 
-export type EntityReducerMap = Record<
-  string,
-  EntityAdapter<EntityStatus<any, any>>
->;
+export type ActionInitialState<
+  Actions extends Record<string, TypedActionObject>
+> = {
+  [Property in keyof Actions as Actions[Property]['call']['type']]: EntityState<
+    EntityStatus<
+      ReturnType<Actions[Property]['call']>['args'],
+      ReturnType<Actions[Property]['success']>['response'],
+      ReturnType<Actions[Property]['failure']>['error']
+    >
+  >;
+};
 
-export type ActionInitialState<X extends Record<string, TypedActionObject>> = {
-  [Property in keyof X as X[Property]['call']['type']]: EntityState<
+export type EntityReducerMap<X extends Record<string, TypedActionObject>> = {
+  [Property in keyof X as X[Property]['call']['type']]: EntityAdapter<
     EntityStatus<
       ReturnType<X[Property]['call']>['args'],
       ReturnType<X[Property]['success']>['response'],
