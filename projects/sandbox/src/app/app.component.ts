@@ -60,9 +60,9 @@ export class AppComponent implements OnInit {
       )
       .subscribe();
 
-    const onceExample = this._sandboxFacade.on(postSandbox.success);
+    const onceExample = this._sandboxFacade.once(postSandbox.success);
 
-    const onceExampleMulti = this._sandboxFacade.on([
+    const onceExampleMulti = this._sandboxFacade.once([
       postSandbox.success,
       postSandbox.failure,
     ]);

@@ -32,7 +32,7 @@ export class FacadeBase {
    * on(getAllKittens);
    */
   on<J extends ActionCreator>(actions: J): Observable<ReturnType<J>>;
-  on<J extends ActionCreator[]>(actions: J): Observable<Action>;
+  on<J extends ActionCreator[]>(actions: J): Observable<ReturnType<J[number]>>;
   on(actions: any): Observable<any> | undefined {
     if (Array.isArray(actions)) {
       const _actions = actions as ActionCreator[];
@@ -63,7 +63,9 @@ export class FacadeBase {
    * once(getAllKittens);
    */
   once<J extends ActionCreator>(actions: J): Observable<ReturnType<J>>;
-  once<J extends ActionCreator[]>(actions: J): Observable<Action>;
+  once<J extends ActionCreator[]>(
+    actions: J
+  ): Observable<ReturnType<J[number]>>;
   once(actions: any): Observable<any> | undefined {
     return this.on(actions).pipe(take(1));
   }
