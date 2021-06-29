@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
 import { ServiceBase } from '../../../../ngrx-toolkit/src/public-api';
 import * as Models from './sandbox.models';
 
@@ -23,5 +24,15 @@ export class SandboxService extends ServiceBase {
       apiRoute: '/todos/1',
       httpOpts: args,
     });
+  }
+
+  getBar(args: Models.GetBarArgs) {
+    return this.get<{ value: boolean }>({
+      apiRoute: '/todos/1',
+      httpOpts: args,
+      extras: {
+        skipCache: true,
+      },
+    }).pipe(map((v) => ({ value: !!v })));
   }
 }

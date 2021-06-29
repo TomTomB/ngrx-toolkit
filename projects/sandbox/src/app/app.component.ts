@@ -22,14 +22,14 @@ export class AppComponent implements OnInit {
   constructor(private _sandboxFacade: SandboxFacade) {}
 
   ngOnInit(): void {
-    this.store3 = this._sandboxFacade.getBar({
-      queryParams: { barSlug: 'baro', barId: 'abc123' },
-      params: { page: 1 },
-    });
-
     this._sandboxFacade.getBar({
       queryParams: { barSlug: 'test', barId: 'test' },
       params: { page: 5 },
+    });
+
+    this.store3 = this._sandboxFacade.getBar({
+      queryParams: { barSlug: 'baro', barId: 'abc123' },
+      params: { page: 1 },
     });
 
     this.store2 = this._sandboxFacade.getFoo({
@@ -66,5 +66,12 @@ export class AppComponent implements OnInit {
       postSandbox.success,
       postSandbox.failure,
     ]);
+  }
+
+  getBar() {
+    this._sandboxFacade.getBar({
+      queryParams: { barSlug: 'baro', barId: 'abc123' },
+      params: { page: 1 },
+    });
   }
 }
