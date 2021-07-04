@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.5.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.4.2...v2.5.0) (2021-07-04)
+
+
+### Features
+
+* 🎸 revamp store debug component ([e421003](https://github.com/TomTomB/ngrx-toolkit/commit/e4210033c8a52de25dad677571f6d46d7fa7f6be))
+
+
+### Bug Fixes
+
+* 🐛 build ([4b78dbd](https://github.com/TomTomB/ngrx-toolkit/commit/4b78dbda01a87474da4fc6b83824fe79870251be))
+
 ### [2.4.2](https://github.com/TomTomB/ngrx-toolkit/compare/v2.4.1...v2.4.2) (2021-06-27)
 
 
