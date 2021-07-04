@@ -5,7 +5,6 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { MappedEntityState } from '../../types/types';
-import packageJson from '../../../../../../package.json';
 import { UNIQUE_ID } from '../../helpers';
 
 type UiState =
@@ -28,8 +27,6 @@ export class StoreDebugComponent {
   store?: MappedEntityState<any>;
 
   uiState: UiState = 'overview';
-
-  version = packageJson.version;
 
   uniqueId = UNIQUE_ID;
 

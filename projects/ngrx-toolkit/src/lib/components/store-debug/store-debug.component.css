@@ -27,10 +27,6 @@ ul {
   font-size: 12px;
 }
 
-.head p {
-  margin-top: -12px;
-}
-
 ul button {
   all: unset;
   width: calc(100% - 24px);
