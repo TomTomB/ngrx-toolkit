@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   MappedEntityState,
   isAction,
-} from 'projects/ngrx-toolkit/src/public-api';
+} from '../../../ngrx-toolkit/src/public-api';
 import { tap } from 'rxjs/operators';
 import { getBar, getFoo, postSandbox } from './store/sandbox.actions';
 import { SandboxFacade } from './store/sandbox.facade';
@@ -11,6 +11,7 @@ import { SandboxFacade } from './store/sandbox.facade';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
   title = 'sandbox';

@@ -1,31 +1,167 @@
-<pre class="store-debug">
-  <h1>Store Debug: {{  !store ? 'NO STORE PRESENT' : '' }}</h1>
+<nav>
+  <ul>
+    <li class="head">
+      <h1>Store Debugger</h1>
+      <p>{{ version }}</p>
+    </li>
+    <li>
+      <button
+        [disabled]="!store"
+        (click)="setUiState('overview')"
+        [ngClass]="{ active: uiState === 'overview' }"
+      >
+        Overview
+      </button>
+    </li>
+    <li>
+      <button
+        [disabled]="!store"
+        (click)="setUiState('args')"
+        [ngClass]="{ active: uiState === 'args' }"
+      >
+        Args
+      </button>
+    </li>
+    <li>
+      <button
+        [disabled]="!store || (store.isError$ | async) === false"
+        (click)="setUiState('error')"
+        [ngClass]="{ active: uiState === 'error' }"
+      >
+        Error
+      </button>
+    </li>
+    <li>
+      <button
+        [disabled]="!store || (store.isError$ | async) === true"
+        (click)="setUiState('response')"
+        [ngClass]="{ active: uiState === 'response' }"
+      >
+        Response
+      </button>
+    </li>
+    <li>
+      <button
+        [disabled]="!store || (store.isError$ | async) === true"
+        (click)="setUiState('truthy-response')"
+        [ngClass]="{ active: uiState === 'truthy-response' }"
+      >
+        Truthy Response
+      </button>
+    </li>
+    <li>
+      <button
+        [disabled]="!store || (store.isError$ | async) === true"
+        (click)="setUiState('falsy-response')"
+        [ngClass]="{ active: uiState === 'falsy-response' }"
+      >
+        Falsy Response
+      </button>
+    </li>
+  </ul>
+</nav>
 
-  entityId: {{ store?.entityId$ | async }}
-  isError: {{ store?.isError$ | async }}
-  isInit: {{ store?.isInit$ | async }}
-  isLoading: {{ store?.isLoading$ | async }}
-  isSuccess: {{ store?.isSuccess$ | async }}
-  timestamp: {{ store?.timestamp$ | async }} ({{ store?.timestamp$ | async | date:'full' }})
-  type: {{ store?.type$ | async }}
-  callState: {{ store?.callState$ | async }}
+<div class="store-debug">
+  <p class="error" *ngIf="!store">No store attached, please bind one!</p>
 
-  error (length): {{ (store?.error$ | async| json)?.length === 4 ? 'null (4)' : (store?.error$ | async| json)?.length }}
-  response (length): {{ (store?.response$ | async | json)?.length }}
-  args (length): {{ (store?.args$ | async | json)?.length }}
+  <p class="detail-head" *ngIf="store?.type$ | async as type">{{ type }}</p>
 
-  <h1>Args</h1>
-{{ (store?.args$ | async | json) }}
+  <ng-container *ngIf="store">
+    <ng-container [ngSwitch]="uiState">
+      <ng-container *ngSwitchCase="'overview'">
+        <p class="computed-head">General</p>
 
-  <h1>Error</h1>
-{{ (store?.error$ | async | json) }}
+        <table>
+          <tr>
+            <th>isInit</th>
+            <td>{{ store?.isInit$ | async }}</td>
+          </tr>
+          <tr>
+            <th>isLoading</th>
+            <td>{{ store?.isLoading$ | async }}</td>
+          </tr>
+          <tr>
+            <th>isSuccess</th>
+            <td>{{ store?.isSuccess$ | async }}</td>
+          </tr>
+          <tr>
+            <th>isError</th>
+            <td>{{ store?.isError$ | async }}</td>
+          </tr>
+          <tr>
+            <th>entityId</th>
+            <td>{{ store?.entityId$ | async }}</td>
+          </tr>
+          <tr>
+            <th>type</th>
+            <td>{{ store?.type$ | async }}</td>
+          </tr>
+          <tr>
+            <th>callState</th>
+            <td>{{ store?.callState$ | async }}</td>
+          </tr>
+          <tr>
+            <th>timestamp</th>
+            <td>{{ store?.timestamp$ | async }}</td>
+          </tr>
+        </table>
 
-  <h1>Response</h1>
-{{ (store?.response$ | async | json) }}
+        <p class="computed-head">Computed</p>
 
-  <h1>Truthy Response</h1>
-{{ (store?.truthyResponse$ | async | json) }}
-
-  <h1>Falsy Response</h1>
-{{ (store?.falsyResponse$ | async | json) }}
-</pre>
+        <table>
+          <tr>
+            <th>Args size</th>
+            <td>{{ formatBytes((store?.args$ | async | json)?.length) }}</td>
+          </tr>
+          <tr>
+            <th>Response size</th>
+            <td *ngIf="(store.isError$ | async) === false">
+              {{ formatBytes((store?.response$ | async | json)?.length) }}
+            </td>
+            <td *ngIf="(store.isError$ | async) === true">null</td>
+          </tr>
+          <tr>
+            <th>Error size</th>
+            <td *ngIf="(store.isError$ | async) === true">
+              {{ formatBytes((store?.error$ | async | json)?.length) }}
+            </td>
+            <td *ngIf="(store.isError$ | async) === false">null</td>
+          </tr>
+          <tr>
+            <th>Is unique</th>
+            <td>{{ (store?.entityId$ | async) === uniqueId }}</td>
+          </tr>
+          <tr>
+            <th>Timestamp</th>
+            <td>{{ store?.timestamp$ | async | date: 'full' }}</td>
+          </tr>
+        </table>
+      </ng-container>
+      <ng-container *ngSwitchCase="'args'">
+        <pre
+          >{{ store?.args$ | async | json }}
+        </pre>
+      </ng-container>
+      <ng-container *ngSwitchCase="'error'">
+        <pre
+          >{{ store?.error$ | async | json }}
+        </pre>
+      </ng-container>
+      <ng-container *ngSwitchCase="'response'">
+        <pre
+          >{{ store?.response$ | async | json }}
+        </pre>
+      </ng-container>
+      <ng-container *ngSwitchCase="'truthy-response'">
+        <pre
+          >{{ store?.truthyResponse$ | async | json }}
+        </pre>
+      </ng-container>
+      <ng-container *ngSwitchCase="'falsy-response'">
+        <pre
+          >{{ store?.falsyResponse$ | async | json }}
+        </pre>
+      </ng-container>
+    </ng-container>
+  </ng-container>
+</div>
