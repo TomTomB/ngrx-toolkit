@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.5.1](https://github.com/TomTomB/ngrx-toolkit/compare/v2.5.0...v2.5.1) (2021-07-04)
+
+
+### Bug Fixes
+
+* 🐛 build error ([3c98d19](https://github.com/TomTomB/ngrx-toolkit/commit/3c98d19d5960d23e1b9702d9963a92a1c4b3dff4))
+
 ## [2.5.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.4.2...v2.5.0) (2021-07-04)
 
 
