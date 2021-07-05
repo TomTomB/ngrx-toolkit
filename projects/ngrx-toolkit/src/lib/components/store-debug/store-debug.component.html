@@ -74,6 +74,18 @@
     <p>{{ type }}</p>
     <div>
       <button (click)="store!.refresh()">Refresh</button>
+      <button
+        *ngIf="(store!.isPolling$ | async) === false"
+        (click)="startPolling()"
+      >
+        Start polling
+      </button>
+      <button
+        *ngIf="(store!.isPolling$ | async) === true"
+        (click)="stopPolling()"
+      >
+        Stop polling
+      </button>
       <button (click)="store!.remove()">Remove</button>
     </div>
   </div>

@@ -3,9 +3,11 @@ import {
   ChangeDetectionStrategy,
   Input,
   ViewEncapsulation,
+  OnDestroy,
 } from '@angular/core';
 import { MappedEntityState } from '../../types/types';
 import { UNIQUE_ID } from '../../helpers';
+import { Subject } from 'rxjs';
 
 type UiState = 'overview' | 'args' | 'error' | 'response' | 'cached-response';
 
@@ -124,13 +126,20 @@ type UiState = 'overview' | 'args' | 'error' | 'response' | 'cached-response';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.ShadowDom,
 })
-export class StoreDebugComponent {
+export class StoreDebugComponent implements OnDestroy {
   @Input()
   store?: MappedEntityState<any>;
 
   uiState: UiState = 'overview';
 
   uniqueId = UNIQUE_ID;
+
+  private _destroy$ = new Subject<boolean>();
+
+  ngOnDestroy(): void {
+    this._destroy$.next(true);
+    this._destroy$.unsubscribe();
+  }
 
   setUiState(newUiState: UiState) {
     this.uiState = newUiState;
@@ -150,5 +159,16 @@ export class StoreDebugComponent {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
 
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
+
+  startPolling() {
+    this.store?.startPolling({
+      intervalDuration: 2500,
+      killSwitch: this._destroy$,
+    });
+  }
+
+  stopPolling() {
+    this.store?.stopPolling();
   }
 }

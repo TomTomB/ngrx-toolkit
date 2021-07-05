@@ -1,8 +1,14 @@
 import { MappedEntityState, TypedActionObject } from '../types';
 import { Actions, ofType } from '@ngrx/effects';
 import { Action, ActionCreator, Store } from '@ngrx/store';
-import { combineLatest, Observable } from 'rxjs';
-import { filter, take, tap } from 'rxjs/operators';
+import {
+  Observable,
+  Subject,
+  interval,
+  BehaviorSubject,
+  Subscription,
+} from 'rxjs';
+import { filter, take, takeUntil, tap } from 'rxjs/operators';
 import { EntitySelectors } from './selector.helpers';
 import { removeCallState } from './action.helpers';
 import { createActionId } from './util';
@@ -72,6 +78,7 @@ export class FacadeBase {
 
   /**
    * Returns all states associated to a action object
+   * Also includes useful helper methods
    */
   select<J extends TypedActionObject>(
     selector: J,
@@ -93,6 +100,8 @@ export class FacadeBase {
     const entityId$ = this.selectEntityId(selector, actionId);
     const callState$ = this.selectCallState(selector, actionId);
 
+    const isPolling$ = new BehaviorSubject<boolean>(false);
+
     const refresh = () =>
       args$
         .pipe(
@@ -101,7 +110,47 @@ export class FacadeBase {
         )
         .subscribe();
 
-    const remove = () => this.remove(selector, actionId);
+    const remove = () => {
+      stopPolling();
+      this.remove(selector, actionId);
+    };
+
+    let killSwitchSub = Subscription.EMPTY;
+    let pollSub = Subscription.EMPTY;
+
+    const startPolling = ({
+      intervalDuration,
+      killSwitch,
+    }: {
+      intervalDuration: number;
+      killSwitch: Subject<boolean>;
+    }) => {
+      if (isPolling$.value) {
+        return;
+      }
+
+      killSwitchSub = killSwitch
+        .pipe(
+          take(1),
+          tap(() => isPolling$.next(false))
+        )
+        .subscribe();
+
+      isPolling$.next(true);
+
+      pollSub = interval(intervalDuration)
+        .pipe(
+          tap(() => refresh()),
+          takeUntil(killSwitch)
+        )
+        .subscribe();
+    };
+
+    const stopPolling = () => {
+      killSwitchSub?.unsubscribe();
+      pollSub?.unsubscribe();
+      isPolling$.next(false);
+    };
 
     return {
       response$,
@@ -112,12 +161,15 @@ export class FacadeBase {
       isLoading$,
       isSuccess$,
       isError$,
+      isPolling$,
       type$,
       timestamp$,
       entityId$,
       callState$,
       refresh,
       remove,
+      startPolling,
+      stopPolling,
     };
   }
 

@@ -1,7 +1,7 @@
 import { HttpHeaders } from '@angular/common/http';
 import { EntityAdapter, EntityState } from '@ngrx/entity';
 import { Action, ActionCreator } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 export declare interface TypedActionNative<T extends string> extends Action {
   readonly type: T;
@@ -110,6 +110,8 @@ export interface MappedEntityState<X extends TypedActionObject> {
   isSuccess$: Observable<boolean | null>;
   isError$: Observable<boolean | null>;
 
+  isPolling$: Observable<boolean>;
+
   timestamp$: Observable<number | null>;
   type$: Observable<string | null>;
   entityId$: Observable<number | null>;
@@ -117,6 +119,11 @@ export interface MappedEntityState<X extends TypedActionObject> {
 
   refresh: () => void;
   remove: () => void;
+  startPolling: (args: {
+    intervalDuration: number;
+    killSwitch: Subject<boolean>;
+  }) => void;
+  stopPolling: () => void;
 }
 
 export interface HttpCallOptions {
