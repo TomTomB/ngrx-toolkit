@@ -5,7 +5,7 @@
     </li>
     <li>
       <button
-        [disabled]="!store"
+        [disabled]="!store || (store.type$ | async) === null"
         (click)="setUiState('overview')"
         [ngClass]="{ active: uiState === 'overview' }"
       >
@@ -14,7 +14,7 @@
     </li>
     <li>
       <button
-        [disabled]="!store"
+        [disabled]="!store || (store.type$ | async) === null"
         (click)="setUiState('args')"
         [ngClass]="{ active: uiState === 'args' }"
       >
@@ -23,7 +23,11 @@
     </li>
     <li>
       <button
-        [disabled]="!store || (store.isError$ | async) === false"
+        [disabled]="
+          !store ||
+          (store.isError$ | async) === false ||
+          (store.type$ | async) === null
+        "
         (click)="setUiState('error')"
         [ngClass]="{ active: uiState === 'error' }"
       >
@@ -32,7 +36,11 @@
     </li>
     <li>
       <button
-        [disabled]="!store || (store.isError$ | async) === true"
+        [disabled]="
+          !store ||
+          (store.isError$ | async) === true ||
+          (store.type$ | async) === null
+        "
         (click)="setUiState('response')"
         [ngClass]="{ active: uiState === 'response' }"
       >
@@ -41,7 +49,11 @@
     </li>
     <li>
       <button
-        [disabled]="!store || (store.isError$ | async) === true"
+        [disabled]="
+          !store ||
+          (store.isError$ | async) === true ||
+          (store.type$ | async) === null
+        "
         (click)="setUiState('truthy-response')"
         [ngClass]="{ active: uiState === 'truthy-response' }"
       >
@@ -50,7 +62,11 @@
     </li>
     <li>
       <button
-        [disabled]="!store || (store.isError$ | async) === true"
+        [disabled]="
+          !store ||
+          (store.isError$ | async) === true ||
+          (store.type$ | async) === null
+        "
         (click)="setUiState('falsy-response')"
         [ngClass]="{ active: uiState === 'falsy-response' }"
       >
@@ -63,9 +79,19 @@
 <div class="store-debug">
   <p class="error" *ngIf="!store">No store attached, please bind one!</p>
 
-  <p class="detail-head" *ngIf="store?.type$ | async as type">{{ type }}</p>
+  <p class="error" *ngIf="store && (store!.type$ | async) === null">
+    Attached store has been removed!
+  </p>
 
-  <ng-container *ngIf="store">
+  <div class="detail-head" *ngIf="store?.type$ | async as type">
+    <p>{{ type }}</p>
+    <div>
+      <button (click)="store!.refresh()">Refresh</button>
+      <button (click)="store!.remove()">Remove</button>
+    </div>
+  </div>
+
+  <ng-container *ngIf="store && (store?.type$ | async)">
     <ng-container [ngSwitch]="uiState">
       <ng-container *ngSwitchCase="'overview'">
         <p class="computed-head">General</p>

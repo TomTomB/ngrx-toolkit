@@ -68,11 +68,4 @@ export class AppComponent implements OnInit {
       postSandbox.failure,
     ]);
   }
-
-  getBar() {
-    this._sandboxFacade.getBar({
-      queryParams: { barSlug: 'baro', barId: 'abc123' },
-      params: { page: 1 },
-    });
-  }
 }

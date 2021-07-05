@@ -115,6 +115,9 @@ export interface MappedEntityState<X extends TypedActionObject> {
   type$: Observable<string | null>;
   entityId$: Observable<number | null>;
   callState$: Observable<CallState | null>;
+
+  refresh: () => void;
+  remove: () => void;
 }
 
 export interface HttpCallOptions {

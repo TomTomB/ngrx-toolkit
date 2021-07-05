@@ -1,8 +1,8 @@
 import { MappedEntityState, TypedActionObject } from '../types';
 import { Actions, ofType } from '@ngrx/effects';
 import { Action, ActionCreator, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, take, tap } from 'rxjs/operators';
 import { EntitySelectors } from './selector.helpers';
 import { removeCallState } from './action.helpers';
 import { createActionId } from './util';
@@ -77,23 +77,49 @@ export class FacadeBase {
     selector: J,
     actionId: number
   ): MappedEntityState<J> {
+    const response$ = this.selectResponse<J>(selector, actionId);
+    const truthyResponse$ = this.selectTruthyResponse<J>(selector, actionId);
+    const falsyResponse$ = this.selectFalsyResponse(selector, actionId);
+
+    const error$ = this.selectError<J>(selector, actionId);
+    const args$ = this.selectArgs<J>(selector, actionId);
+
+    const isInit$ = this.selectIsInit(selector, actionId);
+    const isLoading$ = this.selectIsLoading(selector, actionId);
+    const isSuccess$ = this.selectIsSuccess(selector, actionId);
+    const isError$ = this.selectIsError(selector, actionId);
+
+    const type$ = this.selectType(selector, actionId);
+    const timestamp$ = this.selectTimestamp(selector, actionId);
+    const entityId$ = this.selectEntityId(selector, actionId);
+    const callState$ = this.selectCallState(selector, actionId);
+
+    const refresh = () =>
+      args$
+        .pipe(
+          take(1),
+          tap((args) => this._dispatch(selector.call({args})))
+        )
+        .subscribe();
+
+    const remove = () => this.remove(selector, actionId);
+
     return {
-      response$: this.selectResponse<J>(selector, actionId),
-      truthyResponse$: this.selectTruthyResponse<J>(selector, actionId),
-      falsyResponse$: this.selectFalsyResponse(selector, actionId),
-
-      error$: this.selectError<J>(selector, actionId),
-      args$: this.selectArgs<J>(selector, actionId),
-
-      isInit$: this.selectIsInit(selector, actionId),
-      isLoading$: this.selectIsLoading(selector, actionId),
-      isSuccess$: this.selectIsSuccess(selector, actionId),
-      isError$: this.selectIsError(selector, actionId),
-
-      type$: this.selectType(selector, actionId),
-      timestamp$: this.selectTimestamp(selector, actionId),
-      entityId$: this.selectEntityId(selector, actionId),
-      callState$: this.selectCallState(selector, actionId),
+      response$,
+      truthyResponse$,
+      falsyResponse$,
+      error$,
+      args$,
+      isInit$,
+      isLoading$,
+      isSuccess$,
+      isError$,
+      type$,
+      timestamp$,
+      entityId$,
+      callState$,
+      refresh,
+      remove
     };
   }
 

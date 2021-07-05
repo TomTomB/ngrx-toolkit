@@ -97,6 +97,22 @@ type UiState =
         width: 100%;
         margin-left: -1rem;
         background: rgb(48, 48, 48);
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .detail-head p {
+        margin: 0;
+      }
+
+      .detail-head button {
+        all: unset;
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      .detail-head button + button {
+        margin-left: 10px;
       }
 
       th {
