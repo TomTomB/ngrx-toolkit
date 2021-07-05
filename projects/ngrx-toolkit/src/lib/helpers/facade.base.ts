@@ -78,8 +78,7 @@ export class FacadeBase {
     actionId: number
   ): MappedEntityState<J> {
     const response$ = this.selectResponse<J>(selector, actionId);
-    const truthyResponse$ = this.selectTruthyResponse<J>(selector, actionId);
-    const falsyResponse$ = this.selectFalsyResponse(selector, actionId);
+    const cachedResponse$ = this.selectCachedResponse<J>(selector, actionId);
 
     const error$ = this.selectError<J>(selector, actionId);
     const args$ = this.selectArgs<J>(selector, actionId);
@@ -98,7 +97,7 @@ export class FacadeBase {
       args$
         .pipe(
           take(1),
-          tap((args) => this._dispatch(selector.call({args})))
+          tap((args) => this._dispatch(selector.call({ args })))
         )
         .subscribe();
 
@@ -106,8 +105,7 @@ export class FacadeBase {
 
     return {
       response$,
-      truthyResponse$,
-      falsyResponse$,
+      cachedResponse$,
       error$,
       args$,
       isInit$,
@@ -119,7 +117,7 @@ export class FacadeBase {
       entityId$,
       callState$,
       refresh,
-      remove
+      remove,
     };
   }
 
@@ -156,7 +154,7 @@ export class FacadeBase {
     );
   }
 
-  selectTruthyResponse<J extends TypedActionObject>(
+  selectCachedResponse<J extends TypedActionObject>(
     selector: J,
     actionId: number
   ): Observable<ReturnType<J['success']>['response']> {

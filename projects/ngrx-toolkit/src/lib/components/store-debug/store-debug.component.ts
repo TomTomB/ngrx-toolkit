@@ -7,13 +7,7 @@ import {
 import { MappedEntityState } from '../../types/types';
 import { UNIQUE_ID } from '../../helpers';
 
-type UiState =
-  | 'overview'
-  | 'args'
-  | 'error'
-  | 'response'
-  | 'truthy-response'
-  | 'falsy-response';
+type UiState = 'overview' | 'args' | 'error' | 'response' | 'cached-response';
 
 @Component({
   selector: 'ngrx-toolkit-store-debug',
@@ -45,8 +39,9 @@ type UiState =
       }
 
       .head {
-        padding: 12px 12px 6px;
+        padding: 12px 18px 6px 12px;
         font-size: 12px;
+        text-align: left;
       }
 
       ul button {

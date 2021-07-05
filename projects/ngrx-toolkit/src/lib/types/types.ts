@@ -100,8 +100,7 @@ export interface TypedActionObject<
 
 export interface MappedEntityState<X extends TypedActionObject> {
   response$: Observable<ReturnType<X['success']>['response'] | null>;
-  truthyResponse$: Observable<ReturnType<X['success']>['response']>;
-  falsyResponse$: Observable<null>;
+  cachedResponse$: Observable<ReturnType<X['success']>['response']>;
 
   error$: Observable<ReturnType<X['failure']>['error'] | null>;
   args$: Observable<ReturnType<X['call']>['args'] | null>;

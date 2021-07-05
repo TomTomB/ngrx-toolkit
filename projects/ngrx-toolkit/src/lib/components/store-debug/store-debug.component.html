@@ -54,23 +54,10 @@
           (store.isError$ | async) === true ||
           (store.type$ | async) === null
         "
-        (click)="setUiState('truthy-response')"
-        [ngClass]="{ active: uiState === 'truthy-response' }"
+        (click)="setUiState('cached-response')"
+        [ngClass]="{ active: uiState === 'cached-response' }"
       >
-        Truthy Response
-      </button>
-    </li>
-    <li>
-      <button
-        [disabled]="
-          !store ||
-          (store.isError$ | async) === true ||
-          (store.type$ | async) === null
-        "
-        (click)="setUiState('falsy-response')"
-        [ngClass]="{ active: uiState === 'falsy-response' }"
-      >
-        Falsy Response
+        Cached Response
       </button>
     </li>
   </ul>
@@ -177,14 +164,9 @@
           >{{ store?.response$ | async | json }}
         </pre>
       </ng-container>
-      <ng-container *ngSwitchCase="'truthy-response'">
+      <ng-container *ngSwitchCase="'cached-response'">
         <pre
-          >{{ store?.truthyResponse$ | async | json }}
-        </pre>
-      </ng-container>
-      <ng-container *ngSwitchCase="'falsy-response'">
-        <pre
-          >{{ store?.falsyResponse$ | async | json }}
+          >{{ store?.cachedResponse$ | async | json }}
         </pre>
       </ng-container>
     </ng-container>
