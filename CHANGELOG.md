@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.6.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.5.1...v2.6.0) (2021-07-05)
+
+
+### Features
+
+* 🎸 add mapped entity state helper for polling ([844abb6](https://github.com/TomTomB/ngrx-toolkit/commit/844abb6e61aae04c110ccb2603e62edf08066c69))
+* 🎸 add refresh and remove methods to mapped entity state ([5528720](https://github.com/TomTomB/ngrx-toolkit/commit/5528720f0a93db7d7eafa2c701df9ad5671c5c6c))
+* 🎸 rename truthy response to cached response ([2f74217](https://github.com/TomTomB/ngrx-toolkit/commit/2f7421756853544c5e5bfc7ec7f1ba4e517400eb))
+
 ### [2.5.1](https://github.com/TomTomB/ngrx-toolkit/compare/v2.5.0...v2.5.1) (2021-07-04)
 
 
