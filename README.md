@@ -8,7 +8,7 @@
 
 ## Installation
 
-Requires Angular 12+
+Requires Angular 12.1+
 
 ```bash
 npm install @ngrx/{store,effects,entity} @tomtomb/ngrx-toolkit
@@ -29,6 +29,8 @@ yarn add -D @ngrx/store-devtools
 For a full example have a look at [the sandbox application](https://github.com/TomTomB/ngrx-toolkit/tree/main/projects/sandbox). The toolkit can easily be integrated into an existing NgRx store.
 
 ## API
+
+# These docs are based on version prior to 2.x. The new version included many breaking changes, so please refer to the sandbox app for now!
 
 ### `createActionGroup<Arguments, ResponseData, ErrorResponse>({method, name, scope, isUnique})`
 
@@ -74,9 +76,9 @@ export const getFoo = createActionGroup<
   { value: boolean },
   { additionalErrorData: string }
 >({
-  method: "GET",
-  name: "Foo",
-  scope: "Sandbox",
+  method: 'GET',
+  name: 'Foo',
+  scope: 'Sandbox',
 });
 ```
 
