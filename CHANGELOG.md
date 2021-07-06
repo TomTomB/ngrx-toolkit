@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.7.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.6.0...v2.7.0) (2021-07-06)
+
+
+### Features
+
+* 🎸 improve perf 2 to 5x, cache mapped entity states ([3a78c74](https://github.com/TomTomB/ngrx-toolkit/commit/3a78c74f07605004b5654dad003ff5d8cbce6cdb))
+
 ## [2.6.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.5.1...v2.6.0) (2021-07-05)
 
 
