@@ -21,21 +21,23 @@ export const createCallState = (
   action: TypedAction,
   type: CallState
 ): EntityStatus => {
-  const newObj = {
+  const newObj: EntityStatus = {
     action: {
-      ...JSON.parse(JSON.stringify(action)),
+      ...action,
       type: uniformActionType(action.type),
     },
     callState: type,
     timestamp: new Date().getTime(),
   };
 
-  if (newObj.action.args?.body?.password) {
-    newObj.action.args.body.password = '[HIDDEN]';
+  const anyAction = newObj.action as any;
+
+  if (anyAction.args?.body?.password) {
+    anyAction.args.body.password = '[HIDDEN]';
   }
 
-  if (newObj.action.args?.body?.plainPassword) {
-    newObj.action.args.body.plainPassword = '[HIDDEN]';
+  if (anyAction.args?.body?.plainPassword) {
+    anyAction.args.body.plainPassword = '[HIDDEN]';
   }
 
   return newObj;

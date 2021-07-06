@@ -3,12 +3,7 @@ import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export const uniformActionType = (type: string) =>
-  type
-    .replace('Success', '')
-    .replace('Failure', '')
-    .replace('success', '')
-    .replace('failure', '')
-    .trim();
+  type.replace(/^\s*|\s*$|(Success)|(Failure)/g, '');
 
 export const joinLoading = (observables: Observable<boolean | null>[]) => {
   const copy = observables.filter((o) => !!o);

@@ -1,6 +1,7 @@
 import {
   defineArgTypes,
   createHttpActionGroup,
+  createActionGroup,
 } from '../../../../ngrx-toolkit/src/public-api';
 import * as Models from './sandbox.models';
 
@@ -40,4 +41,14 @@ export const postSandbox = createHttpActionGroup({
   }>(),
 });
 
-export const SANDBOX_ACTIONS = { postSandbox, getFoo, getBar };
+export const benchmark = createActionGroup({
+  name: 'Benchmark',
+  scope: SANDBOX_ACTION_PREFIX,
+  argsTypes: defineArgTypes<{
+    args: Models.BenchmarkArgs;
+    response: { value: boolean };
+    errorResponse: null;
+  }>(),
+});
+
+export const SANDBOX_ACTIONS = { postSandbox, getFoo, getBar, benchmark };

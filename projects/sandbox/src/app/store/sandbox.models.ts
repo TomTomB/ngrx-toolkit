@@ -24,6 +24,12 @@ export interface GetBarArgs {
   };
 }
 
+export interface BenchmarkArgs {
+  queryParams: {
+    benchmark: string;
+  };
+}
+
 export interface TestArgs {
   queryParams: {
     testThing: string;

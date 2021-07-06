@@ -27,4 +27,8 @@ export class SandboxFacade extends FacadeBase {
   getBar(args: Models.GetBarArgs) {
     return this.call(Actions.getBar, args);
   }
+
+  benchmark(args: Models.BenchmarkArgs) {
+    return this.call(Actions.benchmark, args);
+  }
 }

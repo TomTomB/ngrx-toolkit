@@ -14,6 +14,8 @@ import { removeCallState } from './action.helpers';
 import { createActionId } from './util';
 
 export class FacadeBase {
+  private _cache: Record<number, MappedEntityState<any>> = {};
+
   constructor(
     private __store: Store,
     private __actions: Actions,
@@ -84,6 +86,10 @@ export class FacadeBase {
     selector: J,
     actionId: number
   ): MappedEntityState<J> {
+    if (this._cache[actionId]) {
+      return this._cache[actionId];
+    }
+
     const response$ = this.selectResponse<J>(selector, actionId);
     const cachedResponse$ = this.selectCachedResponse<J>(selector, actionId);
 
@@ -152,7 +158,7 @@ export class FacadeBase {
       isPolling$.next(false);
     };
 
-    return {
+    const mappedEntityState = {
       response$,
       cachedResponse$,
       error$,
@@ -171,6 +177,10 @@ export class FacadeBase {
       startPolling,
       stopPolling,
     };
+
+    this._cache[actionId] = mappedEntityState;
+
+    return mappedEntityState;
   }
 
   selectIsInit<J extends TypedActionObject>(selector: J, actionId: number) {
@@ -213,15 +223,6 @@ export class FacadeBase {
     return this.__store
       .select(this._entitySelectors.getResponse(selector.entityId, actionId))
       .pipe(filter((v): v is ReturnType<J['success']>['response'] => !!v));
-  }
-
-  selectFalsyResponse<J extends TypedActionObject>(
-    selector: J,
-    actionId: number
-  ): Observable<null> {
-    return this.__store
-      .select(this._entitySelectors.getResponse(selector.entityId, actionId))
-      .pipe(filter((v): v is null => !v));
   }
 
   selectError<J extends TypedActionObject>(

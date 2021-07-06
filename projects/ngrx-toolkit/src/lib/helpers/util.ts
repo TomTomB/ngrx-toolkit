@@ -1,16 +1,11 @@
 import { Action, ActionCreator } from '@ngrx/store';
-import { ArgumentsBase, TypedApiAction } from '../types';
+import { TypedApiAction } from '../types';
 import { UNIQUE } from './constants';
 import { uniformActionType } from './status.helpers';
+import iMurMurHash from 'imurmurhash';
 
 export const hashCode = (str: string) => {
-  return str
-    .split('')
-    .reduce(
-      (prevHash, currVal) =>
-        ((prevHash << 5) - prevHash + currVal.charCodeAt(0)) | 0,
-      0
-    );
+  return iMurMurHash(str, 42069).result();
 };
 
 export const isAction = <T extends ActionCreator>(
@@ -44,38 +39,30 @@ export const sortObject = (sourceObj: Record<any, any>) => {
 
 export const UNIQUE_ID = generateEntityId(UNIQUE);
 
-const UNIQUE_LIST: string[] = [];
+const UNIQUE_LIST = new Set();
 
 export const createActionId = (
   action: TypedApiAction<any, any>,
   isUnique?: boolean
 ) => {
+  const uniformedActionType = uniformActionType(action.type);
+
   if (isUnique) {
-    if (!UNIQUE_LIST.some((u) => u === uniformActionType(action.type))) {
-      UNIQUE_LIST.push(uniformActionType(action.type));
+    if (!UNIQUE_LIST.has(uniformedActionType)) {
+      UNIQUE_LIST.add(uniformedActionType);
     }
 
     return UNIQUE_ID;
   }
 
-  if (UNIQUE_LIST.some((u) => u === action.type)) {
+  if (UNIQUE_LIST.has(uniformedActionType)) {
     return UNIQUE_ID;
   }
 
   const args = action.args;
 
   if (args) {
-    const copiedArgs = JSON.parse(JSON.stringify(args)) as Record<string, any>;
-    if (copiedArgs?.body?.password) {
-      copiedArgs.body.password = '[HIDDEN]';
-    }
-
-    if (copiedArgs?.body?.plainPassword) {
-      copiedArgs.body.plainPassword = '[HIDDEN]';
-    }
-
-    const orderedArgs = sortObject(copiedArgs);
-
+    const orderedArgs = sortObject(args);
     return generateEntityId(orderedArgs);
   }
 

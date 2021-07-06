@@ -68,4 +68,36 @@ export class AppComponent implements OnInit {
       postSandbox.failure,
     ]);
   }
+
+  benchmarkAllSame() {
+    console.log('running benchmarkAllSame... (5000 samples)');
+
+    // eslint-disable-next-line no-restricted-syntax
+    console.time('benchmarkAllSame');
+
+    for (let i = 0; i < 5000; i++) {
+      this._sandboxFacade.benchmark({
+        queryParams: { benchmark: 'abc123' },
+      });
+    }
+
+    // eslint-disable-next-line no-restricted-syntax
+    console.timeEnd('benchmarkAllSame');
+  }
+
+  benchmarkAllNew() {
+    console.log('running benchmarkAllNew... (5000 samples)');
+
+    // eslint-disable-next-line no-restricted-syntax
+    console.time('benchmarkAllNew');
+
+    for (let i = 0; i < 5000; i++) {
+      this._sandboxFacade.benchmark({
+        queryParams: { benchmark: 'abc123' + i },
+      });
+    }
+
+    // eslint-disable-next-line no-restricted-syntax
+    console.timeEnd('benchmarkAllNew');
+  }
 }

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ServiceBase } from '../../../../ngrx-toolkit/src/public-api';
 import * as Models from './sandbox.models';
@@ -34,5 +35,9 @@ export class SandboxService extends ServiceBase {
         skipCache: true,
       },
     }).pipe(map((v) => ({ value: !!v })));
+  }
+
+  benchmark(args: Models.BenchmarkArgs) {
+    return of({ value: true });
   }
 }
