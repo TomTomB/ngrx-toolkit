@@ -8,7 +8,7 @@
 
 ## Installation
 
-Requires Angular 12.1+
+Requires Angular 12.1+ and TypeScript 4.3+
 
 ```bash
 npm install @ngrx/{store,effects,entity} @tomtomb/ngrx-toolkit
