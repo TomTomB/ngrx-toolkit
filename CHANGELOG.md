@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.8.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.7.0...v2.8.0) (2021-07-07)
+
+
+### Features
+
+* 🎸 rename ngrx-toolkit to ngrxt add suspense directive ([04f06ff](https://github.com/TomTomB/ngrx-toolkit/commit/04f06ff38bb31b4463453eaef7b90658986ad43f))
+
 ## [2.7.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.6.0...v2.7.0) (2021-07-06)
 
 
