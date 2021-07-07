@@ -12,7 +12,7 @@ import { Subject } from 'rxjs';
 type UiState = 'overview' | 'args' | 'error' | 'response' | 'cached-response';
 
 @Component({
-  selector: 'ngrx-toolkit-store-debug',
+  selector: 'ngrxt-store-debug',
   templateUrl: './store-debug.component.html',
   styles: [
     `

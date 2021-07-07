@@ -1,8 +1,21 @@
-<ngrx-toolkit-store-debug [store]="store"></ngrx-toolkit-store-debug>
-<ngrx-toolkit-store-debug [store]="store2"></ngrx-toolkit-store-debug>
-<ngrx-toolkit-store-debug [store]="store3"></ngrx-toolkit-store-debug>
-<ngrx-toolkit-store-debug [store]="store3"></ngrx-toolkit-store-debug>
-<ngrx-toolkit-store-debug></ngrx-toolkit-store-debug>
+<ng-container
+  *ngrxtSuspense="
+    store3?.isLoading$ as loading;
+    let e = $complete;
+    let x = $error
+  "
+>
+  <p>Hello</p>
+  <p>{{ loading | json }}</p>
+  <p>{{ e | json }}</p>
+  <p>{{ x | json }}</p>
+</ng-container>
+
+<ngrxt-store-debug [store]="store"></ngrxt-store-debug>
+<ngrxt-store-debug [store]="store2"></ngrxt-store-debug>
+<ngrxt-store-debug [store]="store3"></ngrxt-store-debug>
+<ngrxt-store-debug [store]="store3"></ngrxt-store-debug>
+<ngrxt-store-debug></ngrxt-store-debug>
 
 <button (click)="benchmarkAllSame()">Benchmark all same</button>
 <button (click)="benchmarkAllNew()">Benchmark all new</button>

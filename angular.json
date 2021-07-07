@@ -7,7 +7,7 @@
       "projectType": "library",
       "root": "projects/ngrx-toolkit",
       "sourceRoot": "projects/ngrx-toolkit/src",
-      "prefix": "ngrx-toolkit",
+      "prefix": "ngrxt",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
@@ -63,9 +63,7 @@
               "projects/sandbox/src/favicon.ico",
               "projects/sandbox/src/assets"
             ],
-            "styles": [
-              "projects/sandbox/src/styles.css"
-            ],
+            "styles": ["projects/sandbox/src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -130,9 +128,7 @@
               "projects/sandbox/src/favicon.ico",
               "projects/sandbox/src/assets"
             ],
-            "styles": [
-              "projects/sandbox/src/styles.css"
-            ],
+            "styles": ["projects/sandbox/src/styles.css"],
             "scripts": []
           }
         },
