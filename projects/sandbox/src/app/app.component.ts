@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import {
   MappedEntityState,
   isAction,
@@ -19,8 +24,12 @@ export class AppComponent implements OnInit {
   store!: MappedEntityState<typeof postSandbox>;
   store2?: MappedEntityState<typeof getFoo>;
   store3?: MappedEntityState<typeof getBar>;
+  store4?: MappedEntityState<typeof getBar>;
 
-  constructor(private _sandboxFacade: SandboxFacade) {}
+  constructor(
+    private _sandboxFacade: SandboxFacade,
+    private _cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this._sandboxFacade.getBar({
@@ -67,6 +76,14 @@ export class AppComponent implements OnInit {
       postSandbox.success,
       postSandbox.failure,
     ]);
+  }
+
+  assignStore4() {
+    this.store4 = this._sandboxFacade.getBar({
+      queryParams: { barSlug: 'test123', barId: 'test123' },
+      params: { page: 1 },
+    });
+    this._cdr.markForCheck();
   }
 
   benchmarkAllSame() {

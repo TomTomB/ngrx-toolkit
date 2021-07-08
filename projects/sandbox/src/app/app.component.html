@@ -4,6 +4,16 @@
   <p>{{ s.type }} is loading? {{ s.isLoading | json }}</p>
 </div>
 
+<div *ngIf="{ s1: store, s2: store2, s3: store4 } | suspenseMulti as s">
+  <p>Suspense multi pipe</p>
+
+  <p>{{ s.s1.type }} is loading? {{ s.s1.isLoading | json }}</p>
+  <p>{{ s.s2?.type }} is loading? {{ s.s2?.isLoading | json }}</p>
+  <p *ngIf="s.s3">{{ s.s3.type }} is loading? {{ s.s3.isLoading | json }}</p>
+</div>
+
+<button (click)="assignStore4()">Assign s3</button>
+
 <ngrxt-store-debug [store]="store"></ngrxt-store-debug>
 <ngrxt-store-debug [store]="store2"></ngrxt-store-debug>
 <ngrxt-store-debug [store]="store3"></ngrxt-store-debug>

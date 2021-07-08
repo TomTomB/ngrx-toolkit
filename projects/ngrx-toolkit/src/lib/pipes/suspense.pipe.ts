@@ -1,25 +1,8 @@
 import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
-import { combineLatest, Observable, Subscription } from 'rxjs';
+import { combineLatest, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { MappedEntityState, TypedActionObject } from '../../types';
-
-type Extract<P> = P extends Observable<infer T> ? T : never;
-
-interface State<T extends MappedEntityState<TypedActionObject>> {
-  args: Extract<T['args$']>;
-  cachedResponse: Extract<T['cachedResponse$']>;
-  callState: Extract<T['callState$']>;
-  entityId: Extract<T['entityId$']>;
-  error: Extract<T['error$']>;
-  isError: Extract<T['isError$']>;
-  isInit: Extract<T['isInit$']>;
-  isLoading: Extract<T['isLoading$']>;
-  isPolling: Extract<T['isPolling$']>;
-  isSuccess: Extract<T['isSuccess$']>;
-  response: Extract<T['response$']>;
-  timestamp: Extract<T['timestamp$']>;
-  type: Extract<T['type$']>;
-}
+import { MappedEntityState, TypedActionObject } from '../types';
+import { State } from './types';
 
 @Pipe({ name: 'suspense', pure: false })
 export class SuspensePipe implements PipeTransform, OnDestroy {
