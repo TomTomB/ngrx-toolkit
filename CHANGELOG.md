@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.9.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.8.0...v2.9.0) (2021-07-08)
+
+
+### Features
+
+* 🎸 suspense multi pipe ([bbf9ec5](https://github.com/TomTomB/ngrx-toolkit/commit/bbf9ec58ea54dec552b073bb2fd4dc01c71a0a88))
+* 🎸 suspense pipe ([1700ca8](https://github.com/TomTomB/ngrx-toolkit/commit/1700ca8db282c15904d99add7d9558bbad3aeeff))
+
 ## [2.8.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.7.0...v2.8.0) (2021-07-07)
 
 
