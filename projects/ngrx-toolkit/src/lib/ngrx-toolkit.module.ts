@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StoreDebugComponent } from './components/store-debug/store-debug.component';
-import { SuspenseDirective } from './components/suspense/suspense.directive';
+import { SuspensePipe } from './components/suspense/suspense.pipe';
 
 @NgModule({
-  declarations: [StoreDebugComponent, SuspenseDirective],
+  declarations: [StoreDebugComponent, SuspensePipe],
   imports: [CommonModule],
-  exports: [StoreDebugComponent, SuspenseDirective],
+  exports: [StoreDebugComponent, SuspensePipe],
 })
 export class NgRxToolkitModule {}

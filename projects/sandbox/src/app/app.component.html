@@ -1,15 +1,8 @@
-<ng-container
-  *ngrxtSuspense="
-    store3?.isLoading$ as loading;
-    let e = $complete;
-    let x = $error
-  "
->
-  <p>Hello</p>
-  <p>{{ loading | json }}</p>
-  <p>{{ e | json }}</p>
-  <p>{{ x | json }}</p>
-</ng-container>
+<div *ngIf="store3 | suspense as s">
+  <p>Suspense pipe</p>
+
+  <p>{{ s.type }} is loading? {{ s.isLoading | json }}</p>
+</div>
 
 <ngrxt-store-debug [store]="store"></ngrxt-store-debug>
 <ngrxt-store-debug [store]="store2"></ngrxt-store-debug>
