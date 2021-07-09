@@ -5,6 +5,7 @@
 [![NPM version](https://img.shields.io/npm/v/@tomtomb/ngrx-toolkit)](https://www.npmjs.com/package/@tomtomb/ngrx-toolkit)
 [![License](https://img.shields.io/github/license/tomtomb/ngrx-toolkit)](https://github.com/TomTomB/ngrx-toolkit/blob/main/LICENSE)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/TomTomB/ngrx-toolkit)
 
 ## Installation
 
