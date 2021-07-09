@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.10.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.9.1...v2.10.0) (2021-07-09)
+
+
+### Features
+
+* 🎸 enable ivy compilation ([e1614af](https://github.com/TomTomB/ngrx-toolkit/commit/e1614af38d39155e144d22a358156cdfac8f6880))
+
+
+### Bug Fixes
+
+* 🐛 change detection issues in suspense pipes ([511d0d8](https://github.com/TomTomB/ngrx-toolkit/commit/511d0d84aa067b0b004f9d7482cddf93f57834e1))
+
 ### [2.9.1](https://github.com/TomTomB/ngrx-toolkit/compare/v2.9.0...v2.9.1) (2021-07-09)
 
 
