@@ -14,7 +14,7 @@ import { removeCallState } from './action.helpers';
 import { createActionId } from './util';
 
 export class FacadeBase {
-  private _cache: Record<number, MappedEntityState<any>> = {};
+  private _cache: Record<string, MappedEntityState<any>> = {};
 
   constructor(
     private __store: Store,
@@ -86,8 +86,9 @@ export class FacadeBase {
     selector: J,
     actionId: number
   ): MappedEntityState<J> {
-    if (this._cache[actionId]) {
-      return this._cache[actionId];
+    const cacheId = `${selector.call.type}_${actionId}`;
+    if (this._cache[cacheId]) {
+      return this._cache[cacheId];
     }
 
     const response$ = this.selectResponse<J>(selector, actionId);
@@ -178,7 +179,7 @@ export class FacadeBase {
       stopPolling,
     };
 
-    this._cache[actionId] = mappedEntityState;
+    this._cache[cacheId] = mappedEntityState;
 
     return mappedEntityState;
   }
