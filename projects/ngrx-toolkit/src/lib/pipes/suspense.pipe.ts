@@ -1,6 +1,6 @@
 import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { combineLatest, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { startWith, tap } from 'rxjs/operators';
 import { MappedEntityState, TypedActionObject } from '../types';
 import { State } from './types';
 
@@ -40,7 +40,7 @@ export class SuspensePipe implements PipeTransform, OnDestroy {
 
     this._subscription = combineLatest([
       this._currentMappedEntityState.args$,
-      this._currentMappedEntityState.cachedResponse$,
+      this._currentMappedEntityState.cachedResponse$.pipe(startWith(null)),
       this._currentMappedEntityState.callState$,
       this._currentMappedEntityState.entityId$,
       this._currentMappedEntityState.error$,
@@ -69,8 +69,8 @@ export class SuspensePipe implements PipeTransform, OnDestroy {
             response,
             timestamp,
             type,
-          ]) =>
-            (this._state = {
+          ]) => {
+            this._state = {
               args,
               cachedResponse,
               callState,
@@ -84,7 +84,10 @@ export class SuspensePipe implements PipeTransform, OnDestroy {
               response,
               timestamp,
               type,
-            })
+              refresh: this._currentMappedEntityState?.refresh,
+              remove: this._currentMappedEntityState?.remove,
+            };
+          }
         )
       )
       .subscribe();

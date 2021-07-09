@@ -1,24 +1,40 @@
 <div *ngIf="store3 | suspense as s">
-  <p>Suspense pipe</p>
-
-  <p>{{ s.type }} is loading? {{ s.isLoading | json }}</p>
+  <h3>Suspense pipe</h3>
+  <ng-container *ngIf="s.type">
+    <p>{{ s.type }} is loading? {{ s.isLoading | json }}</p>
+    <button (click)="s.refresh()">Refresh</button>
+    <button (click)="s.remove()">Remove</button>
+  </ng-container>
+  <button *ngIf="!s.type" (click)="assignStore3()">Recreate</button>
 </div>
-
+<hr />
 <div *ngIf="{ s1: store, s2: store2, s3: store4 } | suspenseMulti as s">
-  <p>Suspense multi pipe</p>
+  <h3>Suspense multi pipe</h3>
 
   <p>{{ s.s1.type }} is loading? {{ s.s1.isLoading | json }}</p>
   <p>{{ s.s2?.type }} is loading? {{ s.s2?.isLoading | json }}</p>
   <p *ngIf="s.s3">{{ s.s3.type }} is loading? {{ s.s3.isLoading | json }}</p>
+
+  <button *ngIf="!s.s3?.type" (click)="assignStore4()">Assign s3</button>
+  <button *ngIf="s.s3?.type" (click)="store4 = undefined">
+    Set s3 to undefined
+  </button>
 </div>
 
-<button (click)="assignStore4()">Assign s3</button>
+<hr />
+<h3>Benchmarks</h3>
+<p>
+  Results will display inside the console. <br />
+  For best results disable redux dev tools and serve in prod mode.
+</p>
+
+<button (click)="benchmarkAllSame()">Benchmark all same</button>
+<button (click)="benchmarkAllNew()">Benchmark all new</button>
+
+<hr />
 
 <ngrxt-store-debug [store]="store"></ngrxt-store-debug>
 <ngrxt-store-debug [store]="store2"></ngrxt-store-debug>
 <ngrxt-store-debug [store]="store3"></ngrxt-store-debug>
 <ngrxt-store-debug [store]="store3"></ngrxt-store-debug>
 <ngrxt-store-debug></ngrxt-store-debug>
-
-<button (click)="benchmarkAllSame()">Benchmark all same</button>
-<button (click)="benchmarkAllNew()">Benchmark all new</button>

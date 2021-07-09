@@ -37,10 +37,7 @@ export class AppComponent implements OnInit {
       params: { page: 5 },
     });
 
-    this.store3 = this._sandboxFacade.getBar({
-      queryParams: { barSlug: 'baro', barId: 'abc123' },
-      params: { page: 1 },
-    });
+    this.assignStore3();
 
     this.store2 = this._sandboxFacade.getFoo({
       queryParams: { sandboxSlug: 'foobar' },
@@ -76,6 +73,13 @@ export class AppComponent implements OnInit {
       postSandbox.success,
       postSandbox.failure,
     ]);
+  }
+
+  assignStore3() {
+    this.store3 = this._sandboxFacade.getBar({
+      queryParams: { barSlug: 'baro', barId: 'abc123' },
+      params: { page: 1 },
+    });
   }
 
   assignStore4() {

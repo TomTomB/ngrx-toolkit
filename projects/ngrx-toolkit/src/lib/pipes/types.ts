@@ -8,7 +8,7 @@ export type State<
 > = T extends object
   ? {
       args: ExtractFrom<T['args$']>;
-      cachedResponse: ExtractFrom<T['cachedResponse$']>;
+      cachedResponse: ExtractFrom<T['cachedResponse$']> | null;
       callState: ExtractFrom<T['callState$']>;
       entityId: ExtractFrom<T['entityId$']>;
       error: ExtractFrom<T['error$']>;
@@ -20,5 +20,7 @@ export type State<
       response: ExtractFrom<T['response$']>;
       timestamp: ExtractFrom<T['timestamp$']>;
       type: ExtractFrom<T['type$']>;
+      refresh: () => void;
+      remove: () => void;
     }
   : T;
