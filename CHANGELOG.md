@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.9.1](https://github.com/TomTomB/ngrx-toolkit/compare/v2.9.0...v2.9.1) (2021-07-09)
+
+
+### Bug Fixes
+
+* 🐛 select caching with unique actions ([4a47d4a](https://github.com/TomTomB/ngrx-toolkit/commit/4a47d4aa274f2d75dae1e487965c0fe701ac324a))
+
 ## [2.9.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.8.0...v2.9.0) (2021-07-08)
 
 
