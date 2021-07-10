@@ -4,16 +4,21 @@ import { createCallState } from './reducer.helpers';
 import { uniformActionType } from './status.helpers';
 import { createActionId } from './util';
 
-export const createTestingState = ({
+export const createTestingState = <
+  ActionToCall extends Action,
+  ReducerFn extends (a: any, b: any) => any,
+  InitialState,
+  CS extends CallState
+>({
   action,
   reducer,
   initialState,
   callState,
 }: {
-  action: Action;
-  reducer: (state: any, action: Action) => any;
-  initialState: any;
-  callState: CallState;
+  action: ActionToCall;
+  reducer: ReducerFn;
+  initialState: InitialState;
+  callState: CS;
 }) => {
   const actionId = createActionId(action);
   const actionKey = uniformActionType(action.type);
