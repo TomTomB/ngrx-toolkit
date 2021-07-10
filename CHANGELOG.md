@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.11.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.10.0...v2.11.0) (2021-07-10)
+
+
+### Features
+
+* 🎸 enhance typings for testing state creator ([f2e80ed](https://github.com/TomTomB/ngrx-toolkit/commit/f2e80ed673a3e3837b7cf82bee4867e8b25b158d))
+
 ## [2.10.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.9.1...v2.10.0) (2021-07-09)
 
 
