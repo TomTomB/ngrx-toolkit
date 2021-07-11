@@ -1,6 +1,7 @@
 export interface PostSandboxArgs {
   queryParams: {
     sandboxId: string;
+    sandboxTest: number;
   };
   sideUpdates: {
     getFoo: GetFooArgs;
@@ -19,6 +20,12 @@ export interface GetBarArgs {
     barSlug: string;
     barId: string;
   };
+  params: {
+    page: number;
+  };
+}
+
+export interface GetBazArgs {
   params: {
     page: number;
   };

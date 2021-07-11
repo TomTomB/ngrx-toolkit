@@ -68,6 +68,8 @@ type OnActionArgs<
       sideUpdates?: never;
     };
 
+//FIXME (TRB): Type checking does not work for arg type
+
 export class EffectBase {
   constructor(private __actions$: Actions, private __featureService: any) {}
 
@@ -78,7 +80,7 @@ export class EffectBase {
     return createEffect(() =>
       this.__actions$.pipe(
         ofType(action.call),
-        switchMap(({ args }) =>
+        switchMap(({ args }: { args: ReturnType<T['call']>['args'] }) =>
           this._serviceCall(action, args, serviceCall, sideUpdates)
         )
       )
@@ -92,7 +94,7 @@ export class EffectBase {
     return createEffect(() =>
       this.__actions$.pipe(
         ofType(action.call),
-        mergeMap(({ args }) =>
+        mergeMap(({ args }: { args: ReturnType<T['call']>['args'] }) =>
           this._serviceCall(action, args, serviceCall, sideUpdates)
         )
       )
@@ -106,7 +108,7 @@ export class EffectBase {
     return createEffect(() =>
       this.__actions$.pipe(
         ofType(action.call),
-        exhaustMap(({ args }) =>
+        exhaustMap(({ args }: { args: ReturnType<T['call']>['args'] }) =>
           this._serviceCall(action, args, serviceCall, sideUpdates)
         )
       )
@@ -120,7 +122,7 @@ export class EffectBase {
     return createEffect(() =>
       this.__actions$.pipe(
         ofType(action.call),
-        concatMap(({ args }) =>
+        concatMap(({ args }: { args: ReturnType<T['call']>['args'] }) =>
           this._serviceCall(action, args, serviceCall, sideUpdates)
         )
       )
@@ -129,13 +131,16 @@ export class EffectBase {
 
   private _serviceCall<
     T extends TypedActionObject,
-    J extends SideUpdates<ActionCallSideUpdates<T>, ActionSuccessResponse<T>, J>
+    J extends SideUpdates<
+      ActionCallSideUpdates<T>,
+      ActionSuccessResponse<T>,
+      J
+    >,
+    L extends ActionCallArgs<T>
   >(
     action: T,
-    args: ActionCallArgs<T>,
-    serviceCall: (
-      args: ActionCallArgs<T>
-    ) => Observable<ActionSuccessResponse<T>>,
+    args: L,
+    serviceCall: (args: L) => Observable<ActionSuccessResponse<T>>,
     sideUpdates?: J
   ) {
     return serviceCall

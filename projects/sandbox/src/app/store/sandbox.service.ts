@@ -2,7 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { ServiceBase } from '../../../../ngrx-toolkit/src/public-api';
+import {
+  defineResponseType,
+  ServiceBase,
+} from '../../../../ngrx-toolkit/src/public-api';
 import * as Models from './sandbox.models';
 
 @Injectable({
@@ -10,27 +13,32 @@ import * as Models from './sandbox.models';
 })
 export class SandboxService extends ServiceBase {
   constructor(private _http: HttpClient) {
-    super(_http, 'https://jsonplaceholder.typicode.com');
+    super(_http, 'https://jsonplaceholder.typicode.com', {
+      queryParams: { foo: 'asad' },
+    });
   }
 
   postSandbox(args: Models.PostSandboxArgs) {
-    return this.get<Models.Sandbox>({
-      apiRoute: '/todos/1',
+    return this.get({
+      apiRoute: (p) => `/todos/${p.sandboxTest}`,
       httpOpts: args,
+      responseType: defineResponseType<Models.Sandbox>(),
     });
   }
 
   getFoo(args: Models.GetFooArgs) {
-    return this.post<Models.Sandbox>({
-      apiRoute: '/todos/1',
+    return this.post({
+      apiRoute: (p) => `/todos/${p.sandboxSlug}`,
       httpOpts: args,
+      responseType: defineResponseType<Models.Sandbox>(),
     });
   }
 
-  getBar(args: Models.GetBarArgs) {
-    return this.get<{ value: boolean }>({
-      apiRoute: '/todos/1',
+  getBar(args: Models.GetBazArgs) {
+    return this.get({
+      apiRoute: `/todos/1`,
       httpOpts: args,
+      responseType: defineResponseType<{ value: boolean }>(),
       extras: {
         skipCache: true,
       },

@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { buildApiURL } from './url-builder.helpers';
 import {
   HttpCallOptions,
   HttpDeleteOptions,
@@ -17,6 +16,9 @@ interface CacheItem {
   data: any;
 }
 
+export const defineResponseType = <T extends any>() => null as any as T;
+
+// TODO (TRB): Add _baseConfig strategy (fallback or merge), default = fallback
 export class ServiceBase {
   private _cache: Record<number, CacheItem> = {};
 
@@ -26,38 +28,50 @@ export class ServiceBase {
     private _baseConfig?: HttpCallOptions
   ) {}
 
-  get<T>({
+  get<
+    HttpOpts extends HttpGetOptions,
+    ResponseType extends ReturnType<typeof defineResponseType> = ReturnType<
+      typeof defineResponseType
+    >
+  >({
     apiRoute,
     httpOpts,
     extras,
   }: {
-    apiRoute: string;
-    httpOpts?: HttpGetOptions;
+    apiRoute: HttpOpts['queryParams'] extends object
+      ? (queryParams: HttpOpts['queryParams']) => string
+      : string;
+    responseType: ResponseType;
+    httpOpts?: HttpOpts;
     extras?: {
       apiBaseOverride?: string;
       cacheExpiresIn?: number;
       skipCache?: boolean;
     };
   }) {
-    let cacheIdParams =
-      'NO_ARG' + JSON.stringify({ httpOpts, apiRoute, extras });
+    const route =
+      typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
 
-    const { apiBase, headers, params, queryParams, responseType } =
-      this._getCallConfig(httpOpts, extras);
+    let cacheIdParams = 'NO_ARG' + JSON.stringify({ httpOpts, route, extras });
+
+    const { apiBase, headers, params, responseType } = this._getCallConfig(
+      httpOpts,
+      extras
+    );
 
     const cacheId = generateEntityId(cacheIdParams);
     const cacheItem = this._cache[cacheId];
 
     if (cacheItem) {
       if (new Date().getTime() < cacheItem.validUntil && !extras?.skipCache) {
-        return of(cacheItem.data) as Observable<T>;
+        return of(cacheItem.data) as Observable<ResponseType>;
       } else {
         delete this._cache[cacheId];
       }
     }
 
     return this.__http
-      .get<T>(buildApiURL(apiBase, apiRoute, queryParams), {
+      .get<ResponseType>(`${apiBase}${route}`, {
         headers: headers,
         params: params as any,
         observe: 'response',
@@ -102,29 +116,40 @@ export class ServiceBase {
         }),
         map((r) => {
           if (responseType === 'arraybuffer') {
-            return { file: r.body } as any as T;
+            return { file: r.body } as any as ResponseType;
           }
-          return r.body as T;
+          return r.body as ResponseType;
         })
       );
   }
 
-  post<T>({
+  post<
+    HttpOpts extends HttpPostOptions,
+    ResponseType extends ReturnType<typeof defineResponseType> = ReturnType<
+      typeof defineResponseType
+    >
+  >({
     apiRoute,
     httpOpts,
     extras,
   }: {
-    apiRoute: string;
-    httpOpts?: HttpPostOptions;
+    apiRoute: HttpOpts['queryParams'] extends object
+      ? (queryParams: HttpOpts['queryParams']) => string
+      : string;
+    responseType: ResponseType;
+    httpOpts?: HttpOpts;
     extras?: {
       apiBaseOverride?: string;
     };
   }) {
+    const route =
+      typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
+
     const { apiBase, headers, params, queryParams, responseType } =
       this._getCallConfig(httpOpts, extras);
 
     return this.__http
-      .post<T>(buildApiURL(apiBase, apiRoute, queryParams), httpOpts?.body, {
+      .post<ResponseType>(`${apiBase}${route}`, httpOpts?.body, {
         headers: headers,
         params: params as any,
         responseType: responseType as any,
@@ -132,59 +157,40 @@ export class ServiceBase {
       .pipe(
         map((r) => {
           if (responseType === 'arraybuffer') {
-            return { file: r } as any as T;
-          }
-          return r;
-        })
-      );
-  }
-
-  put<T>({
-    apiRoute,
-    httpOpts,
-    extras,
-  }: {
-    apiRoute: string;
-    httpOpts?: HttpPutOptions;
-    extras?: {
-      apiBaseOverride?: string;
-    };
-  }) {
-    const { apiBase, headers, params, queryParams, responseType } =
-      this._getCallConfig(httpOpts, extras);
-
-    return this.__http
-      .put<T>(buildApiURL(apiBase, apiRoute, queryParams), httpOpts?.body, {
-        headers: headers,
-        params: params as any,
-        responseType: responseType as any,
-      })
-      .pipe(
-        map((r) => {
-          if (responseType === 'arraybuffer') {
-            return { file: r } as any as T;
+            return { file: r } as any as ResponseType;
           }
           return r;
         })
       );
   }
 
-  patch<T>({
+  put<
+    HttpOpts extends HttpPutOptions,
+    ResponseType extends ReturnType<typeof defineResponseType> = ReturnType<
+      typeof defineResponseType
+    >
+  >({
     apiRoute,
     httpOpts,
     extras,
   }: {
-    apiRoute: string;
-    httpOpts?: HttpPatchOptions;
+    apiRoute: HttpOpts['queryParams'] extends object
+      ? (queryParams: HttpOpts['queryParams']) => string
+      : string;
+    responseType: ResponseType;
+    httpOpts?: HttpOpts;
     extras?: {
       apiBaseOverride?: string;
     };
   }) {
+    const route =
+      typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
+
     const { apiBase, headers, params, queryParams, responseType } =
       this._getCallConfig(httpOpts, extras);
 
     return this.__http
-      .patch<T>(buildApiURL(apiBase, apiRoute, queryParams), httpOpts?.body, {
+      .put<ResponseType>(`${apiBase}${route}`, httpOpts?.body, {
         headers: headers,
         params: params as any,
         responseType: responseType as any,
@@ -192,29 +198,40 @@ export class ServiceBase {
       .pipe(
         map((r) => {
           if (responseType === 'arraybuffer') {
-            return { file: r } as any as T;
+            return { file: r } as any as ResponseType;
           }
           return r;
         })
       );
   }
 
-  delete<T>({
+  patch<
+    HttpOpts extends HttpPatchOptions,
+    ResponseType extends ReturnType<typeof defineResponseType> = ReturnType<
+      typeof defineResponseType
+    >
+  >({
     apiRoute,
     httpOpts,
     extras,
   }: {
-    apiRoute: string;
-    httpOpts?: HttpDeleteOptions;
+    apiRoute: HttpOpts['queryParams'] extends object
+      ? (queryParams: HttpOpts['queryParams']) => string
+      : string;
+    responseType: ResponseType;
+    httpOpts?: HttpOpts;
     extras?: {
       apiBaseOverride?: string;
     };
   }) {
+    const route =
+      typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
+
     const { apiBase, headers, params, queryParams, responseType } =
       this._getCallConfig(httpOpts, extras);
 
     return this.__http
-      .delete<T>(buildApiURL(apiBase, apiRoute, queryParams), {
+      .patch<ResponseType>(`${apiBase}${route}`, httpOpts?.body, {
         headers: headers,
         params: params as any,
         responseType: responseType as any,
@@ -222,7 +239,48 @@ export class ServiceBase {
       .pipe(
         map((r) => {
           if (responseType === 'arraybuffer') {
-            return { file: r } as any as T;
+            return { file: r } as any as ResponseType;
+          }
+          return r;
+        })
+      );
+  }
+
+  delete<
+    HttpOpts extends HttpDeleteOptions,
+    ResponseType extends ReturnType<typeof defineResponseType> = ReturnType<
+      typeof defineResponseType
+    >
+  >({
+    apiRoute,
+    httpOpts,
+    extras,
+  }: {
+    apiRoute: HttpOpts['queryParams'] extends object
+      ? (queryParams: HttpOpts['queryParams']) => string
+      : string;
+    responseType: ResponseType;
+    httpOpts?: HttpOpts;
+    extras?: {
+      apiBaseOverride?: string;
+    };
+  }) {
+    const route =
+      typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
+
+    const { apiBase, headers, params, queryParams, responseType } =
+      this._getCallConfig(httpOpts, extras);
+
+    return this.__http
+      .delete<ResponseType>(`${apiBase}${route}`, {
+        headers: headers,
+        params: params as any,
+        responseType: responseType as any,
+      })
+      .pipe(
+        map((r) => {
+          if (responseType === 'arraybuffer') {
+            return { file: r } as any as ResponseType;
           }
           return r;
         })

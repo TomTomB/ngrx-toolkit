@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
     });
 
     this.store = this._sandboxFacade.postSandbox({
-      queryParams: { sandboxId: 'asfs11412vad' },
+      queryParams: { sandboxId: '1', sandboxTest: 1 },
       sideUpdates: {
         getFoo: { queryParams: { sandboxSlug: 'foobar' } },
         getBar: {
