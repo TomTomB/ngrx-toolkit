@@ -6,7 +6,7 @@ import { createActionId } from './util';
 
 export const createTestingState = <
   ActionToCall extends Action,
-  ReducerFn extends (a: any, b: any) => any,
+  Reducer extends (a: InitialState, b: ActionToCall) => any,
   InitialState,
   CS extends CallState
 >({
@@ -16,7 +16,7 @@ export const createTestingState = <
   callState,
 }: {
   action: ActionToCall;
-  reducer: ReducerFn;
+  reducer: Reducer;
   initialState: InitialState;
   callState: CS;
 }) => {
