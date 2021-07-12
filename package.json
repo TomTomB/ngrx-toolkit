@@ -7,6 +7,13 @@
     "type": "git",
     "url": "git+https://github.com/TomTomB/ngrx-toolkit.git"
   },
+  "keywords": [
+    "Angular",
+    "NgRx",
+    "Redux",
+    "Schematics",
+    "Angular CLI"
+  ],
   "author": "Tom-Rune Bornholdt",
   "bugs": {
     "url": "https://github.com/TomTomB/ngrx-toolkit/issues"
