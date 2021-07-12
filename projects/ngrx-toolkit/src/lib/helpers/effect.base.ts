@@ -1,5 +1,4 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { SuccessCreator } from '../types';
 import { Observable, of } from 'rxjs';
 import {
   catchError,
@@ -10,11 +9,12 @@ import {
   switchMap,
 } from 'rxjs/operators';
 import {
+  SuccessCreator,
   ActionCallArgs,
   ActionCallSideUpdates,
   ActionSuccessResponse,
   TypedActionObject,
-} from '../types/types';
+} from '../types';
 import { buildErrorFromHttpError } from './error.helpers';
 import { Action } from '@ngrx/store';
 
