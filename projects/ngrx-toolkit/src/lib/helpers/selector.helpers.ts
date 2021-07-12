@@ -14,6 +14,14 @@ export const createEntitySelectors = <
   const getAdapterEntities = (state: any, adapterId: keyof Reducers) => {
     const adapter = reducerAdapters[adapterId];
 
+    if (!adapter) {
+      console.error(
+        '[NGRXT:001] Missing reducer adapter. Did you forget to add the action to the ACTIONS constant?',
+        { adapterId, state, reducerAdapters }
+      );
+      return null;
+    }
+
     const { selectEntities } = adapter.getSelectors();
 
     return selectEntities(state[adapterId]);
@@ -25,7 +33,7 @@ export const createEntitySelectors = <
   const getCallStateById = (adapterId: keyof Reducers, actionId: number) =>
     createSelector(
       getStoreSliceAdapterEntities(adapterId),
-      (s) => s[actionId] || null
+      (s) => s?.[actionId] || null
     );
 
   const getIsInit = (adapterId: keyof Reducers, actionId: number) =>
