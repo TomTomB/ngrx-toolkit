@@ -12,6 +12,13 @@
     "url": "https://github.com/TomTomB/ngrx-toolkit/issues"
   },
   "homepage": "https://github.com/TomTomB/ngrx-toolkit#readme",
+  "keywords": [
+    "Angular",
+    "NgRx",
+    "Redux",
+    "Schematics",
+    "Angular CLI"
+  ],
   "peerDependencies": {
     "@angular/common": "^12.1.1",
     "@angular/core": "^12.1.1",
