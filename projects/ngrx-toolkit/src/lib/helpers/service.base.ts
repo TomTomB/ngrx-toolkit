@@ -145,8 +145,10 @@ export class ServiceBase {
     const route =
       typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
 
-    const { apiBase, headers, params, queryParams, responseType } =
-      this._getCallConfig(httpOpts, extras);
+    const { apiBase, headers, params, responseType } = this._getCallConfig(
+      httpOpts,
+      extras
+    );
 
     return this.__http
       .post<ResponseType>(`${apiBase}${route}`, httpOpts?.body, {
@@ -186,8 +188,10 @@ export class ServiceBase {
     const route =
       typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
 
-    const { apiBase, headers, params, queryParams, responseType } =
-      this._getCallConfig(httpOpts, extras);
+    const { apiBase, headers, params, responseType } = this._getCallConfig(
+      httpOpts,
+      extras
+    );
 
     return this.__http
       .put<ResponseType>(`${apiBase}${route}`, httpOpts?.body, {
@@ -227,8 +231,10 @@ export class ServiceBase {
     const route =
       typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
 
-    const { apiBase, headers, params, queryParams, responseType } =
-      this._getCallConfig(httpOpts, extras);
+    const { apiBase, headers, params, responseType } = this._getCallConfig(
+      httpOpts,
+      extras
+    );
 
     return this.__http
       .patch<ResponseType>(`${apiBase}${route}`, httpOpts?.body, {
@@ -268,8 +274,10 @@ export class ServiceBase {
     const route =
       typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
 
-    const { apiBase, headers, params, queryParams, responseType } =
-      this._getCallConfig(httpOpts, extras);
+    const { apiBase, headers, params, responseType } = this._getCallConfig(
+      httpOpts,
+      extras
+    );
 
     return this.__http
       .delete<ResponseType>(`${apiBase}${route}`, {
