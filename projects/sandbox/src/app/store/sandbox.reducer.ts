@@ -4,6 +4,8 @@ import * as Actions from './sandbox.actions';
 
 export const SANDBOX_FEATURE_KEY = 'sandbox';
 
+export type State = typeof initialState;
+
 export interface SandboxPartialState {
   readonly [SANDBOX_FEATURE_KEY]: State;
 }
@@ -27,8 +29,6 @@ export const { reducerSlice, reducerAdapters, initialState } =
       return state;
     })
   );
-
-export type State = typeof initialState;
 
 export function reducer(state: State | undefined, action: Action) {
   return reducerSlice(state, action);

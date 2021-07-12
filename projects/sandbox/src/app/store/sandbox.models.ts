@@ -16,18 +16,8 @@ export interface GetFooArgs {
 }
 
 export interface GetBarArgs {
-  queryParams: {
-    barSlug: string;
-    barId: string;
-  };
   params: {
-    page: number;
-  };
-}
-
-export interface GetBazArgs {
-  params: {
-    page: number;
+    someFilter: string;
   };
 }
 

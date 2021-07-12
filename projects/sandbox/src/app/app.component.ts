@@ -33,8 +33,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this._sandboxFacade.getBar({
-      queryParams: { barSlug: 'test', barId: 'test' },
-      params: { page: 5 },
+      params: { someFilter: '5' },
     });
 
     this.assignStore3();
@@ -48,8 +47,7 @@ export class AppComponent implements OnInit {
       sideUpdates: {
         getFoo: { queryParams: { sandboxSlug: 'foobar' } },
         getBar: {
-          params: { page: 1 },
-          queryParams: { barId: 'abc123', barSlug: 'baro' },
+          params: { someFilter: '1' },
         },
       },
     });
@@ -77,15 +75,13 @@ export class AppComponent implements OnInit {
 
   assignStore3() {
     this.store3 = this._sandboxFacade.getBar({
-      queryParams: { barSlug: 'baro', barId: 'abc123' },
-      params: { page: 1 },
+      params: { someFilter: '1' },
     });
   }
 
   assignStore4() {
     this.store4 = this._sandboxFacade.getBar({
-      queryParams: { barSlug: 'test123', barId: 'test123' },
-      params: { page: 1 },
+      params: { someFilter: '1' },
     });
     this._cdr.markForCheck();
   }
