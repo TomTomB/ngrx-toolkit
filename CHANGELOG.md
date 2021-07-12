@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/TomTomB/ngrx-toolkit/compare/v3.0.0...v3.1.0) (2021-07-12)
+
+
+### Features
+
+* 🎸 add error message for missing reducer adapter ([68dba41](https://github.com/TomTomB/ngrx-toolkit/commit/68dba419d89f919970ffe7aece2ab3777ada194e))
+
+
+### Bug Fixes
+
+* 🐛 object sorter tries to sort null ([7b0f2e7](https://github.com/TomTomB/ngrx-toolkit/commit/7b0f2e7ba1d196d04afb4aedc9d4a91579b4ffa3))
+
 ## [3.0.0](https://github.com/TomTomB/ngrx-toolkit/compare/v2.11.0...v3.0.0) (2021-07-11)
 
 
