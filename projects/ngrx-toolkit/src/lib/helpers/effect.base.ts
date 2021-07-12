@@ -68,8 +68,6 @@ type OnActionArgs<
       sideUpdates?: never;
     };
 
-//FIXME (TRB): Type checking does not work for arg type
-
 export class EffectBase {
   constructor(private __actions$: Actions, private __featureService: any) {}
 
