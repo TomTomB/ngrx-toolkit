@@ -18,7 +18,8 @@
     "upload": "yarn --cwd dist/ngrx-toolkit publish",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --configuration production && yarn --cwd projects/ngrx-toolkit build",
+    "build": "ng build --configuration production && yarn copy:readme && yarn --cwd projects/ngrx-toolkit build",
+    "copy:readme": "cp README.md ./dist/ngrx-toolkit/README.md",
     "test": "ng test",
     "lint": "ng lint"
   },
