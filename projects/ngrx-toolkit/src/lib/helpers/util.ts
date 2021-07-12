@@ -28,7 +28,7 @@ export const sortObject = (sourceObj: Record<any, any>) => {
     .reduce((obj, key) => {
       let val = sourceObj[key];
 
-      if (typeof val === 'object') {
+      if (typeof val === 'object' && val !== null && val !== undefined) {
         val = sortObject(val);
       }
 
