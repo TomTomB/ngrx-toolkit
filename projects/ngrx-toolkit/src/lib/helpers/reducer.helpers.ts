@@ -14,6 +14,7 @@ import {
   TypedActionObject,
 } from '../types';
 import { removeCallState, resetFeatureStore } from './action.helpers';
+import { HIDDEN } from './constants';
 import { uniformActionType } from './status.helpers';
 import { createActionId } from './util';
 
@@ -30,15 +31,17 @@ export const createCallState = (
     timestamp: new Date().getTime(),
   };
 
-  const anyAction = newObj.action as any;
+  const anyAction = JSON.parse(JSON.stringify(newObj.action));
 
   if (anyAction.args?.body?.password) {
-    anyAction.args.body.password = '[HIDDEN]';
+    anyAction.args.body.password = HIDDEN;
   }
 
   if (anyAction.args?.body?.plainPassword) {
-    anyAction.args.body.plainPassword = '[HIDDEN]';
+    anyAction.args.body.plainPassword = HIDDEN;
   }
+
+  newObj.action = anyAction;
 
   return newObj;
 };
