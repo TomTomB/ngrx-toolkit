@@ -1,20 +1,21 @@
 import * as Models from './<%= nameWithoutPath %>.models';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ServiceBase } from '@tomtomb/ngrx-toolkit';
+import { defineResponseType, ServiceBase } from '@tomtomb/ngrx-toolkit';
 
 @Injectable({
   providedIn: 'root'
 })
 export class <%= classify(nameWithoutPath) %>Service extends ServiceBase {
   constructor(private _http: HttpClient) { 
-      super(_http, 'https://example.com');
+    super(_http, 'https://example.com');
   }
 
   getFoo(args: Models.GetFooArgs) {
-    return this.get<null>({
-      apiRoute: '/foo',
+    return this.get({
+      apiRoute: (p) => `/foo/${p.slug}`,
       httpOpts: args,
+      responseType: defineResponseType<null>(),
     });
   }
 }
