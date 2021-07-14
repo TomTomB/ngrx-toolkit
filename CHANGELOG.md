@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.3](https://github.com/TomTomB/ngrx-toolkit/compare/v3.1.2...v3.1.3) (2021-07-14)
+
+
+### Bug Fixes
+
+* 🐛 service schematic ([3549a4d](https://github.com/TomTomB/ngrx-toolkit/commit/3549a4d33f78eefc8e1b3f385cd447f30ef8f6c1))
+
 ### [3.1.2](https://github.com/TomTomB/ngrx-toolkit/compare/v3.1.1...v3.1.2) (2021-07-13)
 
 
