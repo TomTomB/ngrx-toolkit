@@ -57,7 +57,10 @@ export class SuspensePipe implements PipeTransform, OnDestroy {
 
     if (this._currentMappedEntityState !== value) {
       this._dispose();
-      return this.transform(value);
+
+      if (value) {
+        this._subscribe(value);
+      }
     }
 
     return this._state as any as State<T>;
