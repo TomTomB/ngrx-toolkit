@@ -1,8 +1,33 @@
-import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  OnDestroy,
+  Pipe,
+  PipeTransform,
+} from '@angular/core';
 import { combineLatest, Subscription } from 'rxjs';
 import { startWith, tap } from 'rxjs/operators';
 import { MappedEntityState, TypedActionObject } from '../types';
 import { State } from './types';
+
+const DEFAULT_STATE: State<MappedEntityState<TypedActionObject>> = {
+  args: null,
+  cachedResponse: null,
+  callState: null,
+  entityId: null,
+  error: null,
+  isError: false,
+  isInit: false,
+  isLoading: false,
+  isPolling: false,
+  isSuccess: false,
+  refresh: () => {},
+  remove: () => {},
+  startPolling: () => {},
+  stopPolling: () => {},
+  response: null,
+  timestamp: null,
+  type: null,
+} as const;
 
 @Pipe({ name: 'suspense', pure: false })
 export class SuspensePipe implements PipeTransform, OnDestroy {
@@ -12,7 +37,10 @@ export class SuspensePipe implements PipeTransform, OnDestroy {
     | undefined
     | null = null;
 
-  private _state: State<any> | null = null;
+  private _state: State<MappedEntityState<TypedActionObject>> | null =
+    DEFAULT_STATE;
+
+  constructor(private _cdr: ChangeDetectorRef) {}
 
   ngOnDestroy(): void {
     this._dispose();
@@ -20,7 +48,7 @@ export class SuspensePipe implements PipeTransform, OnDestroy {
 
   transform<T extends MappedEntityState<TypedActionObject>>(
     value: T | null | undefined
-  ): State<T> | null | undefined {
+  ): State<T> {
     if (!this._currentMappedEntityState) {
       if (value) {
         this._subscribe(value);
@@ -32,7 +60,7 @@ export class SuspensePipe implements PipeTransform, OnDestroy {
       return this.transform(value);
     }
 
-    return value ? this._state : value;
+    return this._state as any as State<T>;
   }
 
   private _subscribe(obj: MappedEntityState<TypedActionObject>) {
@@ -84,9 +112,19 @@ export class SuspensePipe implements PipeTransform, OnDestroy {
               response,
               timestamp,
               type,
-              refresh: this._currentMappedEntityState?.refresh,
-              remove: this._currentMappedEntityState?.remove,
+              refresh:
+                this._currentMappedEntityState?.refresh ??
+                DEFAULT_STATE.refresh,
+              remove:
+                this._currentMappedEntityState?.remove ?? DEFAULT_STATE.remove,
+              startPolling:
+                this._currentMappedEntityState?.startPolling ??
+                DEFAULT_STATE.startPolling,
+              stopPolling:
+                this._currentMappedEntityState?.stopPolling ??
+                DEFAULT_STATE.stopPolling,
             };
+            this._cdr.markForCheck();
           }
         )
       )

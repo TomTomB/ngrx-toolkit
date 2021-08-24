@@ -8,6 +8,7 @@
   <button *ngIf="!s.type" (click)="assignStore3()">Recreate</button>
 </div>
 <hr />
+
 <div *ngIf="{ s1: store, s2: store2, s3: store4 } | suspenseMulti as s">
   <h3>Suspense multi pipe</h3>
 

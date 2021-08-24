@@ -35,8 +35,7 @@ export class SuspenseMultiPipe implements PipeTransform, OnDestroy {
   ):
     | {
         [Property in keyof T]: State<T[Property]>;
-      }
-    | null {
+      } {
     if (!this._currentMappedEntityState) {
       if (value) {
         this._subscribe(value);
@@ -51,11 +50,9 @@ export class SuspenseMultiPipe implements PipeTransform, OnDestroy {
       }
     }
 
-    return value && Object.keys(this._state).length
-      ? (this._state as any as {
-          [Property in keyof T]: State<T[Property]>;
-        })
-      : null;
+    return this._state as any as {
+      [Property in keyof T]: State<T[Property]>;
+    };
   }
 
   private _subscribe(

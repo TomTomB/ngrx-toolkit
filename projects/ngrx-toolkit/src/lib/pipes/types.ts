@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { MappedEntityState, TypedActionObject } from '../types';
 
 export type ExtractFrom<P> = P extends Observable<infer T> ? T : never;
@@ -22,5 +22,7 @@ export type State<
       type: ExtractFrom<T['type$']>;
       refresh: () => void;
       remove: () => void;
+      startPolling: (args: { intervalDuration: number; killSwitch: Subject<boolean>; }) => void;
+      stopPolling: () => void;
     }
   : T;
