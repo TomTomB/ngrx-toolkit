@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.1.4](https://github.com/TomTomB/ngrx-toolkit/compare/v3.1.3...v3.1.4) (2021-08-24)
+
+
+### Bug Fixes
+
+* 🐛 change detection issues in suspense pipe ([3ed6e9a](https://github.com/TomTomB/ngrx-toolkit/commit/3ed6e9a83cbfe1415db3f953beeef296af4b7787))
+* 🐛 potential endless loop ([dc0ca51](https://github.com/TomTomB/ngrx-toolkit/commit/dc0ca51b7215cd1f52b1805e0d6d9c64ede017f8))
+
 ### [3.1.3](https://github.com/TomTomB/ngrx-toolkit/compare/v3.1.2...v3.1.3) (2021-07-14)
 
 
