@@ -10,7 +10,8 @@ import {
   HttpPutOptions,
 } from '../types';
 import { generateEntityId } from './util';
-import { stringify } from 'qs';
+import { IStringifyOptions, stringify } from 'qs';
+
 interface CacheItem {
   validUntil: number;
   data: any;
@@ -45,6 +46,7 @@ export class ServiceBase {
     httpOpts?: HttpOpts;
     extras?: {
       apiBaseOverride?: string;
+      paramsArrayFormat?: IStringifyOptions['arrayFormat'];
       cacheExpiresIn?: number;
       skipCache?: boolean;
     };
@@ -54,7 +56,7 @@ export class ServiceBase {
 
     let cacheIdParams = 'NO_ARG' + JSON.stringify({ httpOpts, route, extras });
 
-    const { apiBase, headers, params, responseType } = this._getCallConfig(
+    const { apiBase, headers, responseType, queryString } = this._getCallConfig(
       httpOpts,
       extras
     );
@@ -69,8 +71,6 @@ export class ServiceBase {
         delete this._cache[cacheId];
       }
     }
-
-    const queryString = this._mapParams(params);
 
     return this.__http
       .get<ResponseType>(
@@ -144,17 +144,16 @@ export class ServiceBase {
     httpOpts?: HttpOpts;
     extras?: {
       apiBaseOverride?: string;
+      paramsArrayFormat?: IStringifyOptions['arrayFormat'];
     };
   }) {
     const route =
       typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
 
-    const { apiBase, headers, params, responseType } = this._getCallConfig(
+    const { apiBase, headers, responseType, queryString } = this._getCallConfig(
       httpOpts,
       extras
     );
-
-    const queryString = this._mapParams(params);
 
     return this.__http
       .post<ResponseType>(
@@ -193,17 +192,14 @@ export class ServiceBase {
     httpOpts?: HttpOpts;
     extras?: {
       apiBaseOverride?: string;
+      paramsArrayFormat?: IStringifyOptions['arrayFormat'];
     };
   }) {
     const route =
       typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
 
-    const { apiBase, headers, params, responseType } = this._getCallConfig(
-      httpOpts,
-      extras
-    );
-
-    const queryString = this._mapParams(params);
+    const { apiBase, headers, params, responseType, queryString } =
+      this._getCallConfig(httpOpts, extras);
 
     return this.__http
       .put<ResponseType>(
@@ -241,17 +237,16 @@ export class ServiceBase {
     httpOpts?: HttpOpts;
     extras?: {
       apiBaseOverride?: string;
+      paramsArrayFormat?: IStringifyOptions['arrayFormat'];
     };
   }) {
     const route =
       typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
 
-    const { apiBase, headers, params, responseType } = this._getCallConfig(
+    const { apiBase, headers, responseType, queryString } = this._getCallConfig(
       httpOpts,
       extras
     );
-
-    const queryString = this._mapParams(params);
 
     return this.__http
       .patch<ResponseType>(
@@ -259,7 +254,6 @@ export class ServiceBase {
         httpOpts?.body,
         {
           headers: headers,
-          params: params as any,
           responseType: responseType as any,
         }
       )
@@ -290,24 +284,22 @@ export class ServiceBase {
     httpOpts?: HttpOpts;
     extras?: {
       apiBaseOverride?: string;
+      paramsArrayFormat?: IStringifyOptions['arrayFormat'];
     };
   }) {
     const route =
       typeof apiRoute === 'string' ? apiRoute : apiRoute(httpOpts?.queryParams);
 
-    const { apiBase, headers, params, responseType } = this._getCallConfig(
+    const { apiBase, headers, responseType, queryString } = this._getCallConfig(
       httpOpts,
       extras
     );
-
-    const queryString = this._mapParams(params);
 
     return this.__http
       .delete<ResponseType>(
         `${apiBase}${route}${queryString ? '?' + queryString : ''}`,
         {
           headers: headers,
-          params: params as any,
           responseType: responseType as any,
         }
       )
@@ -327,7 +319,10 @@ export class ServiceBase {
 
   private _getCallConfig(
     httpOpts?: HttpCallOptions,
-    extras?: { apiBaseOverride?: string }
+    extras?: {
+      apiBaseOverride?: string;
+      paramsArrayFormat?: IStringifyOptions['arrayFormat'];
+    }
   ) {
     const apiBase = extras?.apiBaseOverride || this._apiBase || '';
     const headers = httpOpts?.headers || this._baseConfig?.headers;
@@ -336,16 +331,10 @@ export class ServiceBase {
     const responseType =
       httpOpts?.responseType || this._baseConfig?.responseType || 'json';
 
-    return { apiBase, headers, params, queryParams, responseType };
-  }
+    const queryString = stringify(params, {
+      arrayFormat: extras?.paramsArrayFormat ?? 'brackets',
+    });
 
-  private _mapParams(params?: Record<string, any>) {
-    if (!params) {
-      return null;
-    }
-
-    const queryString = stringify(params);
-
-    return queryString;
+    return { apiBase, headers, params, queryParams, responseType, queryString };
   }
 }
