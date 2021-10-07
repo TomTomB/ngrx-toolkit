@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/TomTomB/ngrx-toolkit/compare/v3.1.4...v3.2.0) (2021-10-07)
+
+
+### Features
+
+* 🎸 use qs for query params ([b44e99e](https://github.com/TomTomB/ngrx-toolkit/commit/b44e99e52184e5d6b4b1480652937957264145bf))
+
 ### [3.1.4](https://github.com/TomTomB/ngrx-toolkit/compare/v3.1.3...v3.1.4) (2021-08-24)
 
 
