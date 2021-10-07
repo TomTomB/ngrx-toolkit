@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.3.0](https://github.com/TomTomB/ngrx-toolkit/compare/v3.2.0...v3.3.0) (2021-10-07)
+
+
+### Features
+
+* 🎸 make array params mapping extras option ([8670815](https://github.com/TomTomB/ngrx-toolkit/commit/8670815a5f3e2f1c18b497da538a92dfa9b4fa2b))
+
 ## [3.2.0](https://github.com/TomTomB/ngrx-toolkit/compare/v3.1.4...v3.2.0) (2021-10-07)
 
 
