@@ -18,6 +18,7 @@ export interface GetFooArgs {
 export interface GetBarArgs {
   params: {
     someFilter: string;
+    barIds: string[];
   };
 }
 

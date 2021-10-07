@@ -10,7 +10,7 @@ import {
   HttpPutOptions,
 } from '../types';
 import { generateEntityId } from './util';
-
+import { stringify } from 'qs';
 interface CacheItem {
   validUntil: number;
   data: any;
@@ -70,13 +70,17 @@ export class ServiceBase {
       }
     }
 
+    const queryString = this._mapParams(params);
+
     return this.__http
-      .get<ResponseType>(`${apiBase}${route}`, {
-        headers: headers,
-        params: params as any,
-        observe: 'response',
-        responseType: responseType as any,
-      })
+      .get<ResponseType>(
+        `${apiBase}${route}${queryString ? '?' + queryString : ''}`,
+        {
+          headers: headers,
+          observe: 'response',
+          responseType: responseType as any,
+        }
+      )
       .pipe(
         tap((r) => {
           if (extras?.skipCache) {
@@ -150,12 +154,18 @@ export class ServiceBase {
       extras
     );
 
+    const queryString = this._mapParams(params);
+
     return this.__http
-      .post<ResponseType>(`${apiBase}${route}`, httpOpts?.body, {
-        headers: headers,
-        params: params as any,
-        responseType: responseType as any,
-      })
+      .post<ResponseType>(
+        `${apiBase}${route}${queryString ? '?' + queryString : ''}`,
+        httpOpts?.body,
+        {
+          headers: headers,
+
+          responseType: responseType as any,
+        }
+      )
       .pipe(
         map((r) => {
           if (responseType === 'arraybuffer') {
@@ -193,12 +203,17 @@ export class ServiceBase {
       extras
     );
 
+    const queryString = this._mapParams(params);
+
     return this.__http
-      .put<ResponseType>(`${apiBase}${route}`, httpOpts?.body, {
-        headers: headers,
-        params: params as any,
-        responseType: responseType as any,
-      })
+      .put<ResponseType>(
+        `${apiBase}${route}${queryString ? '?' + queryString : ''}`,
+        httpOpts?.body,
+        {
+          headers: headers,
+          responseType: responseType as any,
+        }
+      )
       .pipe(
         map((r) => {
           if (responseType === 'arraybuffer') {
@@ -236,12 +251,18 @@ export class ServiceBase {
       extras
     );
 
+    const queryString = this._mapParams(params);
+
     return this.__http
-      .patch<ResponseType>(`${apiBase}${route}`, httpOpts?.body, {
-        headers: headers,
-        params: params as any,
-        responseType: responseType as any,
-      })
+      .patch<ResponseType>(
+        `${apiBase}${route}${queryString ? '?' + queryString : ''}`,
+        httpOpts?.body,
+        {
+          headers: headers,
+          params: params as any,
+          responseType: responseType as any,
+        }
+      )
       .pipe(
         map((r) => {
           if (responseType === 'arraybuffer') {
@@ -279,12 +300,17 @@ export class ServiceBase {
       extras
     );
 
+    const queryString = this._mapParams(params);
+
     return this.__http
-      .delete<ResponseType>(`${apiBase}${route}`, {
-        headers: headers,
-        params: params as any,
-        responseType: responseType as any,
-      })
+      .delete<ResponseType>(
+        `${apiBase}${route}${queryString ? '?' + queryString : ''}`,
+        {
+          headers: headers,
+          params: params as any,
+          responseType: responseType as any,
+        }
+      )
       .pipe(
         map((r) => {
           if (responseType === 'arraybuffer') {
@@ -311,5 +337,15 @@ export class ServiceBase {
       httpOpts?.responseType || this._baseConfig?.responseType || 'json';
 
     return { apiBase, headers, params, queryParams, responseType };
+  }
+
+  private _mapParams(params?: Record<string, any>) {
+    if (!params) {
+      return null;
+    }
+
+    const queryString = stringify(params);
+
+    return queryString;
   }
 }
