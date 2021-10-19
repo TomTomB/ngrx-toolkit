@@ -17,7 +17,7 @@ export class FacadeBase {
   private _cache: Record<string, MappedEntityState<any>> = {};
 
   constructor(
-    private __store: Store,
+    private __store: Store<Record<any,any>>,
     private __actions: Actions,
     private _entitySelectors: EntitySelectors
   ) {}
