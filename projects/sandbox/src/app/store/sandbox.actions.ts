@@ -10,7 +10,6 @@ export const actionMap = createActionMap('Sandbox', {
     types: defineArgTypes<{
       args: Models.GetFooArgs;
       response: Models.Sandbox;
-      errorResponse: null;
     }>(),
   },
   getBar: {
@@ -18,7 +17,6 @@ export const actionMap = createActionMap('Sandbox', {
     types: defineArgTypes<{
       args: Models.GetBarArgs;
       response: { value: boolean };
-      errorResponse: null;
     }>(),
   },
   postSandbox: {
@@ -34,7 +32,6 @@ export const actionMap = createActionMap('Sandbox', {
     types: defineArgTypes<{
       args: Models.BenchmarkArgs;
       response: { value: boolean };
-      errorResponse: null;
     }>(),
   },
 });
