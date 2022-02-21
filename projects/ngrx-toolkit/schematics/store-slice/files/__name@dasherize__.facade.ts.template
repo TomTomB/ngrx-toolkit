@@ -1,9 +1,8 @@
 import * as Actions from './<%= nameWithoutPath %>.actions';
-import * as Models from './<%= nameWithoutPath %>.models';
 import * as Selectors from './<%= nameWithoutPath %>.selectors';
 import * as fromReducer from './<%= nameWithoutPath %>.reducer';
 import { Actions as ActionsNative } from '@ngrx/effects';
-import { FacadeBase } from '@tomtomb/ngrx-toolkit';
+import { ActionCallArgs, FacadeBase } from '@tomtomb/ngrx-toolkit';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 
@@ -16,7 +15,7 @@ export class <%= classify(nameWithoutPath) %>Facade extends FacadeBase {
     super(store, actions, Selectors.entitySelectors);
   }
 
-  getFoo(args: Models.GetFooArgs) {
+  getFoo(args: ActionCallArgs<typeof Actions.getFoo>) {
     return this.call(Actions.getFoo, args);
   }
 }

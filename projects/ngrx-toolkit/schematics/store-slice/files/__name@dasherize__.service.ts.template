@@ -1,7 +1,11 @@
-import * as Models from './<%= nameWithoutPath %>.models';
+import * as Actions from './<%= nameWithoutPath %>.actions';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { defineResponseType, ServiceBase } from '@tomtomb/ngrx-toolkit';
+import {
+  ActionCallArgs,
+  defineResponseType,
+  ServiceBase,
+} from '@tomtomb/ngrx-toolkit';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +15,7 @@ export class <%= classify(nameWithoutPath) %>Service extends ServiceBase {
     super(_http, 'https://example.com');
   }
 
-  getFoo(args: Models.GetFooArgs) {
+  getFoo(args: ActionCallArgs<typeof Actions.getFoo>) {
     return this.get({
       apiRoute: (p) => `/foo/${p.slug}`,
       httpOpts: args,
