@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.4.0](https://github.com/TomTomB/ngrx-toolkit/compare/v3.3.1...v3.4.0) (2022-02-21)
+
+
+### Features
+
+* 🎸 add http options to actions ([3adc15c](https://github.com/TomTomB/ngrx-toolkit/commit/3adc15c710a5195ad8d139abd6ebd3d0be54e213))
+
+
+### Bug Fixes
+
+* 🐛 build ([c8c19e9](https://github.com/TomTomB/ngrx-toolkit/commit/c8c19e9de3f1644867cdc5fd90b61396ae91f5a4))
+
 ### [3.3.1](https://github.com/TomTomB/ngrx-toolkit/compare/v3.3.0...v3.3.1) (2021-10-19)
 
 
