@@ -15,7 +15,14 @@ export interface ErrorAction<ErrorResponse> {
 }
 
 export interface Args<T> {
-  args: T;
+  args: T & { actionOptions?: ActionOptions };
+}
+
+export interface ActionOptions {
+  headers?: HttpHeaders | { [header: string]: string | string[] };
+  extras?: {
+    skipCache?: boolean;
+  };
 }
 
 export interface ArgumentsBase {
@@ -131,6 +138,7 @@ export interface HttpCallOptions {
   queryParams?: Record<string, string | number>;
   params?: Record<string, any>;
   responseType?: 'json' | 'arraybuffer';
+  actionOptions?: ActionOptions;
 }
 
 export interface HttpGetOptions extends HttpCallOptions {}

@@ -3,10 +3,12 @@ import { Injectable } from '@angular/core';
 import { of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import {
+  ActionCallArgs,
   defineResponseType,
   ServiceBase,
 } from '../../../../ngrx-toolkit/src/public-api';
 import * as Models from './sandbox.models';
+import * as Actions from './sandbox.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +20,7 @@ export class SandboxService extends ServiceBase {
     });
   }
 
-  postSandbox(args: Models.PostSandboxArgs) {
+  postSandbox(args: ActionCallArgs<typeof Actions.postSandbox>) {
     return this.get({
       apiRoute: (p) => `/todos/${p.sandboxTest}`,
       httpOpts: args,
@@ -26,7 +28,7 @@ export class SandboxService extends ServiceBase {
     });
   }
 
-  getFoo(args: Models.GetFooArgs) {
+  getFoo(args: ActionCallArgs<typeof Actions.getFoo>) {
     return this.post({
       apiRoute: (p) => `/todos/${p.sandboxSlug}`,
       httpOpts: args,
@@ -34,7 +36,7 @@ export class SandboxService extends ServiceBase {
     });
   }
 
-  getBar(args: Models.GetBarArgs) {
+  getBar(args: ActionCallArgs<typeof Actions.getBar>) {
     return this.get({
       apiRoute: `/todos/1`,
       httpOpts: args,
@@ -45,7 +47,7 @@ export class SandboxService extends ServiceBase {
     }).pipe(map((v) => ({ value: !!v })));
   }
 
-  benchmark(args: Models.BenchmarkArgs) {
+  benchmark(args: ActionCallArgs<typeof Actions.benchmark>) {
     return of({ value: true });
   }
 }

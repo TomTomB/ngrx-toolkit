@@ -34,6 +34,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this._sandboxFacade.getBar({
       params: { someFilter: '5', barIds: ['a', 'b', 'c'] },
+      actionOptions: { headers: { Foo: 'true' }, extras: { skipCache: true } },
     });
 
     this.assignStore3();

@@ -65,7 +65,11 @@ export class ServiceBase {
     const cacheItem = this._cache[cacheId];
 
     if (cacheItem) {
-      if (new Date().getTime() < cacheItem.validUntil && !extras?.skipCache) {
+      if (
+        new Date().getTime() < cacheItem.validUntil &&
+        !extras?.skipCache &&
+        !httpOpts?.actionOptions?.extras?.skipCache
+      ) {
         return of(cacheItem.data) as Observable<ResponseType>;
       } else {
         delete this._cache[cacheId];
@@ -83,7 +87,7 @@ export class ServiceBase {
       )
       .pipe(
         tap((r) => {
-          if (extras?.skipCache) {
+          if (extras?.skipCache || httpOpts?.actionOptions?.extras?.skipCache) {
             return;
           }
 
@@ -325,7 +329,10 @@ export class ServiceBase {
     }
   ) {
     const apiBase = extras?.apiBaseOverride || this._apiBase || '';
-    const headers = httpOpts?.headers || this._baseConfig?.headers;
+    const headers =
+      httpOpts?.actionOptions?.headers ||
+      httpOpts?.headers ||
+      this._baseConfig?.headers;
     const params = httpOpts?.params || this._baseConfig?.params;
     const queryParams = httpOpts?.queryParams || this._baseConfig?.queryParams;
     const responseType =
