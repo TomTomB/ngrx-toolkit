@@ -32,7 +32,7 @@ export class FacadeBase<T extends Record<string, TypedActionObject>> {
     Object.keys(_actionMap).forEach((key: keyof T) => {
       const action: T[keyof T] = _actionMap[key];
       this.dispatch[key as keyof T] = (args: ActionCallArgs<typeof action>) =>
-        this.call(action, args);
+        this._call(action, args);
     });
   }
 
@@ -308,7 +308,7 @@ export class FacadeBase<T extends Record<string, TypedActionObject>> {
    * @param args The call action args
    * @returns A mapped entity state
    */
-  call<J extends T[keyof T]>(
+  private _call<J extends T[keyof T]>(
     actionGroup: J,
     args: ReturnType<J['call']>['args']
   ) {
