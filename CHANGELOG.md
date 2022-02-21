@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [3.4.1](https://github.com/TomTomB/ngrx-toolkit/compare/v3.4.0...v3.4.1) (2022-02-21)
+
+
+### Bug Fixes
+
+* 🐛 remove usage of require ([0e061c5](https://github.com/TomTomB/ngrx-toolkit/commit/0e061c57aaeb87c0674f2dd0b8a14a23e98fddad))
+
 ## [3.4.0](https://github.com/TomTomB/ngrx-toolkit/compare/v3.3.1...v3.4.0) (2022-02-21)
 
 
