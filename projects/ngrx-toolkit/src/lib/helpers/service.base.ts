@@ -10,7 +10,7 @@ import {
   HttpPutOptions,
 } from '../types';
 import { generateEntityId } from './util';
-import { IStringifyOptions, stringify } from '../qs';
+import { type IStringifyOptions, stringify } from '../qs';
 
 interface CacheItem {
   validUntil: number;
