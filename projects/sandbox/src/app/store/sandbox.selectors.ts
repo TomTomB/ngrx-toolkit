@@ -3,7 +3,6 @@ import { createEntitySelectors } from '../../../../ngrx-toolkit/src/public-api';
 import * as fromReducer from './sandbox.reducer';
 
 export const getState = createFeatureSelector<
-  fromReducer.SandboxPartialState,
   fromReducer.State
 >(fromReducer.SANDBOX_FEATURE_KEY);
 
