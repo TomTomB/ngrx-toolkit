@@ -1,8 +1,9 @@
 // @ts-nocheck
+/* eslint-disable */
 
-var getSideChannel = require('side-channel');
-var utils = require('./utils');
-var formats = require('./formats');
+import utils from './utils';
+import formats from './formats';
+import { getSideChannel } from './side-channel';
 var has = Object.prototype.hasOwnProperty;
 
 var arrayPrefixGenerators = {
