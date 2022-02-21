@@ -8,19 +8,23 @@ import {
   ServiceBase,
 } from '../../../../ngrx-toolkit/src/public-api';
 import * as Models from './sandbox.models';
-import * as Actions from './sandbox.actions';
+import { actionMap } from './sandbox.actions';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SandboxService extends ServiceBase {
+export class SandboxService extends ServiceBase<typeof actionMap> {
   constructor(private _http: HttpClient) {
-    super(_http, 'https://jsonplaceholder.typicode.com', {
+    super(_http, 'https://jsonplaceholder.typicode.com', actionMap, {
       queryParams: { foo: 'asad' },
+    });
+
+    this.createServiceCalls({
+      getFoo: { route: (p) => `/todos/${p.sandboxSlug}` },
     });
   }
 
-  postSandbox(args: ActionCallArgs<typeof Actions.postSandbox>) {
+  postSandbox(args: ActionCallArgs<typeof actionMap['postSandbox']>) {
     return this.get({
       apiRoute: (p) => `/todos/${p.sandboxTest}`,
       httpOpts: args,
@@ -28,7 +32,7 @@ export class SandboxService extends ServiceBase {
     });
   }
 
-  getFoo(args: ActionCallArgs<typeof Actions.getFoo>) {
+  getFoo(args: ActionCallArgs<typeof actionMap['getFoo']>) {
     return this.post({
       apiRoute: (p) => `/todos/${p.sandboxSlug}`,
       httpOpts: args,
@@ -36,7 +40,7 @@ export class SandboxService extends ServiceBase {
     });
   }
 
-  getBar(args: ActionCallArgs<typeof Actions.getBar>) {
+  getBar(args: ActionCallArgs<typeof actionMap['getBar']>) {
     return this.get({
       apiRoute: `/todos/1`,
       httpOpts: args,
@@ -47,7 +51,7 @@ export class SandboxService extends ServiceBase {
     }).pipe(map((v) => ({ value: !!v })));
   }
 
-  benchmark(args: ActionCallArgs<typeof Actions.benchmark>) {
+  benchmark(args: ActionCallArgs<typeof actionMap['benchmark']>) {
     return of({ value: true });
   }
 }

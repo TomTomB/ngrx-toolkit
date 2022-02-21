@@ -8,6 +8,7 @@ import {
   HttpPatchOptions,
   HttpPostOptions,
   HttpPutOptions,
+  TypedActionObject,
 } from '../types';
 import { generateEntityId } from './util';
 import { type IStringifyOptions, stringify } from '../qs';
@@ -19,15 +20,41 @@ interface CacheItem {
 
 export const defineResponseType = <T extends any>() => null as any as T;
 
+export type ServiceCalls<T extends Record<string, TypedActionObject>> = {
+  [Property in keyof T]: (args: any) => any;
+};
+
 // TODO (TRB): Add _baseConfig strategy (fallback or merge), default = fallback
-export class ServiceBase {
+export class ServiceBase<T extends Record<string, TypedActionObject>> {
   private _cache: Record<number, CacheItem> = {};
+
+  serviceCalls: ServiceCalls<T> = {} as ServiceCalls<T>;
 
   constructor(
     private __http: HttpClient,
     private _apiBase: string,
+    _actionMap: T,
     private _baseConfig?: HttpCallOptions
   ) {}
+
+  createServiceCalls(
+    callConfigs: Partial<{
+      [Property in keyof T]: {
+        route: ReturnType<
+          T[Property]['call']
+        >['args']['queryParams'] extends object
+          ? (
+              queryParams: ReturnType<
+                T[Property]['call']
+              >['args']['queryParams']
+            ) => string
+          : string;
+      };
+    }>
+  ) {
+    // TODO (TRB): Map config to service calls
+    Object.keys(callConfigs).forEach((callName) => {});
+  }
 
   get<
     HttpOpts extends HttpGetOptions,

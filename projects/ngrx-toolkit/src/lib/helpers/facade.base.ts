@@ -1,4 +1,9 @@
-import { MappedEntityState, TypedActionObject } from '../types';
+import {
+  ActionCallArgs,
+  Dispatchers,
+  MappedEntityState,
+  TypedActionObject,
+} from '../types';
 import { Actions, ofType } from '@ngrx/effects';
 import { Action, ActionCreator, Store } from '@ngrx/store';
 import {
@@ -13,14 +18,23 @@ import { EntitySelectors } from './selector.helpers';
 import { removeCallState } from './action.helpers';
 import { createActionId } from './util';
 
-export class FacadeBase {
+export class FacadeBase<T extends Record<string, TypedActionObject>> {
   private _cache: Record<string, MappedEntityState<any>> = {};
 
+  dispatch: Dispatchers<T> = {} as Dispatchers<T>;
+
   constructor(
-    private __store: Store<Record<any,any>>,
+    private __store: Store<Record<any, any>>,
     private __actions: Actions,
-    private _entitySelectors: EntitySelectors
-  ) {}
+    private _entitySelectors: EntitySelectors,
+    _actionMap: T
+  ) {
+    Object.keys(_actionMap).forEach((key: keyof T) => {
+      const action: T[keyof T] = _actionMap[key];
+      this.dispatch[key as keyof T] = (args: ActionCallArgs<typeof action>) =>
+        this.call(action, args);
+    });
+  }
 
   /**
    * Listen to actions provided by this store
@@ -294,7 +308,7 @@ export class FacadeBase {
    * @param args The call action args
    * @returns A mapped entity state
    */
-  call<J extends TypedActionObject>(
+  call<J extends T[keyof T]>(
     actionGroup: J,
     args: ReturnType<J['call']>['args']
   ) {

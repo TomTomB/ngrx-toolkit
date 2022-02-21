@@ -1,4 +1,4 @@
-import { Error } from '../types';
+import { ActionError } from '../types';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -20,14 +20,14 @@ export const joinLoading = (observables: Observable<boolean | null>[]) => {
   );
 };
 
-export const joinErrors = (
-  observables: Observable<Error<unknown> | null>[]
+export const joinActionErrors = (
+  observables: Observable<ActionError<unknown> | null>[]
 ) => {
   const copy = observables.filter((o) => !!o);
 
   return combineLatest(copy).pipe(
     map((values) => {
-      const errors: Error<unknown>[] = [];
+      const errors: ActionError<unknown>[] = [];
 
       values.forEach((v) => {
         if (v) {

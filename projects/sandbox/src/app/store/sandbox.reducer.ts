@@ -1,6 +1,6 @@
 import { Action, on } from '@ngrx/store';
 import { createReducerSlice } from '../../../../ngrx-toolkit/src/public-api';
-import * as Actions from './sandbox.actions';
+import { actionMap } from './sandbox.actions';
 
 export const SANDBOX_FEATURE_KEY = 'sandbox';
 
@@ -13,14 +13,14 @@ export interface SandboxPartialState {
 export const { reducerSlice, reducerAdapters, initialState } =
   createReducerSlice(
     {
-      actions: Actions.SANDBOX_ACTIONS,
+      actions: actionMap,
       key: SANDBOX_FEATURE_KEY,
       initialStateExtra: {
         foo: 'dsas',
       },
     },
-    on(Actions.getBar.call, (state, action) => {
-      const entityId = Actions.getBar.entityId;
+    on(actionMap.getBar.call, (state, action) => {
+      const entityId = actionMap.getBar.entityId;
 
       // you can now do custom stuff with the underlying entity adapter
       const entityAdapter = reducerAdapters[entityId];

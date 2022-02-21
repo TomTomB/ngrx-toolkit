@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Error, FirebaseError } from '../types';
+import { ActionError, FirebaseError } from '../types';
 
 export const isFirebaseError = (
   err: HttpErrorResponse | FirebaseError
@@ -17,7 +17,7 @@ export const buildErrorFromHttpError = <T, J>({
   };
 }) => {
   if (isFirebaseError(error)) {
-    const err: Error<J> = {
+    const err: ActionError<J> = {
       message: extras?.message || error.message,
       status: error.code,
       data: null,
@@ -25,7 +25,7 @@ export const buildErrorFromHttpError = <T, J>({
     return { error: err, args };
   }
 
-  const errorObj: Error<J> = {
+  const errorObj: ActionError<J> = {
     status: error.status,
     message: extras?.message || error.message,
     data: error.error,

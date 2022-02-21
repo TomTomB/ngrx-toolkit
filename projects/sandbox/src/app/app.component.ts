@@ -9,8 +9,8 @@ import {
   isAction,
 } from '../../../ngrx-toolkit/src/public-api';
 import { tap } from 'rxjs/operators';
-import { getBar, getFoo, postSandbox } from './store/sandbox.actions';
 import { SandboxFacade } from './store/sandbox.facade';
+import { actionMap } from './store/sandbox.actions';
 
 @Component({
   selector: 'app-root',
@@ -21,10 +21,10 @@ import { SandboxFacade } from './store/sandbox.facade';
 export class AppComponent implements OnInit {
   title = 'sandbox';
 
-  store!: MappedEntityState<typeof postSandbox>;
-  store2?: MappedEntityState<typeof getFoo>;
-  store3?: MappedEntityState<typeof getBar>;
-  store4?: MappedEntityState<typeof getBar>;
+  store!: MappedEntityState<typeof actionMap['postSandbox']>;
+  store2?: MappedEntityState<typeof actionMap['getFoo']>;
+  store3?: MappedEntityState<typeof actionMap['getBar']>;
+  store4?: MappedEntityState<typeof actionMap['getBar']>;
 
   constructor(
     private _sandboxFacade: SandboxFacade,
@@ -32,18 +32,18 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this._sandboxFacade.getBar({
+    this._sandboxFacade.dispatch.getBar({
       params: { someFilter: '5', barIds: ['a', 'b', 'c'] },
       actionOptions: { headers: { Foo: 'true' }, extras: { skipCache: true } },
     });
 
     this.assignStore3();
 
-    this.store2 = this._sandboxFacade.getFoo({
+    this.store2 = this._sandboxFacade.dispatch.getFoo({
       queryParams: { sandboxSlug: 'foobar' },
     });
 
-    this.store = this._sandboxFacade.postSandbox({
+    this.store = this._sandboxFacade.dispatch.postSandbox({
       queryParams: { sandboxId: '1', sandboxTest: 1 },
       sideUpdates: {
         getFoo: { queryParams: { sandboxSlug: 'foobar' } },
@@ -53,35 +53,35 @@ export class AppComponent implements OnInit {
       },
     });
 
-    const onExample = this._sandboxFacade.on(postSandbox.success);
+    const onExample = this._sandboxFacade.on(actionMap.postSandbox.success);
 
     const onExampleMulti = this._sandboxFacade
-      .on([postSandbox.success, postSandbox.failure])
+      .on([actionMap.postSandbox.success, actionMap.postSandbox.failure])
       .pipe(
         tap((a) => {
-          if (isAction(postSandbox.success, a)) {
+          if (isAction(actionMap.postSandbox.success, a)) {
             console.log('onExampleMulti', a);
           }
         })
       )
       .subscribe();
 
-    const onceExample = this._sandboxFacade.once(postSandbox.success);
+    const onceExample = this._sandboxFacade.once(actionMap.postSandbox.success);
 
     const onceExampleMulti = this._sandboxFacade.once([
-      postSandbox.success,
-      postSandbox.failure,
+      actionMap.postSandbox.success,
+      actionMap.postSandbox.failure,
     ]);
   }
 
   assignStore3() {
-    this.store3 = this._sandboxFacade.getBar({
+    this.store3 = this._sandboxFacade.dispatch.getBar({
       params: { someFilter: '1', barIds: ['a', 'b', 'c'] },
     });
   }
 
   assignStore4() {
-    this.store4 = this._sandboxFacade.getBar({
+    this.store4 = this._sandboxFacade.dispatch.getBar({
       params: { someFilter: '1', barIds: ['a', 'b', 'c'] },
     });
     this._cdr.markForCheck();
@@ -94,7 +94,7 @@ export class AppComponent implements OnInit {
     console.time('benchmarkAllSame');
 
     for (let i = 0; i < 5000; i++) {
-      this._sandboxFacade.benchmark({
+      this._sandboxFacade.dispatch.benchmark({
         queryParams: { benchmark: 'abc123' },
       });
     }
@@ -110,7 +110,7 @@ export class AppComponent implements OnInit {
     console.time('benchmarkAllNew');
 
     for (let i = 0; i < 5000; i++) {
-      this._sandboxFacade.benchmark({
+      this._sandboxFacade.dispatch.benchmark({
         queryParams: { benchmark: 'abc123' + i },
       });
     }

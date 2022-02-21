@@ -11,7 +11,7 @@ export interface Response<T> {
 }
 
 export interface ErrorAction<ErrorResponse> {
-  error: Error<ErrorResponse>;
+  error: ActionError<ErrorResponse>;
 }
 
 export interface Args<T> {
@@ -53,7 +53,7 @@ export interface TypedApiAction<Arguments, Response, ErrorResponse = any>
   extends TypedAction {
   args?: Arguments;
   response?: Response;
-  error?: Error<ErrorResponse>;
+  error?: ActionError<ErrorResponse>;
 }
 
 export interface TypedAction extends Action {
@@ -92,13 +92,25 @@ export type FailureCreator<
 >;
 
 export interface TypedActionObject<
-  Args extends ArgumentsBase | null = any,
+  Args extends ArgumentsBase | undefined | null = any,
   Response = any,
   Error = any,
+  Method extends
+    | 'GET'
+    | 'POST'
+    | 'PUT'
+    | 'PATCH'
+    | 'DELETE'
+    | 'HEAD'
+    | 'OPTIONS'
+    | 'CONNECT'
+    | 'TRACE'
+    | 'LOCAL' = any,
   ActionName extends string = string
 > {
   isUnique: boolean;
   entityId: ActionName;
+  method: Method;
 
   call: CallCreator<Args, ActionName>;
   success: SuccessCreator<Args, Response, `${ActionName} Success`>;
@@ -157,7 +169,7 @@ export interface HttpPatchOptions extends HttpCallOptions {
 
 export interface HttpDeleteOptions extends HttpCallOptions {}
 
-export interface Error<T = unknown> {
+export interface ActionError<T = unknown> {
   status: number | string;
   message: string;
   data: T | null;
@@ -199,3 +211,47 @@ export type EntityReducerMap<X extends Record<string, TypedActionObject>> = {
     >
   >;
 };
+
+export type Dispatchers<T extends Record<string, TypedActionObject>> = {
+  [Property in keyof T]: (
+    args: ActionCallArgs<T[Property]>
+  ) => MappedEntityState<T[Property]>;
+};
+
+export interface ActionCreatorArgs {
+  method?:
+    | 'GET'
+    | 'POST'
+    | 'PUT'
+    | 'PATCH'
+    | 'DELETE'
+    | 'HEAD'
+    | 'OPTIONS'
+    | 'CONNECT'
+    | 'TRACE';
+  types: {
+    args?: ArgumentsBase;
+    response?: any;
+    errorResponse?: any;
+  };
+  isUnique?: boolean;
+}
+
+export type ActionMap<
+  Scope extends string,
+  Actions extends Record<string, ActionCreatorArgs>
+> = {
+  [Property in keyof Actions as CastString<Property>]: TypedActionObject<
+    Actions[Property]['types']['args'],
+    Actions[Property]['types']['response'],
+    Actions[Property]['types']['errorResponse'],
+    Actions[Property]['method'] extends string
+      ? Actions[Property]['method']
+      : 'LOCAL',
+    `[${Scope}] [${Actions[Property]['method'] extends string
+      ? Actions[Property]['method']
+      : 'LOCAL'}] ${CastString<Property>}`
+  >;
+};
+
+type CastString<T> = T extends string ? T : never;
