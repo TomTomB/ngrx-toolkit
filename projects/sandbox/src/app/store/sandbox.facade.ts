@@ -8,7 +8,12 @@ import { Actions } from '@ngrx/effects';
 
 @Injectable({ providedIn: 'root' })
 export class SandboxFacade extends FacadeBase<typeof actionMap> {
-  constructor(store: Store<SandboxPartialState>, actions: Actions) {
-    super(store, actions, entitySelectors, actionMap);
+  constructor(store: Store<SandboxPartialState>, actions$: Actions) {
+    super({
+      store,
+      actions$,
+      entitySelectors,
+      actionMap,
+    });
   }
 }

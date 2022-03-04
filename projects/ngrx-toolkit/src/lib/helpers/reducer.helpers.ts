@@ -4,6 +4,7 @@ import {
   ActionCallArgs,
   ActionInitialState,
   ActionSuccessResponse,
+  AnyTypedActionObject,
   CallCreator,
   CallState,
   EntityReducerMap,
@@ -11,7 +12,6 @@ import {
   FailureCreator,
   SuccessCreator,
   TypedAction,
-  TypedActionObject,
 } from '../types';
 import { removeCallState, resetFeatureStore } from './action.helpers';
 import { HIDDEN } from './constants';
@@ -70,7 +70,7 @@ export const createOn = <
 };
 
 export const createReducerSlice = <
-  Actions extends Record<string, TypedActionObject>,
+  Actions extends Record<string, AnyTypedActionObject>,
   Key extends string,
   InitialStateExtra extends Record<any, any>
 >(

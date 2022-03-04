@@ -6,14 +6,14 @@ import {
 } from '@angular/core';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { map, startWith, tap } from 'rxjs/operators';
-import { MappedEntityState, TypedActionObject } from '../types';
+import { MappedEntityState, AnyTypedActionObject } from '../types';
 import { State } from './types';
 
 @Pipe({ name: 'suspenseMulti', pure: false })
 export class SuspenseMultiPipe implements PipeTransform, OnDestroy {
   private _subscription: Subscription | null = null;
   private _currentMappedEntityState:
-    | Record<string, MappedEntityState<TypedActionObject> | null | undefined>
+    | Record<string, MappedEntityState<AnyTypedActionObject> | null | undefined>
     | undefined
     | null = null;
 
@@ -28,7 +28,7 @@ export class SuspenseMultiPipe implements PipeTransform, OnDestroy {
   transform<
     T extends Record<
       string,
-      MappedEntityState<TypedActionObject> | null | undefined
+      MappedEntityState<AnyTypedActionObject> | null | undefined
     >
   >(
     value: T | null | undefined
@@ -56,7 +56,10 @@ export class SuspenseMultiPipe implements PipeTransform, OnDestroy {
   }
 
   private _subscribe(
-    obj: Record<string, MappedEntityState<TypedActionObject> | null | undefined>
+    obj: Record<
+      string,
+      MappedEntityState<AnyTypedActionObject> | null | undefined
+    >
   ) {
     this._currentMappedEntityState = obj;
 

@@ -1,10 +1,10 @@
 import { Observable, Subject } from 'rxjs';
-import { MappedEntityState, TypedActionObject } from '../types';
+import { MappedEntityState, AnyTypedActionObject } from '../types';
 
 export type ExtractFrom<P> = P extends Observable<infer T> ? T : never;
 
 export type State<
-  T extends MappedEntityState<TypedActionObject> | null | undefined
+  T extends MappedEntityState<AnyTypedActionObject> | null | undefined
 > = T extends object
   ? {
       args: ExtractFrom<T['args$']>;
@@ -22,7 +22,10 @@ export type State<
       type: ExtractFrom<T['type$']>;
       refresh: () => void;
       remove: () => void;
-      startPolling: (args: { intervalDuration: number; killSwitch: Subject<boolean>; }) => void;
+      startPolling: (args: {
+        intervalDuration: number;
+        killSwitch: Subject<boolean>;
+      }) => void;
       stopPolling: () => void;
     }
   : T;

@@ -1,8 +1,8 @@
 import {
   ActionCallArgs,
+  AnyTypedActionObject,
   Dispatchers,
   MappedEntityState,
-  TypedActionObject,
 } from '../types';
 import { Actions, ofType } from '@ngrx/effects';
 import { Action, ActionCreator, Store } from '@ngrx/store';
@@ -18,22 +18,20 @@ import { EntitySelectors } from './selector.helpers';
 import { removeCallState } from './action.helpers';
 import { createActionId } from './util';
 
-export class FacadeBase<T extends Record<string, TypedActionObject>> {
+export class FacadeBase<T extends Record<string, AnyTypedActionObject>> {
   private _cache: Record<string, MappedEntityState<any>> = {};
 
   dispatch: Dispatchers<T> = {} as Dispatchers<T>;
 
   constructor(
-    private __store: Store<Record<any, any>>,
-    private __actions: Actions,
-    private _entitySelectors: EntitySelectors,
-    _actionMap: T
+    private _config: {
+      store: Store<Record<any, any>>;
+      actions$: Actions;
+      entitySelectors: EntitySelectors;
+      actionMap: T;
+    }
   ) {
-    Object.keys(_actionMap).forEach((key: keyof T) => {
-      const action: T[keyof T] = _actionMap[key];
-      this.dispatch[key as keyof T] = (args: ActionCallArgs<typeof action>) =>
-        this._call(action, args);
-    });
+    this._setupDispatcher(_config.actionMap);
   }
 
   /**
@@ -58,11 +56,11 @@ export class FacadeBase<T extends Record<string, TypedActionObject>> {
   on(actions: any): Observable<any> | undefined {
     if (Array.isArray(actions)) {
       const _actions = actions as ActionCreator[];
-      return this.__actions.pipe(ofType(..._actions.map((a) => a.type)));
+      return this._config.actions$.pipe(ofType(..._actions.map((a) => a.type)));
     }
     if (typeof actions === 'function') {
       const _action = actions as ActionCreator;
-      return this.__actions.pipe(ofType(_action.type));
+      return this._config.actions$.pipe(ofType(_action.type));
     }
     return;
   }
@@ -96,7 +94,7 @@ export class FacadeBase<T extends Record<string, TypedActionObject>> {
    * Returns all states associated to a action object
    * Also includes useful helper methods
    */
-  select<J extends TypedActionObject>(
+  select<J extends AnyTypedActionObject>(
     selector: J,
     actionId: number
   ): MappedEntityState<J> {
@@ -198,87 +196,104 @@ export class FacadeBase<T extends Record<string, TypedActionObject>> {
     return mappedEntityState;
   }
 
-  selectIsInit<J extends TypedActionObject>(selector: J, actionId: number) {
-    return this.__store.select(
-      this._entitySelectors.getIsInit(selector.entityId, actionId)
+  selectIsInit<J extends AnyTypedActionObject>(selector: J, actionId: number) {
+    return this._config.store.select(
+      this._config.entitySelectors.getIsInit(selector.entityId, actionId)
     );
   }
 
-  selectIsLoading<J extends TypedActionObject>(selector: J, actionId: number) {
-    return this.__store.select(
-      this._entitySelectors.getIsLoading(selector.entityId, actionId)
+  selectIsLoading<J extends AnyTypedActionObject>(
+    selector: J,
+    actionId: number
+  ) {
+    return this._config.store.select(
+      this._config.entitySelectors.getIsLoading(selector.entityId, actionId)
     );
   }
 
-  selectIsSuccess<J extends TypedActionObject>(selector: J, actionId: number) {
-    return this.__store.select(
-      this._entitySelectors.getIsSuccess(selector.entityId, actionId)
+  selectIsSuccess<J extends AnyTypedActionObject>(
+    selector: J,
+    actionId: number
+  ) {
+    return this._config.store.select(
+      this._config.entitySelectors.getIsSuccess(selector.entityId, actionId)
     );
   }
 
-  selectIsError<J extends TypedActionObject>(selector: J, actionId: number) {
-    return this.__store.select(
-      this._entitySelectors.getIsError(selector.entityId, actionId)
+  selectIsError<J extends AnyTypedActionObject>(selector: J, actionId: number) {
+    return this._config.store.select(
+      this._config.entitySelectors.getIsError(selector.entityId, actionId)
     );
   }
 
-  selectResponse<J extends TypedActionObject>(
+  selectResponse<J extends AnyTypedActionObject>(
     selector: J,
     actionId: number
   ): Observable<ReturnType<J['success']>['response'] | null> {
-    return this.__store.select(
-      this._entitySelectors.getResponse(selector.entityId, actionId)
+    return this._config.store.select(
+      this._config.entitySelectors.getResponse(selector.entityId, actionId)
     );
   }
 
-  selectCachedResponse<J extends TypedActionObject>(
+  selectCachedResponse<J extends AnyTypedActionObject>(
     selector: J,
     actionId: number
   ): Observable<ReturnType<J['success']>['response']> {
-    return this.__store
-      .select(this._entitySelectors.getResponse(selector.entityId, actionId))
+    return this._config.store
+      .select(
+        this._config.entitySelectors.getResponse(selector.entityId, actionId)
+      )
       .pipe(filter((v): v is ReturnType<J['success']>['response'] => !!v));
   }
 
-  selectError<J extends TypedActionObject>(
+  selectError<J extends AnyTypedActionObject>(
     selector: J,
     actionId: number
   ): Observable<ReturnType<J['failure']>['error'] | null> {
-    return this.__store.select(
-      this._entitySelectors.getError(selector.entityId, actionId)
+    return this._config.store.select(
+      this._config.entitySelectors.getError(selector.entityId, actionId)
     );
   }
 
-  selectArgs<J extends TypedActionObject>(
+  selectArgs<J extends AnyTypedActionObject>(
     selector: J,
     actionId: number
   ): Observable<ReturnType<J['call']>['args']> {
-    return this.__store.select(
-      this._entitySelectors.getArgs(selector.entityId, actionId)
+    return this._config.store.select(
+      this._config.entitySelectors.getArgs(selector.entityId, actionId)
     );
   }
 
-  selectEntityId<J extends TypedActionObject>(selector: J, actionId: number) {
-    return this.__store.select(
-      this._entitySelectors.getEntityId(selector.entityId, actionId)
+  selectEntityId<J extends AnyTypedActionObject>(
+    selector: J,
+    actionId: number
+  ) {
+    return this._config.store.select(
+      this._config.entitySelectors.getEntityId(selector.entityId, actionId)
     );
   }
 
-  selectTimestamp<J extends TypedActionObject>(selector: J, actionId: number) {
-    return this.__store.select(
-      this._entitySelectors.getTimestamp(selector.entityId, actionId)
+  selectTimestamp<J extends AnyTypedActionObject>(
+    selector: J,
+    actionId: number
+  ) {
+    return this._config.store.select(
+      this._config.entitySelectors.getTimestamp(selector.entityId, actionId)
     );
   }
 
-  selectType<J extends TypedActionObject>(selector: J, actionId: number) {
-    return this.__store.select(
-      this._entitySelectors.getType(selector.entityId, actionId)
+  selectType<J extends AnyTypedActionObject>(selector: J, actionId: number) {
+    return this._config.store.select(
+      this._config.entitySelectors.getType(selector.entityId, actionId)
     );
   }
 
-  selectCallState<J extends TypedActionObject>(selector: J, actionId: number) {
-    return this.__store.select(
-      this._entitySelectors.getCallState(selector.entityId, actionId)
+  selectCallState<J extends AnyTypedActionObject>(
+    selector: J,
+    actionId: number
+  ) {
+    return this._config.store.select(
+      this._config.entitySelectors.getCallState(selector.entityId, actionId)
     );
   }
 
@@ -293,7 +308,7 @@ export class FacadeBase<T extends Record<string, TypedActionObject>> {
    * // Pass in the action
    * remove(getAllKittens);
    */
-  remove<J extends TypedActionObject>(selector: J, actionId: number) {
+  remove<J extends AnyTypedActionObject>(selector: J, actionId: number) {
     this._dispatch(
       removeCallState({
         adapterId: selector.entityId,
@@ -323,7 +338,15 @@ export class FacadeBase<T extends Record<string, TypedActionObject>> {
    */
   private _dispatch(action: Action, isUnique?: boolean) {
     const id = createActionId(action, isUnique);
-    this.__store.dispatch(action);
+    this._config.store.dispatch(action);
     return id;
+  }
+
+  private _setupDispatcher(actionMap: T) {
+    Object.keys(actionMap).forEach((key: keyof T) => {
+      const action: T[keyof T] = actionMap[key];
+      this.dispatch[key as keyof T] = (args: ActionCallArgs<typeof action>) =>
+        this._call(action, args);
+    });
   }
 }

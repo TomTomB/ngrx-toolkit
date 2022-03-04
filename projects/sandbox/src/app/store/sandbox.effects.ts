@@ -8,7 +8,7 @@ import { SandboxService } from './sandbox.service';
 export class SandboxEffects extends EffectBase {
   postSandbox$ = this.onActionSwitchMap({
     action: actionMap.postSandbox,
-    serviceCall: this.featureService.postSandbox,
+    serviceCall: this.featureService.execute.postSandbox,
     sideUpdates: {
       getFoo: {
         action: actionMap.getFoo.success,
@@ -22,21 +22,18 @@ export class SandboxEffects extends EffectBase {
   });
   getFoo$ = this.onActionSwitchMap({
     action: actionMap.getFoo,
-    serviceCall: this.featureService.getFoo,
+    serviceCall: this.featureService.execute.getFoo,
   });
   getBar$ = this.onActionSwitchMap({
     action: actionMap.getBar,
-    serviceCall: this.featureService.getBar,
+    serviceCall: this.featureService.execute.getBar,
   });
   benchmark$ = this.onActionSwitchMap({
     action: actionMap.benchmark,
-    serviceCall: this.featureService.benchmark,
+    serviceCall: this.featureService.execute.benchmark,
   });
 
-  constructor(
-    private actions$: Actions,
-    private featureService: SandboxService
-  ) {
-    super(actions$, featureService);
+  constructor(actions$: Actions, private featureService: SandboxService) {
+    super({ actions$, featureService });
   }
 }

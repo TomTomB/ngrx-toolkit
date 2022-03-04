@@ -13,7 +13,7 @@ import {
   ActionCallArgs,
   ActionCallSideUpdates,
   ActionSuccessResponse,
-  TypedActionObject,
+  AnyTypedActionObject,
 } from '../types';
 import { buildErrorFromHttpError } from './error.helpers';
 import { Action } from '@ngrx/store';
@@ -50,7 +50,7 @@ type SideUpdates<
 };
 
 type OnActionArgs<
-  T extends TypedActionObject,
+  T extends AnyTypedActionObject,
   J extends SideUpdates<ActionCallSideUpdates<T>, ActionSuccessResponse<T>, J>
 > = ActionCallSideUpdates<T> extends Record<string, any>
   ? {
@@ -69,10 +69,10 @@ type OnActionArgs<
     };
 
 export class EffectBase {
-  constructor(private __actions$: Actions, private __featureService: any) {}
+  constructor(private _config: { actions$: Actions; featureService: any }) {}
 
   onActionSwitchMap<
-    TAO extends TypedActionObject,
+    TAO extends AnyTypedActionObject,
     SU extends SideUpdates<
       ActionCallSideUpdates<TAO>,
       ActionSuccessResponse<TAO>,
@@ -80,7 +80,7 @@ export class EffectBase {
     >
   >({ action, serviceCall, sideUpdates }: OnActionArgs<TAO, SU>) {
     return createEffect(() =>
-      this.__actions$.pipe(
+      this._config.actions$.pipe(
         ofType(action.call),
         switchMap(({ args }: { args: ReturnType<TAO['call']>['args'] }) =>
           this._serviceCall(action, args, serviceCall, sideUpdates)
@@ -90,7 +90,7 @@ export class EffectBase {
   }
 
   onActionMergeMap<
-    TAO extends TypedActionObject,
+    TAO extends AnyTypedActionObject,
     SU extends SideUpdates<
       ActionCallSideUpdates<TAO>,
       ActionSuccessResponse<TAO>,
@@ -98,7 +98,7 @@ export class EffectBase {
     >
   >({ action, serviceCall, sideUpdates }: OnActionArgs<TAO, SU>) {
     return createEffect(() =>
-      this.__actions$.pipe(
+      this._config.actions$.pipe(
         ofType(action.call),
         mergeMap(({ args }: { args: ReturnType<TAO['call']>['args'] }) =>
           this._serviceCall(action, args, serviceCall, sideUpdates)
@@ -108,7 +108,7 @@ export class EffectBase {
   }
 
   onActionExhaustMap<
-    TAO extends TypedActionObject,
+    TAO extends AnyTypedActionObject,
     SU extends SideUpdates<
       ActionCallSideUpdates<TAO>,
       ActionSuccessResponse<TAO>,
@@ -116,7 +116,7 @@ export class EffectBase {
     >
   >({ action, serviceCall, sideUpdates }: OnActionArgs<TAO, SU>) {
     return createEffect(() =>
-      this.__actions$.pipe(
+      this._config.actions$.pipe(
         ofType(action.call),
         exhaustMap(({ args }: { args: ReturnType<TAO['call']>['args'] }) =>
           this._serviceCall(action, args, serviceCall, sideUpdates)
@@ -126,7 +126,7 @@ export class EffectBase {
   }
 
   onActionConcatMap<
-    TAO extends TypedActionObject,
+    TAO extends AnyTypedActionObject,
     SU extends SideUpdates<
       ActionCallSideUpdates<TAO>,
       ActionSuccessResponse<TAO>,
@@ -134,7 +134,7 @@ export class EffectBase {
     >
   >({ action, serviceCall, sideUpdates }: OnActionArgs<TAO, SU>) {
     return createEffect(() =>
-      this.__actions$.pipe(
+      this._config.actions$.pipe(
         ofType(action.call),
         concatMap(({ args }: { args: ReturnType<TAO['call']>['args'] }) =>
           this._serviceCall(action, args, serviceCall, sideUpdates)
@@ -144,7 +144,7 @@ export class EffectBase {
   }
 
   private _serviceCall<
-    TAO extends TypedActionObject,
+    TAO extends AnyTypedActionObject,
     SU extends SideUpdates<
       ActionCallSideUpdates<TAO>,
       ActionSuccessResponse<TAO>,
@@ -158,7 +158,7 @@ export class EffectBase {
     sideUpdates?: SU
   ) {
     return serviceCall
-      .bind(this.__featureService)(args)
+      .bind(this._config.featureService)(args)
       .pipe(
         map((response) => {
           const actionDefault: Action[] = [action.success({ response, args })];

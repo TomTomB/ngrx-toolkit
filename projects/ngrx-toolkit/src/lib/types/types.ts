@@ -91,22 +91,24 @@ export type FailureCreator<
   ) => ErrorAction<ResponseData> & Args<ArgType> & TypedActionNative<ActionName>
 >;
 
+export type ActionMethod =
+  | 'GET'
+  | 'POST'
+  | 'PUT'
+  | 'PATCH'
+  | 'DELETE'
+  | 'HEAD'
+  | 'OPTIONS'
+  | 'CONNECT'
+  | 'TRACE'
+  | 'LOCAL';
+
 export interface TypedActionObject<
-  Args extends ArgumentsBase | undefined | null = any,
-  Response = any,
-  Error = any,
-  Method extends
-    | 'GET'
-    | 'POST'
-    | 'PUT'
-    | 'PATCH'
-    | 'DELETE'
-    | 'HEAD'
-    | 'OPTIONS'
-    | 'CONNECT'
-    | 'TRACE'
-    | 'LOCAL' = any,
-  ActionName extends string = string
+  Args extends ArgumentsBase | undefined | null,
+  Response,
+  Error,
+  Method extends ActionMethod,
+  ActionName extends string
 > {
   isUnique: boolean;
   entityId: ActionName;
@@ -117,7 +119,9 @@ export interface TypedActionObject<
   failure: FailureCreator<Args, Error, `${ActionName} Failure`>;
 }
 
-export interface MappedEntityState<X extends TypedActionObject> {
+export type AnyTypedActionObject = TypedActionObject<any, any, any, any, any>;
+
+export interface MappedEntityState<X extends AnyTypedActionObject> {
   response$: Observable<ReturnType<X['success']>['response'] | null>;
   cachedResponse$: Observable<ReturnType<X['success']>['response']>;
 
@@ -180,18 +184,18 @@ export interface FirebaseError {
   message: string;
 }
 
-export type ActionCallArgs<T extends TypedActionObject> = ReturnType<
+export type ActionCallArgs<T extends AnyTypedActionObject> = ReturnType<
   T['call']
 >['args'];
-export type ActionSuccessResponse<T extends TypedActionObject> = ReturnType<
+export type ActionSuccessResponse<T extends AnyTypedActionObject> = ReturnType<
   T['success']
 >['response'];
-export type ActionCallSideUpdates<T extends TypedActionObject> = ReturnType<
+export type ActionCallSideUpdates<T extends AnyTypedActionObject> = ReturnType<
   T['call']
 >['args']['sideUpdates'];
 
 export type ActionInitialState<
-  Actions extends Record<string, TypedActionObject>
+  Actions extends Record<string, AnyTypedActionObject>
 > = {
   [Property in keyof Actions as Actions[Property]['call']['type']]: EntityState<
     EntityStatus<
@@ -202,7 +206,7 @@ export type ActionInitialState<
   >;
 };
 
-export type EntityReducerMap<X extends Record<string, TypedActionObject>> = {
+export type EntityReducerMap<X extends Record<string, AnyTypedActionObject>> = {
   [Property in keyof X as X[Property]['call']['type']]: EntityAdapter<
     EntityStatus<
       ReturnType<X[Property]['call']>['args'],
@@ -212,7 +216,7 @@ export type EntityReducerMap<X extends Record<string, TypedActionObject>> = {
   >;
 };
 
-export type Dispatchers<T extends Record<string, TypedActionObject>> = {
+export type Dispatchers<T extends Record<string, AnyTypedActionObject>> = {
   [Property in keyof T]: (
     args: ActionCallArgs<T[Property]>
   ) => MappedEntityState<T[Property]>;

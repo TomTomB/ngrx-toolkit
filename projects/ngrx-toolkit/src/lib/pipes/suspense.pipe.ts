@@ -6,10 +6,10 @@ import {
 } from '@angular/core';
 import { combineLatest, Subscription } from 'rxjs';
 import { startWith, tap } from 'rxjs/operators';
-import { MappedEntityState, TypedActionObject } from '../types';
+import { MappedEntityState, AnyTypedActionObject } from '../types';
 import { State } from './types';
 
-const DEFAULT_STATE: State<MappedEntityState<TypedActionObject>> = {
+const DEFAULT_STATE: State<MappedEntityState<AnyTypedActionObject>> = {
   args: null,
   cachedResponse: null,
   callState: null,
@@ -33,11 +33,11 @@ const DEFAULT_STATE: State<MappedEntityState<TypedActionObject>> = {
 export class SuspensePipe implements PipeTransform, OnDestroy {
   private _subscription: Subscription | null = null;
   private _currentMappedEntityState:
-    | MappedEntityState<TypedActionObject>
+    | MappedEntityState<AnyTypedActionObject>
     | undefined
     | null = null;
 
-  private _state: State<MappedEntityState<TypedActionObject>> | null =
+  private _state: State<MappedEntityState<AnyTypedActionObject>> | null =
     DEFAULT_STATE;
 
   constructor(private _cdr: ChangeDetectorRef) {}
@@ -46,7 +46,7 @@ export class SuspensePipe implements PipeTransform, OnDestroy {
     this._dispose();
   }
 
-  transform<T extends MappedEntityState<TypedActionObject>>(
+  transform<T extends MappedEntityState<AnyTypedActionObject>>(
     value: T | null | undefined
   ): State<T> {
     if (!this._currentMappedEntityState) {
@@ -66,7 +66,7 @@ export class SuspensePipe implements PipeTransform, OnDestroy {
     return this._state as any as State<T>;
   }
 
-  private _subscribe(obj: MappedEntityState<TypedActionObject>) {
+  private _subscribe(obj: MappedEntityState<AnyTypedActionObject>) {
     this._currentMappedEntityState = obj;
 
     this._subscription = combineLatest([

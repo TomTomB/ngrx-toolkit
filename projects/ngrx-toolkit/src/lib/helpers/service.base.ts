@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import {
+  ActionMethod,
+  AnyTypedActionObject,
   HttpCallOptions,
   HttpDeleteOptions,
   HttpGetOptions,
   HttpPatchOptions,
   HttpPostOptions,
   HttpPutOptions,
-  TypedActionObject,
 } from '../types';
 import { generateEntityId } from './util';
 import { type IStringifyOptions, stringify } from '../qs';
@@ -18,42 +19,71 @@ interface CacheItem {
   data: any;
 }
 
-export const defineResponseType = <T extends any>() => null as any as T;
+const defineResponseType = <T extends any>() => null as any as T;
 
-export type ServiceCalls<T extends Record<string, TypedActionObject>> = {
-  [Property in keyof T]: (args: any) => any;
+type ActionMap = Record<string, AnyTypedActionObject>;
+
+export type ServiceCalls<T extends ActionMap> = {
+  [Property in keyof T]: (
+    args: ReturnType<T[Property]['call']>['args']
+  ) => Observable<ReturnType<T[Property]['success']>['response']>;
 };
 
+export type CallConfigs<T extends ActionMap> = {
+  [Property in keyof T]: {
+    route: ExtractRoute<T[Property]>;
+  };
+};
+
+export type ExtractRoute<T extends ActionMap[number]> = ReturnType<
+  T['call']
+>['args']['queryParams'] extends object
+  ? (queryParams: ReturnType<T['call']>['args']['queryParams']) => string
+  : string;
+
 // TODO (TRB): Add _baseConfig strategy (fallback or merge), default = fallback
-export class ServiceBase<T extends Record<string, TypedActionObject>> {
+export class ServiceBase<T extends ActionMap> {
   private _cache: Record<number, CacheItem> = {};
 
-  serviceCalls: ServiceCalls<T> = {} as ServiceCalls<T>;
+  execute: ServiceCalls<T> = {} as ServiceCalls<T>;
 
   constructor(
-    private __http: HttpClient,
-    private _apiBase: string,
-    _actionMap: T,
-    private _baseConfig?: HttpCallOptions
-  ) {}
-
-  createServiceCalls(
-    callConfigs: Partial<{
-      [Property in keyof T]: {
-        route: ReturnType<
-          T[Property]['call']
-        >['args']['queryParams'] extends object
-          ? (
-              queryParams: ReturnType<
-                T[Property]['call']
-              >['args']['queryParams']
-            ) => string
-          : string;
-      };
-    }>
+    private _config: {
+      http: HttpClient;
+      actionMap: T;
+      callConfig: CallConfigs<T>;
+      baseConfig: HttpCallOptions & { apiBase: string };
+    }
   ) {
+    this._createServiceCalls(_config.callConfig);
+  }
+
+  private _createServiceCalls(callConfigs: CallConfigs<T>) {
     // TODO (TRB): Map config to service calls
-    Object.keys(callConfigs).forEach((callName) => {});
+    Object.keys(callConfigs).forEach((callName: keyof T) => {
+      const config: CallConfigs<T>[keyof T] = callConfigs[callName];
+      const action = this._config.actionMap[callName];
+
+      switch (action.method as ActionMethod) {
+        case 'GET':
+          this.execute[callName] = (
+            args: ReturnType<typeof action['call']>['args']
+          ) =>
+            this.get({
+              apiRoute: config.route,
+              httpOpts: args,
+              responseType:
+                defineResponseType<
+                  ReturnType<typeof action['success']>['response']
+                >(),
+            });
+
+          break;
+
+        default:
+          break;
+      }
+    });
   }
 
   get<
@@ -103,7 +133,7 @@ export class ServiceBase<T extends Record<string, TypedActionObject>> {
       }
     }
 
-    return this.__http
+    return this._config.http
       .get<ResponseType>(
         `${apiBase}${route}${queryString ? '?' + queryString : ''}`,
         {
@@ -186,7 +216,7 @@ export class ServiceBase<T extends Record<string, TypedActionObject>> {
       extras
     );
 
-    return this.__http
+    return this._config.http
       .post<ResponseType>(
         `${apiBase}${route}${queryString ? '?' + queryString : ''}`,
         httpOpts?.body,
@@ -232,7 +262,7 @@ export class ServiceBase<T extends Record<string, TypedActionObject>> {
     const { apiBase, headers, params, responseType, queryString } =
       this._getCallConfig(httpOpts, extras);
 
-    return this.__http
+    return this._config.http
       .put<ResponseType>(
         `${apiBase}${route}${queryString ? '?' + queryString : ''}`,
         httpOpts?.body,
@@ -279,7 +309,7 @@ export class ServiceBase<T extends Record<string, TypedActionObject>> {
       extras
     );
 
-    return this.__http
+    return this._config.http
       .patch<ResponseType>(
         `${apiBase}${route}${queryString ? '?' + queryString : ''}`,
         httpOpts?.body,
@@ -326,7 +356,7 @@ export class ServiceBase<T extends Record<string, TypedActionObject>> {
       extras
     );
 
-    return this.__http
+    return this._config.http
       .delete<ResponseType>(
         `${apiBase}${route}${queryString ? '?' + queryString : ''}`,
         {
@@ -355,15 +385,17 @@ export class ServiceBase<T extends Record<string, TypedActionObject>> {
       paramsArrayFormat?: IStringifyOptions['arrayFormat'];
     }
   ) {
-    const apiBase = extras?.apiBaseOverride || this._apiBase || '';
+    const apiBase =
+      extras?.apiBaseOverride || this._config.baseConfig.apiBase || '';
     const headers =
       httpOpts?.actionOptions?.headers ||
       httpOpts?.headers ||
-      this._baseConfig?.headers;
-    const params = httpOpts?.params || this._baseConfig?.params;
-    const queryParams = httpOpts?.queryParams || this._baseConfig?.queryParams;
+      this._config.baseConfig?.headers;
+    const params = httpOpts?.params || this._config.baseConfig?.params;
+    const queryParams =
+      httpOpts?.queryParams || this._config.baseConfig?.queryParams;
     const responseType =
-      httpOpts?.responseType || this._baseConfig?.responseType || 'json';
+      httpOpts?.responseType || this._config.baseConfig?.responseType || 'json';
 
     const queryString = stringify(params, {
       arrayFormat: extras?.paramsArrayFormat ?? 'brackets',

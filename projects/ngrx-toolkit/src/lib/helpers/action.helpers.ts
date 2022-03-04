@@ -6,6 +6,7 @@ import {
   ArgumentsBase,
   ActionCreatorArgs,
   ActionMap,
+  ActionMethod,
 } from '../types';
 import { createAction, props } from '@ngrx/store';
 
@@ -18,17 +19,7 @@ export const defineArgTypes = <
 >() => null as any as T;
 
 export const createActionGroup = <
-  Method extends
-    | 'GET'
-    | 'POST'
-    | 'PUT'
-    | 'PATCH'
-    | 'DELETE'
-    | 'HEAD'
-    | 'OPTIONS'
-    | 'CONNECT'
-    | 'TRACE'
-    | 'LOCAL',
+  Method extends ActionMethod,
   Scope extends string,
   Name extends string,
   ArgTypes extends ReturnType<typeof defineArgTypes> = ReturnType<
