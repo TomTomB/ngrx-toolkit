@@ -97,11 +97,11 @@ export type ActionMethod =
   | 'PUT'
   | 'PATCH'
   | 'DELETE'
-  | 'HEAD'
-  | 'OPTIONS'
-  | 'CONNECT'
-  | 'TRACE'
   | 'LOCAL';
+// | 'HEAD'
+// | 'OPTIONS'
+// | 'CONNECT'
+// | 'TRACE'
 
 export interface TypedActionObject<
   Args extends ArgumentsBase | undefined | null,
@@ -223,16 +223,7 @@ export type Dispatchers<T extends Record<string, AnyTypedActionObject>> = {
 };
 
 export interface ActionCreatorArgs {
-  method?:
-    | 'GET'
-    | 'POST'
-    | 'PUT'
-    | 'PATCH'
-    | 'DELETE'
-    | 'HEAD'
-    | 'OPTIONS'
-    | 'CONNECT'
-    | 'TRACE';
+  method?: ActionMethod;
   types: {
     args?: ArgumentsBase;
     response?: any;

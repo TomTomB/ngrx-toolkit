@@ -59,34 +59,49 @@ export class ServiceBase<T extends ActionMap> {
   }
 
   private _createServiceCalls(callConfigs: CallConfigs<T>) {
-    // TODO (TRB): Map config to service calls
     Object.keys(callConfigs).forEach((callName: keyof T) => {
       const config: CallConfigs<T>[keyof T] = callConfigs[callName];
       const action = this._config.actionMap[callName];
 
-      switch (action.method as ActionMethod) {
-        case 'GET':
-          this.execute[callName] = (
-            args: ReturnType<typeof action['call']>['args']
-          ) =>
-            this.get({
-              apiRoute: config.route,
-              httpOpts: args,
-              responseType:
-                defineResponseType<
-                  ReturnType<typeof action['success']>['response']
-                >(),
-            });
+      this.execute[callName] = (
+        args: ReturnType<typeof action['call']>['args']
+      ) => {
+        const methodTyped = action.method as ActionMethod;
 
-          break;
+        if (methodTyped === 'LOCAL') {
+          return of(null);
+        }
 
-        default:
-          break;
-      }
+        const callMethod =
+          methodTyped === 'GET'
+            ? this._get
+            : methodTyped === 'POST'
+            ? this._post
+            : methodTyped === 'PUT'
+            ? this._put
+            : methodTyped === 'PATCH'
+            ? this._patch
+            : methodTyped === 'DELETE'
+            ? this._delete
+            : null;
+
+        if (!callMethod) {
+          throw new Error(`Unsupported method ${methodTyped}`);
+        }
+
+        return callMethod.bind(this)({
+          apiRoute: config.route,
+          httpOpts: args,
+          responseType:
+            defineResponseType<
+              ReturnType<typeof action['success']>['response']
+            >(),
+        });
+      };
     });
   }
 
-  get<
+  private _get<
     HttpOpts extends HttpGetOptions,
     ResponseType extends ReturnType<typeof defineResponseType> = ReturnType<
       typeof defineResponseType
@@ -188,7 +203,7 @@ export class ServiceBase<T extends ActionMap> {
       );
   }
 
-  post<
+  private _post<
     HttpOpts extends HttpPostOptions,
     ResponseType extends ReturnType<typeof defineResponseType> = ReturnType<
       typeof defineResponseType
@@ -236,7 +251,7 @@ export class ServiceBase<T extends ActionMap> {
       );
   }
 
-  put<
+  private _put<
     HttpOpts extends HttpPutOptions,
     ResponseType extends ReturnType<typeof defineResponseType> = ReturnType<
       typeof defineResponseType
@@ -281,7 +296,7 @@ export class ServiceBase<T extends ActionMap> {
       );
   }
 
-  patch<
+  private _patch<
     HttpOpts extends HttpPatchOptions,
     ResponseType extends ReturnType<typeof defineResponseType> = ReturnType<
       typeof defineResponseType
@@ -328,7 +343,7 @@ export class ServiceBase<T extends ActionMap> {
       );
   }
 
-  delete<
+  private _delete<
     HttpOpts extends HttpDeleteOptions,
     ResponseType extends ReturnType<typeof defineResponseType> = ReturnType<
       typeof defineResponseType
