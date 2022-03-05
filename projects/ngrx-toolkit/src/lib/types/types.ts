@@ -91,13 +91,7 @@ export type FailureCreator<
   ) => ErrorAction<ResponseData> & Args<ArgType> & TypedActionNative<ActionName>
 >;
 
-export type ActionMethod =
-  | 'GET'
-  | 'POST'
-  | 'PUT'
-  | 'PATCH'
-  | 'DELETE'
-  | 'LOCAL';
+export type ActionMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 // | 'HEAD'
 // | 'OPTIONS'
 // | 'CONNECT'
@@ -223,7 +217,7 @@ export type Dispatchers<T extends Record<string, AnyTypedActionObject>> = {
 };
 
 export interface ActionCreatorArgs {
-  method?: ActionMethod;
+  method: ActionMethod;
   types: {
     args?: ArgumentsBase;
     response?: any;
@@ -240,12 +234,8 @@ export type ActionMap<
     Actions[Property]['types']['args'],
     Actions[Property]['types']['response'],
     Actions[Property]['types']['errorResponse'],
-    Actions[Property]['method'] extends string
-      ? Actions[Property]['method']
-      : 'LOCAL',
-    `[${Scope}] [${Actions[Property]['method'] extends string
-      ? Actions[Property]['method']
-      : 'LOCAL'}] ${CastString<Property>}`
+    Actions[Property]['method'],
+    `[${Scope}] [${Actions[Property]['method']}] ${CastString<Property>}`
   >;
 };
 

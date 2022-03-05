@@ -68,10 +68,6 @@ export class ServiceBase<T extends ActionMap> {
       ) => {
         const methodTyped = action.method as ActionMethod;
 
-        if (methodTyped === 'LOCAL') {
-          return of(null);
-        }
-
         const callMethod =
           methodTyped === 'GET'
             ? this._get

@@ -29,6 +29,7 @@ export const actionMap = createActionMap('Sandbox', {
     }>(),
   },
   benchmark: {
+    method: 'GET',
     types: defineArgTypes<{
       args: Models.BenchmarkArgs;
       response: { value: boolean };

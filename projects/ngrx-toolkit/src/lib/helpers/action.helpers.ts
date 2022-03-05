@@ -78,7 +78,7 @@ export const createActionMap = <
 
     const group = createActionGroup({
       scope,
-      method: action.method ?? 'LOCAL',
+      method: action.method,
       name: actionName as string,
       argsTypes: action.types,
       isUnique: !!action.isUnique,
